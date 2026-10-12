@@ -130,17 +130,25 @@ public final class PackFlow {
         }
     }
 
-    /** Одно окно на всю пачку: «Скачать все ресурспаки» или «Отказаться и выйти». */
+    /** Одно окно на всю пачку: одна кнопка «Скачать все ресурспаки». */
     private static void ask(Minecraft client, Path dir, Scan scan) {
         Screen previous = client.gui.screen();
         List<Incoming> missing = scan.missing();
+
+        boolean required = false;
+        for (Incoming i : missing) {
+            if (i.packet().required()) required = true;
+        }
 
         Component message = Component.literal(
                 "Сервер отправил новые или изменённые ресурспаки: " + missing.size()
                         + hostSuffix(missing.get(0).packet().url())
                         + ".\nНажмите кнопку, чтобы скачать всё нужное сразу. "
-                        + "Паки сохранятся в папку resourcepacks и включатся автоматически."
-                        + "\n\nПри отказе вы будете отключены от сервера.");
+                        + "Паки сохранятся в папку resourcepacks и включатся автоматически.");
+        if (required) {
+            message = message.copy().append(Component.literal(
+                    "\n\nСервер требует эти паки: при отказе он может отключить вас."));
+        }
         for (Incoming i : missing) {
             if (i.packet().prompt().isPresent()) {
                 message = message.copy().append(Component.literal("\n\n")).append(i.packet().prompt().get());
@@ -157,21 +165,13 @@ public final class PackFlow {
                         for (Incoming i : missing) {
                             i.send(Action.DECLINED);
                         }
-                        leaveServer(client, missing.get(0));
+                        apply(client, scan.found());
                     }
                 },
                 Component.literal("Ресурспаки сервера"),
                 message,
                 Component.literal("Скачать все ресурспаки"),
-                Component.literal("Отказаться и выйти")));
-    }
-
-    /** Как в ванили при отказе: отключаемся от сервера. */
-    private static void leaveServer(Minecraft client, Incoming any) {
-        QUEUE.clear();
-        finish(client);
-        any.listener().getConnection().disconnect(
-                Component.literal("Вы отказались скачивать ресурспаки сервера"));
+                Component.literal("Не скачивать")));
     }
 
     private static void downloadAll(Minecraft client, Path dir, Scan scan) {
@@ -299,4 +299,4 @@ public final class PackFlow {
             return "";
         }
     }
-                }
+}
