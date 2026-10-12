@@ -1,0 +1,9 @@
+{
+  "localpack-bypass.screen.title": "Server resource packs",
+  "localpack-bypass.screen.message": "The server sent new or changed resource packs: %s%s.\nPress the button to download everything you need at once. The packs are saved to the resourcepacks folder and enabled automatically.\n\nIf you decline, you will be disconnected from the server.",
+  "localpack-bypass.screen.download": "Download all resource packs",
+  "localpack-bypass.screen.decline": "Decline and leave",
+  "localpack-bypass.disconnect": "You declined to download the server's resource packs",
+  "modmenu.nameTranslation.localpack-bypass": "Local Resource Pack Cache",
+  "modmenu.descriptionTranslation.localpack-bypass": "Downloads server resource packs with one button, saves them to resourcepacks and enables them automatically. If a pack is already downloaded, you join without any prompts."
+}
