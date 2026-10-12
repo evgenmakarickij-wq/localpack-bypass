@@ -3,9 +3,9 @@
   "id": "localpack-bypass",
   "version": "${version}",
   "name": "Local Resource Pack Cache",
-  "description": "Якщо на диску вже є ресурспак, що точно збігається за SHA-1 з тим, який надсилає сервер, мод одразу вмикає локальну копію замість повторного завантаження по мережі.",
+  "description": "Since there is already a resource pack on the disk that is strictly protected by SHA-1, which overpowers the server, the mode immediately downloads a local copy instead of re-downloading along the way. ",
   "authors": [
-    "You"
+    "Claude"
   ],
   "contact": {},
   "license": "MIT",
