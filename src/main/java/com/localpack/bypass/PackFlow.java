@@ -65,7 +65,7 @@ public final class PackFlow {
                             Minecraft client,
                             Path dir) {
         UUID id = packet.id();
-        Screen previous = client.screen;
+        Screen previous = client.gui.screen();
 
         Component message = Component.literal(
                 "Сервер надіслав новий або змінений ресурспак"
@@ -79,9 +79,9 @@ public final class PackFlow {
             message = message.copy().append(Component.literal("\n\n")).append(packet.prompt().get());
         }
 
-        client.setScreen(new ConfirmScreen(
+        client.gui.setScreen(new ConfirmScreen(
                 accepted -> {
-                    client.setScreen(previous);
+                    client.gui.setScreen(previous);
                     if (accepted) {
                         download(listener, packet, client, dir);
                     } else {
