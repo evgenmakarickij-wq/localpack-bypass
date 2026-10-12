@@ -1,0 +1,9 @@
+{
+  "localpack-bypass.screen.title": "Ресурспаки сервера",
+  "localpack-bypass.screen.message": "Сервер надіслав нові або змінені ресурспаки: %s%s.\nНатисніть кнопку, щоб завантажити все потрібне одразу. Паки збережуться в папку resourcepacks і ввімкнуться автоматично.\n\nПри відмові вас буде відключено від сервера.",
+  "localpack-bypass.screen.download": "Завантажити всі ресурспаки",
+  "localpack-bypass.screen.decline": "Відмовитись і вийти",
+  "localpack-bypass.disconnect": "Ви відмовилися завантажувати ресурспаки сервера",
+  "modmenu.nameTranslation.localpack-bypass": "Локальний кеш ресурспаків",
+  "modmenu.descriptionTranslation.localpack-bypass": "Завантажує ресурспаки сервера однією кнопкою, зберігає їх у resourcepacks і вмикає автоматично. Якщо пак уже завантажено, ви заходите без запитів."
+}
