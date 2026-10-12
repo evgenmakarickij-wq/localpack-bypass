@@ -101,11 +101,11 @@ public final class LocalPackBypassHelper {
         try {
             uri = URI.create(url);
         } catch (RuntimeException e) {
-            throw new IllegalArgumentException("Некоректний URL: " + url, e);
+            throw new IllegalArgumentException("Некорректный URL: " + url, e);
         }
         String scheme = uri.getScheme();
         if (scheme == null || !(scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"))) {
-            throw new IllegalArgumentException("Непідтримувана схема URL: " + scheme);
+            throw new IllegalArgumentException("Неподдерживаемая схема URL: " + scheme);
         }
 
         Files.createDirectories(dir);
@@ -122,7 +122,7 @@ public final class LocalPackBypassHelper {
             HttpResponse<InputStream> response = HTTP.send(request, HttpResponse.BodyHandlers.ofInputStream());
             if (response.statusCode() != 200) {
                 response.body().close();
-                throw new IOException("Сервер відповів HTTP " + response.statusCode());
+                throw new IOException("Сервер ответил HTTP " + response.statusCode());
             }
 
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -132,7 +132,7 @@ public final class LocalPackBypassHelper {
 
             String actual = HexFormat.of().formatHex(digest.digest());
             if (!actual.equalsIgnoreCase(expectedHash)) {
-                throw new IOException("SHA-1 не збігається: очікувався " + expectedHash + ", отримано " + actual);
+                throw new IOException("SHA-1 не совпадает: ожидался " + expectedHash + ", получен " + actual);
             }
 
             Files.move(part, target, StandardCopyOption.REPLACE_EXISTING);
