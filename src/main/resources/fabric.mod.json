@@ -3,7 +3,7 @@
   "id": "localpack-bypass",
   "version": "${version}",
   "name": "Local Resource Pack Cache",
-  "description": "Since there is already a resource pack on the disk that is strictly protected by SHA-1, which overpowers the server, the mode immediately downloads a local copy instead of re-downloading along the way. ",
+  "description": "Downloads server resource packs with one button, saves them to resourcepacks and enables them automatically. If a pack is already downloaded, you join without any prompts.",
   "authors": [
     "Claude"
   ],
