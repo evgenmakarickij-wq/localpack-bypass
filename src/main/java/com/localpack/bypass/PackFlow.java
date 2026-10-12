@@ -52,7 +52,7 @@ public final class PackFlow {
 
     private record Outcome(String fileName, Throwable error) {}
 
-    // Всё ниже трогается только из потока клиента.
+    // Everything below is touched only from the client thread.
     private static final List<Incoming> QUEUE = new ArrayList<>();
     private static boolean timerScheduled = false;
     private static boolean busy = false;
@@ -69,7 +69,7 @@ public final class PackFlow {
         });
     }
 
-    /** Ждём 300 мс, чтобы собрать в одну пачку все паки, которые сервер шлёт подряд. */
+    /** Wait 300 ms to collect all packs the server sends back-to-back into one batch. */
     private static void schedule(Minecraft client) {
         if (busy || timerScheduled || QUEUE.isEmpty()) return;
         timerScheduled = true;
@@ -93,12 +93,12 @@ public final class PackFlow {
                     try {
                         Scan result = scan;
                         if (error != null) {
-                            LOGGER.warn("Не удалось проверить локальные ресурспаки", error);
+                            LOGGER.warn("Could not check local resource packs", error);
                             result = new Scan(List.of(), batch);
                         }
                         onScanned(client, dir, result);
                     } catch (RuntimeException e) {
-                        LOGGER.error("Ошибка обработки ресурспаков", e);
+                        LOGGER.error("Error while processing resource packs", e);
                         finish(client);
                     }
                 }));
@@ -120,7 +120,7 @@ public final class PackFlow {
 
     private static void onScanned(Minecraft client, Path dir, Scan scan) {
         for (Applied a : scan.found()) {
-            LOGGER.info("Найден локальный ресурспак: {}", a.fileName());
+            LOGGER.info("Found local resource pack: {}", a.fileName());
             a.incoming().send(Action.ACCEPTED);
         }
         if (scan.missing().isEmpty()) {
@@ -130,25 +130,15 @@ public final class PackFlow {
         }
     }
 
-    /** Одно окно на всю пачку: одна кнопка «Скачать все ресурспаки». */
+    /** One screen for the whole batch: "Download all" or "Decline and leave". */
     private static void ask(Minecraft client, Path dir, Scan scan) {
         Screen previous = client.gui.screen();
         List<Incoming> missing = scan.missing();
 
-        boolean required = false;
-        for (Incoming i : missing) {
-            if (i.packet().required()) required = true;
-        }
-
-        Component message = Component.literal(
-                "Сервер отправил новые или изменённые ресурспаки: " + missing.size()
-                        + hostSuffix(missing.get(0).packet().url())
-                        + ".\nНажмите кнопку, чтобы скачать всё нужное сразу. "
-                        + "Паки сохранятся в папку resourcepacks и включатся автоматически.");
-        if (required) {
-            message = message.copy().append(Component.literal(
-                    "\n\nСервер требует эти паки: при отказе он может отключить вас."));
-        }
+        Component message = Component.translatable(
+                "localpack-bypass.screen.message",
+                missing.size(),
+                hostSuffix(missing.get(0).packet().url()));
         for (Incoming i : missing) {
             if (i.packet().prompt().isPresent()) {
                 message = message.copy().append(Component.literal("\n\n")).append(i.packet().prompt().get());
@@ -165,22 +155,30 @@ public final class PackFlow {
                         for (Incoming i : missing) {
                             i.send(Action.DECLINED);
                         }
-                        apply(client, scan.found());
+                        leaveServer(client, missing.get(0));
                     }
                 },
-                Component.literal("Ресурспаки сервера"),
+                Component.translatable("localpack-bypass.screen.title"),
                 message,
-                Component.literal("Скачать все ресурспаки"),
-                Component.literal("Не скачивать")));
+                Component.translatable("localpack-bypass.screen.download"),
+                Component.translatable("localpack-bypass.screen.decline")));
+    }
+
+    /** Like vanilla on decline: disconnect from the server. */
+    private static void leaveServer(Minecraft client, Incoming any) {
+        QUEUE.clear();
+        finish(client);
+        any.listener().getConnection().disconnect(
+                Component.translatable("localpack-bypass.disconnect"));
     }
 
     private static void downloadAll(Minecraft client, Path dir, Scan scan) {
         for (Incoming i : scan.missing()) {
             i.send(Action.ACCEPTED);
         }
-        LOGGER.info("Скачиваю ресурспаки сервера: {}", scan.missing().size());
+        LOGGER.info("Downloading server resource packs: {}", scan.missing().size());
 
-        // Один и тот же пак (по хешу) качаем один раз.
+        // The same pack (by hash) is downloaded only once.
         Map<String, CompletableFuture<Outcome>> byHash = new LinkedHashMap<>();
         for (Incoming i : scan.missing()) {
             String hash = i.packet().hash().toLowerCase(Locale.ROOT);
@@ -206,20 +204,20 @@ public final class PackFlow {
                             if (o.error() == null) {
                                 all.add(new Applied(i, o.fileName()));
                             } else {
-                                LOGGER.error("Не удалось скачать ресурспак", o.error());
+                                LOGGER.error("Could not download resource pack", o.error());
                                 i.send(o.error() instanceof IllegalArgumentException
                                         ? Action.INVALID_URL : Action.FAILED_DOWNLOAD);
                             }
                         }
                         apply(client, all);
                     } catch (RuntimeException e) {
-                        LOGGER.error("Ошибка обработки ресурспаков", e);
+                        LOGGER.error("Error while processing resource packs", e);
                         finish(client);
                     }
                 }));
     }
 
-    /** Включает все паки пачки разом, сохраняет выбор и один раз перезагружает ресурсы. */
+    /** Enables all packs of the batch at once, saves the selection and reloads resources once. */
     private static void apply(Minecraft client, List<Applied> applied) {
         if (applied.isEmpty()) {
             finish(client);
@@ -239,7 +237,7 @@ public final class PackFlow {
 
         List<String> current = new ArrayList<>(repository.getSelectedIds());
 
-        // Старые паки мода снимаем, но не те, что пришли в этом же заходе на сервер.
+        // Remove old packs downloaded by the mod, except those received in this same server join.
         long now = System.currentTimeMillis();
         Set<String> keep = new LinkedHashSet<>();
         if (now - lastApplyMs < SAME_SESSION_MS) {
@@ -254,7 +252,7 @@ public final class PackFlow {
         selected.addAll(ids);
 
         if (new ArrayList<>(selected).equals(current)) {
-            // Всё уже включено, перезагрузка не нужна.
+            // Everything is already enabled, no reload needed.
             for (Applied a : applied) {
                 a.incoming().send(Action.SUCCESSFULLY_LOADED);
             }
@@ -269,15 +267,15 @@ public final class PackFlow {
             if (active.contains(FILE_ID_PREFIX + a.fileName())) {
                 good.add(a);
             } else {
-                LOGGER.error("Пак {} не удалось включить (не найден или несовместим)", a.fileName());
+                LOGGER.error("Pack {} could not be enabled (not found or incompatible)", a.fileName());
                 a.incoming().send(Action.FAILED_RELOAD);
             }
         }
-        client.options.updateResourcePacks(repository); // сохраняет в options.txt
+        client.options.updateResourcePacks(repository); // saves to options.txt
 
         client.reloadResourcePacks().whenComplete((ignored, error) -> client.execute(() -> {
             if (error != null) {
-                LOGGER.error("Ошибка перезагрузки ресурсов", error);
+                LOGGER.error("Error while reloading resources", error);
             }
             for (Applied a : good) {
                 a.incoming().send(error == null ? Action.SUCCESSFULLY_LOADED : Action.FAILED_RELOAD);
@@ -288,7 +286,7 @@ public final class PackFlow {
 
     private static void finish(Minecraft client) {
         busy = false;
-        schedule(client); // если за это время пришли ещё паки
+        schedule(client); // in case more packs arrived meanwhile
     }
 
     private static String hostSuffix(String url) {
