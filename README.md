@@ -32,11 +32,7 @@
 
 ## Build
 
-```
-gradle build
-```
-
-The jar appears in `build/libs/`. The [GitHub Actions workflow](.github/workflows/build.yml) also builds it on every push to `main`; download the jar from the **Artifacts** of the run.
+The mod is built by the [GitHub Actions workflow](.github/workflows/build.yml) on every push to `main`. Download the jar from the **Artifacts** of the run.
 
 ## Where the code comes from
 
@@ -48,4 +44,6 @@ The jar appears in `build/libs/`. The [GitHub Actions workflow](.github/workflow
 
 ## License
 
-This is an **open-source** project released under the **[MIT License](LICENSE)** ([summary](https://opensource.org/license/mit)). Copyright (c) 2026 Claude, McChopik, Telemine3140. You may use, copy, modify, merge, publish and distribute i
+This is an **open-source** project released under the **[MIT License](LICENSE)** ([summary](https://opensource.org/license/mit)). Copyright (c) 2026 Claude, McChopik, Telemine3140. You may use, copy, modify, merge, publish and distribute it, including commercially, as long as the copyright and license notice are kept. The software is provided "as is", without warranty of any kind.
+
+Contributions, issues and pull requests are welcome: [open an issue](https://github.com/evgenmakarickij-wq/localpack-bypass/issues).
