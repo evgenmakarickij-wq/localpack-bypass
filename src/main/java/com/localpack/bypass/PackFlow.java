@@ -122,6 +122,8 @@ public final class PackFlow {
                 found.add(new Applied(in, local.getFileName().toString()));
             } else {
                 missing.add(in);
+                LOGGER.info("No local pack with SHA-1 {} (url {}). Zips in {}: {}",
+                        in.packet().hash(), in.packet().url(), dir, LocalPackBypassHelper.describeZips(dir));
             }
         }
         return new Scan(found, missing);
@@ -332,4 +334,4 @@ public final class PackFlow {
             return "";
         }
     }
-            }
+}
