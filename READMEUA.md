@@ -32,11 +32,7 @@
 
 ## Збірка
 
-```
-gradle build
-```
-
-Готовий jar з'являється в `build/libs/`. [Робочий процес GitHub Actions](.github/workflows/build.yml) також збирає його при кожному пуші в `main`; jar можна завантажити з розділу **Artifacts** запуску.
+Мод збирає [робочий процес GitHub Actions](.github/workflows/build.yml) при кожному пуші в `main`. Jar можна завантажити з розділу **Artifacts** запуску.
 
 ## Звідки код
 
