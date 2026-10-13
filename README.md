@@ -1,25 +1,11 @@
 # localpack-bypass
 
-[
-
-![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)
-
-](LICENSE)
-[
-
-![Open Source](https://img.shields.io/badge/open%20source-yes-brightgreen.svg)
-
-](https://github.com/evgenmakarickij-wq/localpack-bypass)
-[
-
-![Minecraft](https://img.shields.io/badge/Minecraft-26.2-blue.svg)
-
-](https://www.minecraft.net)
-[
-
-![Fabric](https://img.shields.io/badge/mod%20loader-Fabric-beige.svg)
-
-](https://fabricmc.net)
+<p>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT"></a>
+  <a href="https://github.com/evgenmakarickij-wq/localpack-bypass"><img src="https://img.shields.io/badge/open%20source-yes-brightgreen.svg" alt="Open Source"></a>
+  <a href="https://www.minecraft.net"><img src="https://img.shields.io/badge/Minecraft-26.2-blue.svg" alt="Minecraft 26.2"></a>
+  <a href="https://fabricmc.net"><img src="https://img.shields.io/badge/mod%20loader-Fabric-beige.svg" alt="Fabric"></a>
+</p>
 
 **Languages:** **English** · [Українська](READMEUA.md) · [Русский](READMERU.md)
 
@@ -62,6 +48,4 @@ The jar appears in `build/libs/`. The [GitHub Actions workflow](.github/workflow
 
 ## License
 
-This is an **open-source** project released under the **[MIT License](LICENSE)** ([summary](https://opensource.org/license/mit)). Copyright (c) 2026 Claude, McChopik, Telemine3140. You may use, copy, modify, merge, publish and distribute it, including commercially, as long as the copyright and license notice are kept. The software is provided "as is", without warranty of any kind.
-
-Contributions, issues and pull requests are welcome: [open an issue](https://github.com/evgenmakarickij-wq/localpack-bypass/issues).
+This is an **open-source** project released under the **[MIT License](LICENSE)** ([summary](https://opensource.org/license/mit)). Copyright (c) 2026 Claude, McChopik, Telemine3140. You may use, copy, modify, merge, publish and distribute i
