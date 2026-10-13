@@ -168,7 +168,8 @@ public final class PackFlow {
     private static void leaveServer(Minecraft client, Incoming any) {
         QUEUE.clear();
         finish(client);
-        any.listener().getConnection().disconnect(
+        // CHANGED: goes through the Disconnector interface implemented by the mixin
+        ((Disconnector) any.listener()).localpackBypass$disconnect(
                 Component.translatable("localpack-bypass.disconnect"));
     }
 
