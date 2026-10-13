@@ -32,11 +32,7 @@
 
 ## Сборка
 
-```
-gradle build
-```
-
-Готовый jar появляется в `build/libs/`. [Рабочий процесс GitHub Actions](.github/workflows/build.yml) также собирает его при каждом пуше в `main`; jar можно скачать из раздела **Artifacts** запуска.
+Мод собирает [рабочий процесс GitHub Actions](.github/workflows/build.yml) при каждом пуше в `main`. Jar можно скачать из раздела **Artifacts** запуска.
 
 ## Откуда код
 
