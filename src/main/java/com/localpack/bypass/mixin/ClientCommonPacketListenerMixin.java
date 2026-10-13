@@ -26,6 +26,11 @@ public abstract class ClientCommonPacketListenerMixin implements Disconnector {
         this.connection.disconnect(reason);
     }
 
+    @Override
+    public Object localpackBypass$connectionKey() {
+        return this.connection;
+    }
+
     @Inject(method = "handleResourcePackPush", at = @At("HEAD"), cancellable = true)
     private void localpackBypass$onResourcePackPush(ClientboundResourcePackPushPacket packet, CallbackInfo ci) {
         if (!LocalPackBypassHelper.isValidSha1(packet.hash())) {
