@@ -12,6 +12,7 @@ import net.minecraft.server.packs.repository.PackRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -32,7 +33,12 @@ public final class PackFlow {
 
     private static final String FILE_ID_PREFIX = "file/";
     private static final String AUTO_ID_PREFIX = FILE_ID_PREFIX + LocalPackBypassHelper.AUTO_FILE_PREFIX;
-    private static final long SAME_SESSION_MS = 20_000L;
+
+    /**
+     * After the player clicks "Download all", further packs of the same connection are downloaded without asking,
+     * and packs received on that connection within this window are kept enabled together.
+     */
+    private static final long APPROVAL_WINDOW_MS = 120_000L;
 
     private static final ExecutorService IO = Executors.newFixedThreadPool(4, r -> {
         Thread t = new Thread(r, "localpack-io");
@@ -58,6 +64,9 @@ public final class PackFlow {
     private static boolean busy = false;
     private static Set<String> recentIds = new LinkedHashSet<>();
     private static long lastApplyMs = 0L;
+    private static WeakReference<Object> lastApplyConnection = new WeakReference<>(null);
+    private static WeakReference<Object> approvedConnection = new WeakReference<>(null);
+    private static long approvedAtMs = 0L;
 
     private PackFlow() {}
 
@@ -130,10 +139,30 @@ public final class PackFlow {
         }
     }
 
+    private static boolean isApproved(Incoming in) {
+        Object key = ((Disconnector) in.listener()).localpackBypass$connectionKey();
+        return key != null
+                && approvedConnection.get() == key
+                && System.currentTimeMillis() - approvedAtMs < APPROVAL_WINDOW_MS;
+    }
+
+    private static void approve(Incoming in) {
+        approvedConnection = new WeakReference<>(((Disconnector) in.listener()).localpackBypass$connectionKey());
+        approvedAtMs = System.currentTimeMillis();
+    }
+
     /** One screen for the whole batch: "Download all" or "Decline and leave". */
     private static void ask(Minecraft client, Path dir, Scan scan) {
         Screen previous = client.gui.screen();
         List<Incoming> missing = scan.missing();
+
+        // The server sends packs one by one: the player already agreed on this connection, so do not ask again.
+        if (isApproved(missing.get(0))) {
+            LOGGER.info("Already approved on this connection, downloading {} more pack(s) without asking", missing.size());
+            approvedAtMs = System.currentTimeMillis();
+            downloadAll(client, dir, scan);
+            return;
+        }
 
         Component message = Component.translatable(
                 "localpack-bypass.screen.message",
@@ -150,6 +179,7 @@ public final class PackFlow {
                 accepted -> {
                     client.gui.setScreen(previous);
                     if (accepted) {
+                        approve(missing.get(0));
                         downloadAll(client, dir, scan);
                     } else {
                         for (Incoming i : missing) {
@@ -168,7 +198,6 @@ public final class PackFlow {
     private static void leaveServer(Minecraft client, Incoming any) {
         QUEUE.clear();
         finish(client);
-        // CHANGED: goes through the Disconnector interface implemented by the mixin
         ((Disconnector) any.listener()).localpackBypass$disconnect(
                 Component.translatable("localpack-bypass.disconnect"));
     }
@@ -238,15 +267,17 @@ public final class PackFlow {
 
         List<String> current = new ArrayList<>(repository.getSelectedIds());
 
-        // Remove old packs downloaded by the mod, except those received in this same server join.
+        // Remove old packs downloaded by the mod, except those received on this same connection.
+        Object connKey = ((Disconnector) applied.get(0).incoming().listener()).localpackBypass$connectionKey();
         long now = System.currentTimeMillis();
         Set<String> keep = new LinkedHashSet<>();
-        if (now - lastApplyMs < SAME_SESSION_MS) {
+        if (connKey != null && lastApplyConnection.get() == connKey && now - lastApplyMs < APPROVAL_WINDOW_MS) {
             keep.addAll(recentIds);
         }
         keep.addAll(ids);
         recentIds = keep;
         lastApplyMs = now;
+        lastApplyConnection = new WeakReference<>(connKey);
 
         Set<String> selected = new LinkedHashSet<>(current);
         selected.removeIf(s -> s.startsWith(AUTO_ID_PREFIX) && !keep.contains(s));
@@ -287,6 +318,9 @@ public final class PackFlow {
 
     private static void finish(Minecraft client) {
         busy = false;
+        if (approvedConnection.get() != null) {
+            approvedAtMs = System.currentTimeMillis(); // keep the approval alive while packs keep coming
+        }
         schedule(client); // in case more packs arrived meanwhile
     }
 
@@ -298,4 +332,4 @@ public final class PackFlow {
             return "";
         }
     }
-}
+            }
