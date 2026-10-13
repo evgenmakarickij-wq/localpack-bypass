@@ -30,6 +30,9 @@ public final class LocalPackBypassHelper {
 
     private static final Map<Path, CachedHash> CACHE = new ConcurrentHashMap<>();
 
+    /** Files modified more recently than this are not cached: they might still be being written. */
+    private static final long CACHE_MIN_AGE_MS = 3_000L;
+
     private static final HttpClient HTTP = HttpClient.newBuilder()
             .followRedirects(HttpClient.Redirect.NORMAL)
             .connectTimeout(Duration.ofSeconds(15))
@@ -72,14 +75,49 @@ public final class LocalPackBypassHelper {
             if (cached != null && cached.size() == size && cached.modified() == modified) {
                 return cached.sha1();
             }
-            String sha1 = getSha1(file);
-            if (!sha1.isEmpty()) {
+            String sha1 = getSha1WithRetry(file);
+            boolean settled = System.currentTimeMillis() - modified > CACHE_MIN_AGE_MS;
+            if (!sha1.isEmpty() && settled) {
                 CACHE.put(file, new CachedHash(size, modified, sha1));
             }
             return sha1;
         } catch (IOException e) {
             return "";
         }
+    }
+
+    /** A file can be briefly unreadable (antivirus, the game itself): retry before giving up. */
+    private static String getSha1WithRetry(Path file) {
+        for (int attempt = 0; attempt < 3; attempt++) {
+            String sha1 = getSha1(file);
+            if (!sha1.isEmpty()) return sha1;
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return "";
+            }
+        }
+        return "";
+    }
+
+    /** For the log: every zip in the folder with its size and (already known) SHA-1. Does not hash anything. */
+    public static String describeZips(Path dir) {
+        if (dir == null || !Files.isDirectory(dir)) return "(folder not found)";
+        StringBuilder sb = new StringBuilder();
+        try (Stream<Path> stream = Files.list(dir)) {
+            for (Path file : (Iterable<Path>) stream::iterator) {
+                String name = file.getFileName().toString();
+                if (!name.toLowerCase(Locale.ROOT).endsWith(".zip") || !Files.isRegularFile(file)) continue;
+                CachedHash cached = CACHE.get(file);
+                if (sb.length() > 0) sb.append("; ");
+                sb.append(name).append(" [").append(Files.size(file)).append(" B, sha1=")
+                        .append(cached == null ? "unknown" : cached.sha1()).append("]");
+            }
+        } catch (IOException e) {
+            return "(could not list folder: " + e.getMessage() + ")";
+        }
+        return sb.length() == 0 ? "(no zip files)" : sb.toString();
     }
 
     public static String getSha1(Path file) {
