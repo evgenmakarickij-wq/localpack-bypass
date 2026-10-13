@@ -5,7 +5,7 @@
   "name": "Local Resource Pack Cache",
   "description": "Downloads server resource packs with one button, saves them to resourcepacks and enables them automatically. If a pack is already downloaded, you join without any prompts.",
   "authors": [
-    "Claude"
+    "Pidaras"
   ],
   "contact": {},
   "license": "MIT",
