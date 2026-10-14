@@ -28,6 +28,13 @@ processResources {
     }
 }
 
+// MIT requires the notice to travel with every copy of the software, and a released jar is one.
+tasks.withType(Jar).configureEach {
+    from("LICENSE") {
+        into "META-INF"
+    }
+}
+
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 25
 }
