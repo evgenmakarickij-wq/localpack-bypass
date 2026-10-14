@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Server-Ressourcenpakete",
+  "localpack-bypass.screen.message": "Der Server hat neue oder geänderte Ressourcenpakete gesendet: %s%s.\nDrücke die Schaltfläche, um alles Benötigte auf einmal herunterzuladen. Die Pakete werden im Ordner resourcepacks gespeichert und automatisch aktiviert.\n\nWenn du ablehnst, wirst du vom Server getrennt.",
+  "localpack-bypass.screen.download": "Alle Ressourcenpakete herunterladen",
+  "localpack-bypass.screen.decline": "Ablehnen und verlassen",
+  "localpack-bypass.disconnect": "Du hast das Herunterladen der Ressourcenpakete des Servers abgelehnt",
+  "localpack-bypass.update.title": "Mod-Aktualisierung",
+  "localpack-bypass.update.message": "Version %s von Local Resource Pack Cache ist verfügbar, du hast %s.\n\nHerunterladen? Die alte Version wird ersetzt und das Spiel muss neu gestartet werden.",
+  "localpack-bypass.update.download": "Herunterladen und installieren",
+  "localpack-bypass.update.skip": "Diese Version überspringen",
+  "localpack-bypass.update.downloading": "Version %s wird heruntergeladen …",
+  "localpack-bypass.update.installed": "Version %s ist installiert. Starte das Spiel neu, um sie zu verwenden.",
+  "localpack-bypass.update.queued": "Version %s wurde heruntergeladen und überprüft. Die alte Version wird beim Schließen des Spiels entfernt; starte danach neu.",
+  "localpack-bypass.update.queuedManual": "Version %s wurde heruntergeladen und überprüft, aber die alte JAR-Datei konnte nicht automatisch ersetzt werden. Entferne sie von Hand und verschiebe die neue JAR-Datei nach mods: %s",
+  "localpack-bypass.update.dev": "Läuft in einer Entwicklungsumgebung, Aktualisierungen sind deaktiviert.",
+  "localpack-bypass.update.failed": "Die Aktualisierung konnte nicht installiert werden: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Lokaler Ressourcenpaket-Cache",
+  "modmenu.descriptionTranslation.localpack-bypass": "Lädt Server-Ressourcenpakete mit einer einzigen Schaltfläche herunter, speichert sie in resourcepacks und aktiviert sie automatisch. Ist ein Paket bereits heruntergeladen, trittst du ohne Nachfragen bei."
+}

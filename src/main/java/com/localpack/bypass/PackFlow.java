@@ -94,7 +94,7 @@ public final class PackFlow {
         busy = true;
         List<Incoming> batch = new ArrayList<>(QUEUE);
         QUEUE.clear();
-        Path dir = client.getResourcePackDirectory();
+        Path dir = GamePaths.resourcePacksDir();
 
         CompletableFuture
                 .supplyAsync(() -> scan(dir, batch), IO)

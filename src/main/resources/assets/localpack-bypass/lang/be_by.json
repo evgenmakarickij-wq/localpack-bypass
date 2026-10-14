@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Наборы рэсурсаў сервера",
+  "localpack-bypass.screen.message": "Сервер даслаў новыя або змененыя наборы рэсурсаў: %s%s.\nНацісніце кнопку, каб спампаваць усё патрэбнае адразу. Наборы захаваюцца ў тэчку resourcepacks і ўключацца аўтаматычна.\n\nКалі вы адмовіцеся, вас адключыць ад сервера.",
+  "localpack-bypass.screen.download": "Спампаваць усе наборы рэсурсаў",
+  "localpack-bypass.screen.decline": "Адмовіцца і выйсці",
+  "localpack-bypass.disconnect": "Вы адмовіліся спампоўваць наборы рэсурсаў сервера",
+  "localpack-bypass.update.title": "Абнаўленне мода",
+  "localpack-bypass.update.message": "Даступная версія %s мода «Local Resource Pack Cache», у вас %s.\n\nСпампаваць яе? Старая версія будзе заменена, гульню трэба перазапусціць.",
+  "localpack-bypass.update.download": "Спампаваць і ўсталяваць",
+  "localpack-bypass.update.skip": "Прапусціць гэтую версію",
+  "localpack-bypass.update.downloading": "Спампоўванне версіі %s…",
+  "localpack-bypass.update.installed": "Версія %s усталявана. Перазапусціце гульню, каб яе ўключыць.",
+  "localpack-bypass.update.queued": "Версія %s спампавана і праверана. Старая версія будзе выдалена пасля закрыцця гульні; затым перазапусціце яе.",
+  "localpack-bypass.update.queuedManual": "Версія %s спампавана і праверана, але замяніць стары файл jar аўтаматычна не ўдалося. Выдаліце яго ўручную і перанясіце новы файл jar у mods: %s",
+  "localpack-bypass.update.dev": "Мод запушчаны з асяроддзя распрацоўкі, абнаўленні адключаны.",
+  "localpack-bypass.update.failed": "Не ўдалося ўсталяваць абнаўленне: %s",
+  "localpack-bypass.update.ok": "Добра",
+  "modmenu.nameTranslation.localpack-bypass": "Лакальны кэш набораў рэсурсаў",
+  "modmenu.descriptionTranslation.localpack-bypass": "Спампоўвае наборы рэсурсаў сервера адной кнопкай, захоўвае іх у resourcepacks і ўключае аўтаматычна. Калі набор ужо спампаваны, вы заходзіце без запытаў."
+}

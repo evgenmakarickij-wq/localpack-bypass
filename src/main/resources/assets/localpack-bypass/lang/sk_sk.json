@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Serverové balíčky zdrojov",
+  "localpack-bypass.screen.message": "Server poslal nové alebo zmenené balíčky zdrojov: %s%s.\nStlačením tlačidla stiahneš všetko potrebné naraz. Balíčky sa uložia do priečinka resourcepacks a automaticky sa zapnú.\n\nAk odmietneš, budeš od servera odpojený.",
+  "localpack-bypass.screen.download": "Stiahnuť všetky balíčky zdrojov",
+  "localpack-bypass.screen.decline": "Odmietnuť a odísť",
+  "localpack-bypass.disconnect": "Odmietol si stiahnuť balíčky zdrojov servera",
+  "localpack-bypass.update.title": "Aktualizácia modu",
+  "localpack-bypass.update.message": "Je dostupná verzia %s modu Local Resource Pack Cache, ty máš %s.\n\nStiahnuť ju? Stará verzia bude nahradená a hru bude potrebné reštartovať.",
+  "localpack-bypass.update.download": "Stiahnuť a nainštalovať",
+  "localpack-bypass.update.skip": "Preskočiť túto verziu",
+  "localpack-bypass.update.downloading": "Sťahovanie verzie %s…",
+  "localpack-bypass.update.installed": "Verzia %s je nainštalovaná. Na jej použitie reštartuj hru.",
+  "localpack-bypass.update.queued": "Verzia %s je stiahnutá a overená. Stará verzia bude odstránená po zatvorení hry; potom hru reštartuj.",
+  "localpack-bypass.update.queuedManual": "Verzia %s je stiahnutá a overená, ale starý súbor jar sa nepodarilo automaticky nahradiť. Odstráň ho ručne a presuň nový súbor jar do mods: %s",
+  "localpack-bypass.update.dev": "Beží vo vývojovom prostredí, aktualizácie sú vypnuté.",
+  "localpack-bypass.update.failed": "Aktualizáciu sa nepodarilo nainštalovať: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Lokálna medzipamäť balíčkov zdrojov",
+  "modmenu.descriptionTranslation.localpack-bypass": "Sťahuje serverové balíčky zdrojov jedným tlačidlom, ukladá ich do resourcepacks a automaticky ich zapína. Ak je balíček už stiahnutý, pripojíš sa bez výziev."
+}

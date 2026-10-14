@@ -115,23 +115,8 @@ public final class Updater {
     }
 
     // ------------------------------------------------------------------ paths
-
-    private static Path stateDir() {
-        return FabricLoader.getInstance().getConfigDir().resolve(MOD_ID);
-    }
-
-    private static Path stateFile() {
-        return stateDir().resolve("update-state.json");
-    }
-
-    private static Path pendingDir() {
-        return stateDir().resolve("pending");
-    }
-
-    /** Fabric scans this folder for {@code *.jar} on every launch. */
-    private static Path modsDir() {
-        return FabricLoader.getInstance().getGameDir().resolve("mods");
-    }
+    // mods/, config/localpack-bypass/ and the game directory behind them are resolved by GamePaths,
+    // which hands back absolute normalised paths on Windows, macOS, Linux and Android alike.
 
     /** The single jar this mod was loaded from, or empty in a development environment. */
     private static Optional<Path> runningJar() {
@@ -139,7 +124,7 @@ public final class Updater {
                 .map(container -> container.getOrigin().getPaths())
                 .orElse(List.of());
         if (paths.size() != 1) return Optional.empty();
-        Path path = paths.get(0);
+        Path path = paths.get(0).toAbsolutePath().normalize();
         if (!path.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".jar")) return Optional.empty();
         return Files.isRegularFile(path) ? Optional.of(path) : Optional.empty();
     }
@@ -155,7 +140,7 @@ public final class Updater {
 
     private static State load() {
         State fresh = new State();
-        Path file = stateFile();
+        Path file = GamePaths.stateFile();
         if (!Files.isRegularFile(file)) return fresh;
         try {
             String json = Files.readString(file, StandardCharsets.UTF_8);
@@ -173,8 +158,8 @@ public final class Updater {
         synchronized (STATE_LOCK) {
             if (state == null) return;
             try {
-                Files.createDirectories(stateDir());
-                Path target = stateFile();
+                Files.createDirectories(GamePaths.stateDir());
+                Path target = GamePaths.stateFile();
                 Path part = target.resolveSibling(target.getFileName() + ".part");
                 Files.writeString(part, GSON.toJson(state), StandardCharsets.UTF_8);
                 Files.move(part, target, StandardCopyOption.REPLACE_EXISTING);
@@ -193,32 +178,61 @@ public final class Updater {
 
     /**
      * Runs at startup: drops bookkeeping for files that are already gone and finishes an install
-     * that the helper script has completed since the last launch.
+     * that could not be completed while the game was running from the old jar.
+     *
+     * <p>The paths are read defensively. A game directory that is synced between devices can hold a
+     * path this system cannot parse at all — a Windows literal opened on Android, say — and that
+     * must not abort the client during initialisation.
      */
     public static void applyPendingCleanup() {
         State current = state();
         boolean changed = false;
 
-        if (current.pendingDelete != null && !Files.exists(Path.of(current.pendingDelete))) {
-            LOGGER.info("Old jar {} is gone, update finished", current.pendingDelete);
+        Optional<Path> running = GamePaths.parseStored(current.pendingDelete);
+        if (current.pendingDelete != null && running.isEmpty()) {
+            LOGGER.warn("Ignoring an unreadable path in the update state: {}", current.pendingDelete);
             current.pendingDelete = null;
             changed = true;
+        } else if (running.isPresent() && !Files.exists(running.get())) {
+            LOGGER.info("Old jar {} is gone, update finished", running.get());
+            current.pendingDelete = null;
+            changed = true;
+            running = Optional.empty();
         }
 
-        if (current.pendingFrom != null && current.pendingTo != null) {
-            Path from = Path.of(current.pendingFrom);
-            Path to = Path.of(current.pendingTo);
-            if (!Files.exists(from) && Files.exists(to)) {
-                LOGGER.info("Update {} is in place", to.getFileName());
-                current.pendingFrom = null;
-                current.pendingTo = null;
+        Optional<Path> from = GamePaths.parseStored(current.pendingFrom);
+        Optional<Path> to = GamePaths.parseStored(current.pendingTo);
+        if (from.isEmpty() || to.isEmpty()) {
+            if (changed) save();
+            return;
+        }
+
+        Path source = from.get();
+        Path target = to.get();
+
+        if (!Files.exists(source) && Files.exists(target)) {
+            LOGGER.info("Update {} is in place", target.getFileName());
+            current.pendingFrom = null;
+            current.pendingTo = null;
+            changed = true;
+        } else if (Files.exists(source) && !Files.exists(target)) {
+            // The move was refused last time only because the game was running from the old jar. On
+            // Windows that stays true for as long as the process lives, so the queued delete is left
+            // to the helper script; everywhere else the jar can be removed now, in this process,
+            // which is what an Android launcher needs — it has no cmd.exe to fall back on.
+            if (running.isPresent() && Platform.canReplaceRunningJar() && deleteQuietly(running.get())) {
+                LOGGER.info("Removed the old jar {}", running.get());
+                current.pendingDelete = null;
                 changed = true;
-            } else if (Files.exists(from) && !Files.exists(to) && current.pendingDelete == null) {
-                // The helper never ran and nothing is locked any more: finish the job here.
+            }
+
+            // Two jars with the same mod id in mods/ would stop the next launch, so the move waits
+            // until the old jar is really gone.
+            if (current.pendingDelete == null) {
                 try {
-                    Files.createDirectories(to.getParent());
-                    Files.move(from, to, StandardCopyOption.REPLACE_EXISTING);
-                    LOGGER.info("Installed the downloaded update as {}", to.getFileName());
+                    Files.createDirectories(target.getParent());
+                    Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
+                    LOGGER.info("Installed the downloaded update as {}", target.getFileName());
                     current.pendingFrom = null;
                     current.pendingTo = null;
                     changed = true;
@@ -226,9 +240,25 @@ public final class Updater {
                     LOGGER.warn("Could not install the downloaded update: {}", e.toString());
                 }
             }
+        } else if (!Files.exists(source) && !Files.exists(target)) {
+            // Both are gone: there is nothing left to finish, so stop retrying on every launch.
+            LOGGER.info("{} and {} are both gone, dropping the queued update", source, target);
+            current.pendingFrom = null;
+            current.pendingTo = null;
+            changed = true;
         }
 
         if (changed) save();
+    }
+
+    private static boolean deleteQuietly(Path file) {
+        try {
+            Files.deleteIfExists(file);
+            return !Files.exists(file);
+        } catch (IOException | RuntimeException e) {
+            LOGGER.info("Could not remove {}: {}", file, e.toString());
+            return false;
+        }
     }
 
     // ------------------------------------------------------------- check
@@ -373,7 +403,7 @@ public final class Updater {
 
             Path staged;
             try {
-                Files.createDirectories(pendingDir());
+                Files.createDirectories(GamePaths.pendingDir());
                 staged = download(info);
             } catch (IOException e) {
                 LOGGER.error("Could not download update {}", info.version(), e);
@@ -383,7 +413,7 @@ public final class Updater {
                 return new InstallResult(InstallResult.Kind.FAILED, info.version(), e.toString());
             }
 
-            Path target = modsDir().resolve(info.file());
+            Path target = GamePaths.modsDir().resolve(info.file());
             State current = state();
             current.pendingFrom = staged.toString();
             current.pendingTo = target.toString();
@@ -396,8 +426,8 @@ public final class Updater {
     }
 
     private static Path download(UpdateInfo info) throws IOException, InterruptedException {
-        Path part = pendingDir().resolve(info.file() + ".part");
-        Path staged = pendingDir().resolve(info.file());
+        Path part = GamePaths.pendingDir().resolve(info.file() + ".part");
+        Path staged = GamePaths.pendingDir().resolve(info.file());
         Files.deleteIfExists(part);
 
         HttpRequest request = HttpRequest.newBuilder(URI.create(info.url()))
@@ -441,7 +471,8 @@ public final class Updater {
      * <p>If the jar cannot be deleted, installing would leave two jars with the same mod id in
      * {@code mods/} and Fabric would refuse the next launch with a duplicate mod error. So the
      * update is queued instead: on Windows a small detached script waits for this process to exit
-     * and does both steps, elsewhere the next launch finishes the job in
+     * and does both steps, while on Android, Linux and macOS — where the running jar is not locked
+     * and the delete normally succeeds outright — the next launch finishes the job in
      * {@link #applyPendingCleanup()}.
      */
     private static InstallResult removeRunningJar(UpdateInfo info, Path running, Path staged, Path target) {
@@ -476,9 +507,10 @@ public final class Updater {
      * metacharacter, so a path can never turn into something the shell would execute.
      */
     private static boolean spawnHelper(Path running, Path staged, Path target) {
-        String os = System.getProperty("os.name", "").toLowerCase(Locale.ROOT);
-        if (!os.contains("win")) {
-            // On POSIX the delete above only fails for a real reason; a helper would not help.
+        if (!Platform.isWindows()) {
+            // On Android, Linux and macOS the running jar is only open, not locked, so the delete
+            // above failed for a reason no helper can work around. The queued install is finished by
+            // applyPendingCleanup() on the next launch instead.
             return false;
         }
 
@@ -507,12 +539,12 @@ public final class Updater {
                 + "del /f /q \"%~f0\"\r\n";
 
         try {
-            Files.createDirectories(stateDir());
-            Path scriptFile = stateDir().resolve("finish-update-" + pid + ".cmd");
+            Files.createDirectories(GamePaths.stateDir());
+            Path scriptFile = GamePaths.stateDir().resolve("finish-update-" + pid + ".cmd");
             Files.writeString(scriptFile, script, StandardCharsets.UTF_8);
             new ProcessBuilder("cmd.exe", "/c", "start", "\"localpack-bypass update\"", "/min",
                     scriptFile.toAbsolutePath().toString())
-                    .directory(stateDir().toFile())
+                    .directory(GamePaths.stateDir().toFile())
                     .start();
             return true;
         } catch (IOException | RuntimeException e) {

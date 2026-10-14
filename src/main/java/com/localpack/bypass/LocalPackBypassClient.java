@@ -9,7 +9,10 @@ public class LocalPackBypassClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Local Resource Pack Cache loaded");
+        // Which system this is decides how a running jar is replaced and what the launcher's game
+        // directory looks like, so both end up in the log next to the folders themselves.
+        LOGGER.info("Local Resource Pack Cache loaded on {} (game directory {}, mods {}, config {})",
+                Platform.current(), GamePaths.gameDir(), GamePaths.modsDir(), GamePaths.configDir());
 
         // Finish an update that was downloaded on a previous run, then offer any newer release.
         Updater.applyPendingCleanup();

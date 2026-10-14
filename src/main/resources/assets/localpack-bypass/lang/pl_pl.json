@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Paczki zasobów serwera",
+  "localpack-bypass.screen.message": "Serwer wysłał nowe lub zmienione paczki zasobów: %s%s.\nNaciśnij przycisk, aby pobrać wszystko, czego potrzebujesz, za jednym razem. Paczki zostaną zapisane w folderze resourcepacks i włączone automatycznie.\n\nJeśli odmówisz, zostaniesz rozłączony z serwerem.",
+  "localpack-bypass.screen.download": "Pobierz wszystkie paczki zasobów",
+  "localpack-bypass.screen.decline": "Odmów i wyjdź",
+  "localpack-bypass.disconnect": "Odmówiłeś pobrania paczek zasobów serwera",
+  "localpack-bypass.update.title": "Aktualizacja moda",
+  "localpack-bypass.update.message": "Dostępna jest wersja %s moda Local Resource Pack Cache, ty masz %s.\n\nPobrać ją? Stara wersja zostanie zastąpiona, a gra będzie wymagała ponownego uruchomienia.",
+  "localpack-bypass.update.download": "Pobierz i zainstaluj",
+  "localpack-bypass.update.skip": "Pomiń tę wersję",
+  "localpack-bypass.update.downloading": "Pobieranie wersji %s…",
+  "localpack-bypass.update.installed": "Wersja %s jest zainstalowana. Uruchom grę ponownie, aby jej użyć.",
+  "localpack-bypass.update.queued": "Wersja %s została pobrana i zweryfikowana. Stara wersja zostanie usunięta po zamknięciu gry; następnie uruchom ją ponownie.",
+  "localpack-bypass.update.queuedManual": "Wersja %s została pobrana i zweryfikowana, ale nie udało się automatycznie zastąpić starego pliku jar. Usuń go ręcznie i przenieś nowy plik jar do mods: %s",
+  "localpack-bypass.update.dev": "Uruchomiono ze środowiska deweloperskiego, aktualizacje są wyłączone.",
+  "localpack-bypass.update.failed": "Nie udało się zainstalować aktualizacji: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Lokalna pamięć podręczna paczek zasobów",
+  "modmenu.descriptionTranslation.localpack-bypass": "Pobiera paczki zasobów serwera jednym przyciskiem, zapisuje je w resourcepacks i włącza automatycznie. Jeśli paczka jest już pobrana, dołączasz bez żadnych pytań."
+}
