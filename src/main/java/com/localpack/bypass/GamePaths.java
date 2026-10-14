@@ -53,6 +53,16 @@ public final class GamePaths {
         return stateDir().resolve("update-state.json");
     }
 
+    /** The player's settings, written by the config screen. */
+    public static Path configFile() {
+        return stateDir().resolve("config.json");
+    }
+
+    /** Everything the mod remembers about packs and servers, written by {@link PackRegistry}. */
+    public static Path historyFile() {
+        return stateDir().resolve("history.json");
+    }
+
     public static Path pendingDir() {
         return stateDir().resolve("pending");
     }

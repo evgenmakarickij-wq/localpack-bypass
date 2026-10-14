@@ -14,6 +14,12 @@ public class LocalPackBypassClient implements ClientModInitializer {
         LOGGER.info("Local Resource Pack Cache loaded on {} (game directory {}, mods {}, config {})",
                 Platform.current(), GamePaths.gameDir(), GamePaths.modsDir(), GamePaths.configDir());
 
+        // Read now, so a damaged settings file is reported at startup rather than in the middle of a
+        // join, and write the memory out on the way down so the last few seconds are not lost.
+        Config.get();
+        PackRegistry.flush();
+        Runtime.getRuntime().addShutdownHook(new Thread(PackRegistry::flush, "localpack-history-save"));
+
         // Finish an update that was downloaded on a previous run, then offer any newer release.
         Updater.applyPendingCleanup();
         UpdateFlow.init();

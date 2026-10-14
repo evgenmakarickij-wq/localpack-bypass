@@ -12,12 +12,23 @@ base {
 
 repositories {
     mavenCentral()
+    // Mod Menu, for the config screen. Kept out of the runtime classpath: see the comment below.
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/"
+    }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Compile-only, and deliberately so. Minecraft 26.1 and later ship unobfuscated, so there is no
+    // remapping step and this is a plain compileOnly rather than modCompileOnly. The config screen
+    // is reached through Mod Menu's "modmenu" entrypoint, which nothing loads unless Mod Menu is
+    // installed, so a player without Mod Menu never classloads the one class that names it.
+    compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {

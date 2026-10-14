@@ -1,9 +1,13 @@
 package com.localpack.bypass;
 
+import com.localpack.bypass.client.InfoScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
@@ -12,30 +16,59 @@ import net.minecraft.server.packs.repository.PackRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Everything that happens between a server offering a resource pack and the pack being on screen.
+ *
+ * <p>A pack can arrive at any moment — during the configuration phase of a connection, or in the
+ * middle of play — and the same server often sends several, one after another. The flow is therefore
+ * built around three rules:
+ *
+ * <ul>
+ *   <li><b>Ask once per pack.</b> The same pack offered again is not a new question. The answers
+ *       given on a connection are kept, so a server that repeats itself is answered from memory, and
+ *       a server the player has dealt with before is answered without a screen at all (see
+ *       {@code Config.rememberServers}).
+ *   <li><b>One screen at a time.</b> While a question is on screen nothing else is asked or started;
+ *       the packs that arrive meanwhile wait in a queue and are handled with the same answer.
+ *   <li><b>Never fail silently.</b> A download that does not work says so, on screen if there is
+ *       room for it and in the log either way. A click that appears to do nothing is the failure
+ *       mode this class exists to avoid.
+ * </ul>
+ *
+ * <p>State below is touched only from the client thread, except the downloads, which run on
+ * {@link #IO} and report back through {@code client.execute}.
+ */
 public final class PackFlow {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("localpack-bypass");
 
     private static final String FILE_ID_PREFIX = "file/";
     private static final String AUTO_ID_PREFIX = FILE_ID_PREFIX + LocalPackBypassHelper.AUTO_FILE_PREFIX;
+    private static final String ZIP_SUFFIX = ".zip";
 
     /**
-     * After the player clicks "Download all", further packs of the same connection are downloaded without asking,
+     * After the player agrees, further packs of the same connection are downloaded without asking,
      * and packs received on that connection within this window are kept enabled together.
      */
     private static final long APPROVAL_WINDOW_MS = 120_000L;
@@ -46,9 +79,35 @@ public final class PackFlow {
         return t;
     });
 
+    /** One id, so a second problem replaces the first notice instead of stacking behind it. */
+    private static final SystemToast.SystemToastId PROBLEM_TOAST = new SystemToast.SystemToastId();
+
     private record Incoming(ClientCommonPacketListenerImpl listener, ClientboundResourcePackPushPacket packet) {
         void send(Action action) {
             listener.send(new ServerboundResourcePackPacket(packet.id(), action));
+        }
+
+        String hash() {
+            return packet.hash().toLowerCase(Locale.ROOT);
+        }
+
+        String url() {
+            return packet.url();
+        }
+
+        /** The server this pack came from, or an empty string when the URL does not name one. */
+        String host() {
+            return hostOf(packet.url());
+        }
+
+        /** Identity of the connection, shared by its configuration and play phases. */
+        Object connection() {
+            return ((Disconnector) listener).localpackBypass$connectionKey();
+        }
+
+        /** The saved-server entry, which is where the game keeps "Server Resource Packs" per server. */
+        ServerData serverData() {
+            return ((Disconnector) listener).localpackBypass$serverData();
         }
     }
 
@@ -62,27 +121,51 @@ public final class PackFlow {
     private static final List<Incoming> QUEUE = new ArrayList<>();
     private static boolean timerScheduled = false;
     private static boolean busy = false;
+    /** True while this mod is showing a question: nothing else is asked and no batch is started. */
+    private static boolean asking = false;
+    /** The question on screen, to notice if something else replaced it. */
+    private static Screen prompt;
     private static Set<String> recentIds = new LinkedHashSet<>();
     private static long lastApplyMs = 0L;
     private static WeakReference<Object> lastApplyConnection = new WeakReference<>(null);
     private static WeakReference<Object> approvedConnection = new WeakReference<>(null);
     private static long approvedAtMs = 0L;
+    /** Per connection: what the player already answered about each pack, by hash. */
+    private static final Map<Object, Map<String, Boolean>> ANSWERS = new WeakHashMap<>();
 
     private PackFlow() {}
 
     public static void handle(ClientCommonPacketListenerImpl listener, ClientboundResourcePackPushPacket packet) {
         Minecraft client = Minecraft.getInstance();
         client.execute(() -> {
-            QUEUE.add(new Incoming(listener, packet));
+            Incoming incoming = new Incoming(listener, packet);
+            Boolean answered = answerOf(incoming);
+            if (Boolean.FALSE.equals(answered)) {
+                // Already turned down on this connection: saying no again is the whole handling.
+                LOGGER.info("Pack {} was declined on this connection already", incoming.hash());
+                PackRegistry.event(incoming.host(), incoming.url(), incoming.hash(), "declined", null, 0L, 0L);
+                incoming.send(Action.DECLINED);
+                return;
+            }
+            if (Boolean.TRUE.equals(answered)) {
+                LOGGER.info("Pack {} was accepted on this connection already", incoming.hash());
+            }
+            QUEUE.add(incoming);
             schedule(client);
         });
     }
 
-    /** Wait 300 ms to collect all packs the server sends back-to-back into one batch. */
+    /** Waits for the rest of a batch — servers send their packs back to back — then handles them together. */
     private static void schedule(Minecraft client) {
-        if (busy || timerScheduled || QUEUE.isEmpty()) return;
+        // A question that is no longer on screen was not answered: something else replaced it.
+        if (asking && client.gui.screen() != prompt) {
+            asking = false;
+            prompt = null;
+        }
+        if (busy || timerScheduled || asking || QUEUE.isEmpty()) return;
         timerScheduled = true;
-        CompletableFuture.delayedExecutor(300, TimeUnit.MILLISECONDS)
+        int wait = Config.get().batchWaitMs();
+        CompletableFuture.delayedExecutor(wait, TimeUnit.MILLISECONDS)
                 .execute(() -> client.execute(() -> {
                     timerScheduled = false;
                     startBatch(client);
@@ -90,14 +173,18 @@ public final class PackFlow {
     }
 
     private static void startBatch(Minecraft client) {
-        if (busy || QUEUE.isEmpty()) return;
+        if (busy || asking || QUEUE.isEmpty()) return;
         busy = true;
         List<Incoming> batch = new ArrayList<>(QUEUE);
         QUEUE.clear();
-        Path dir = GamePaths.resourcePacksDir();
+        Path dir = PackStorage.downloadDir();
+
+        // Reading the repository has to happen here, on the client thread; the rest — remembering,
+        // hashing, copying — is file work and belongs off it.
+        Set<String> available = new LinkedHashSet<>(client.getResourcePackRepository().getAvailableIds());
 
         CompletableFuture
-                .supplyAsync(() -> scan(dir, batch), IO)
+                .supplyAsync(() -> scan(dir, available, batch), IO)
                 .whenComplete((scan, error) -> client.execute(() -> {
                     try {
                         Scan result = scan;
@@ -105,7 +192,7 @@ public final class PackFlow {
                             LOGGER.warn("Could not check local resource packs", error);
                             result = new Scan(List.of(), batch);
                         }
-                        onScanned(client, dir, result);
+                        onScanned(client, result);
                     } catch (RuntimeException e) {
                         LOGGER.error("Error while processing resource packs", e);
                         finish(client);
@@ -113,115 +200,252 @@ public final class PackFlow {
                 }));
     }
 
-    private static Scan scan(Path dir, List<Incoming> batch) {
+    /**
+     * Sorts a batch into packs that are already on disk and packs that have to be fetched.
+     *
+     * <p>The game's own pack list is looked at first: a pack the repository already knows is one
+     * file name, no hashing and no folder scan. Only when that misses is what this mod remembers
+     * consulted — one {@code stat} — and only when that misses too is the folder hashed. A server
+     * that genuinely changed its pack sends a hash that is in none of those places, so it is
+     * fetched again, which is the point.
+     */
+    private static Scan scan(Path dir, Set<String> available, List<Incoming> batch) {
         List<Applied> found = new ArrayList<>();
         List<Incoming> missing = new ArrayList<>();
         for (Incoming in : batch) {
-            Path local = LocalPackBypassHelper.findLocalPackByHash(dir, in.packet().hash());
-            if (local != null) {
-                found.add(new Applied(in, local.getFileName().toString()));
-            } else {
-                missing.add(in);
-                LOGGER.info("No local pack with SHA-1 {} (url {}). Zips in {}: {}",
-                        in.packet().hash(), in.packet().url(), dir, LocalPackBypassHelper.describeZips(dir));
+            String hash = in.hash();
+            String fileName = LocalPackBypassHelper.fileNameFor(hash);
+
+            if (available.contains(FILE_ID_PREFIX + fileName)) {
+                LOGGER.info("The game already lists {} for this connection", fileName);
+                found.add(new Applied(in, fileName));
+                continue;
             }
+
+            Path local = locate(dir, hash);
+            if (local != null) {
+                try {
+                    // The pack may live outside the game's own folder; the game can only load it
+                    // from there, so a copy is put in place when one is needed.
+                    PackStorage.ensureLoadable(local);
+                    found.add(new Applied(in, fileName));
+                    continue;
+                } catch (IOException e) {
+                    LOGGER.warn("Could not make {} usable by the game: {}", local, e.toString());
+                }
+            }
+
+            missing.add(in);
+            LOGGER.info("No local pack with SHA-1 {} (url {}). Zips in {}: {}",
+                    hash, in.url(), dir, LocalPackBypassHelper.describeZips(dir));
         }
         return new Scan(found, missing);
     }
 
-    private static void onScanned(Minecraft client, Path dir, Scan scan) {
+    /** The file holding this pack: what the mod remembers, or a hash pass over the folder. */
+    private static Path locate(Path dir, String hash) {
+        Optional<PackRegistry.Pack> remembered = PackRegistry.find(hash);
+        if (remembered.isPresent()) {
+            Path file = dir.resolve(remembered.get().file);
+            if (Files.isRegularFile(file)) {
+                LOGGER.info("Found pack {} for SHA-1 {} from memory", file, hash);
+                return file;
+            }
+        }
+        return LocalPackBypassHelper.findLocalPackByHash(dir, hash);
+    }
+
+    private static void onScanned(Minecraft client, Scan scan) {
         for (Applied a : scan.found()) {
             LOGGER.info("Found local resource pack: {}", a.fileName());
             a.incoming().send(Action.ACCEPTED);
         }
         if (scan.missing().isEmpty()) {
-            apply(client, scan.found());
+            apply(client, scan.found(), List.of());
         } else {
-            ask(client, dir, scan);
+            ask(client, scan);
         }
     }
 
     private static boolean isApproved(Incoming in) {
-        Object key = ((Disconnector) in.listener()).localpackBypass$connectionKey();
+        Object key = in.connection();
         return key != null
                 && approvedConnection.get() == key
                 && System.currentTimeMillis() - approvedAtMs < APPROVAL_WINDOW_MS;
     }
 
     private static void approve(Incoming in) {
-        approvedConnection = new WeakReference<>(((Disconnector) in.listener()).localpackBypass$connectionKey());
+        approvedConnection = new WeakReference<>(in.connection());
         approvedAtMs = System.currentTimeMillis();
     }
 
-    /** One screen for the whole batch: "Download all" or "Decline and leave". */
-    private static void ask(Minecraft client, Path dir, Scan scan) {
-        Screen previous = client.gui.screen();
-        List<Incoming> missing = scan.missing();
+    private static Boolean answerOf(Incoming in) {
+        Object key = in.connection();
+        if (key == null) return null;
+        Map<String, Boolean> answers = ANSWERS.get(key);
+        return answers == null ? null : answers.get(in.hash());
+    }
 
-        // The server sends packs one by one: the player already agreed on this connection, so do not ask again.
-        if (isApproved(missing.get(0))) {
-            LOGGER.info("Already approved on this connection, downloading {} more pack(s) without asking", missing.size());
-            approvedAtMs = System.currentTimeMillis();
-            downloadAll(client, dir, scan);
+    /** The per-server "Server Resource Packs" setting, or Prompt when there is no saved server. */
+    private static ServerData.ServerPackStatus packStatus(Incoming in) {
+        try {
+            ServerData data = in.serverData();
+            return data == null ? ServerData.ServerPackStatus.PROMPT : data.getResourcePackStatus();
+        } catch (RuntimeException e) {
+            return ServerData.ServerPackStatus.PROMPT;
+        }
+    }
+
+    /**
+     * Keeps the answer, so the same question is not asked again — in this mod's own memory, which is
+     * what makes a server without a saved entry behave the same way, and in the game's per-server
+     * setting, which is the switch the player can see and change in the server list.
+     */
+    private static void rememberConsent(Incoming in) {
+        String host = in.host();
+        PackRegistry.accepted(host, in.hash());
+        ServerData data = in.serverData();
+        if (data == null) return;
+        try {
+            data.setResourcePackStatus(ServerData.ServerPackStatus.ENABLED);
+            ServerList.saveSingleServer(data);
+        } catch (RuntimeException e) {
+            LOGGER.warn("Could not keep the resource pack choice for this server: {}", e.toString());
+        }
+    }
+
+    private static void answer(Incoming in, boolean accepted) {
+        Object key = in.connection();
+        if (key == null) return;
+        ANSWERS.computeIfAbsent(key, k -> new HashMap<>()).put(in.hash(), accepted);
+    }
+
+    /**
+     * Asks the player about everything that is not on disk yet, or answers it from what is already
+     * known: the game's own per-server "Server Resource Packs" setting, a pack they agreed to on this
+     * connection, a server they have agreed to before, or a question they already answered.
+     */
+    private static void ask(Minecraft client, Scan scan) {
+        Incoming first = scan.missing().get(0);
+        String host = first.host();
+
+        // The game keeps this setting per server — "Enabled", "Prompt", "Disabled" — and vanilla
+        // never asks again when it is Enabled, so neither does this. Cancelling the pack push means
+        // vanilla's own download never runs, which is the whole point of this mod, but the choice
+        // the player made is still theirs and is honoured here.
+        ServerData.ServerPackStatus status = packStatus(first);
+        if (status == ServerData.ServerPackStatus.DISABLED) {
+            LOGGER.info("Resource packs are switched off for {}; declining", host.isEmpty() ? "this server" : host);
+            for (Incoming i : scan.missing()) {
+                PackRegistry.event(i.host(), i.url(), i.hash(), "declined", "server packs disabled", 0L, 0L);
+            }
+            declineAll(client, scan);
             return;
         }
 
+        Boolean remembered = answerOf(first);
+        boolean trusted = status == ServerData.ServerPackStatus.ENABLED
+                || (Config.get().rememberServers() && PackRegistry.isTrusted(host));
+        if (Boolean.TRUE.equals(remembered) || isApproved(first) || trusted) {
+            LOGGER.info("Downloading {} more pack(s) from {} without asking (already agreed)",
+                    scan.missing().size(), host.isEmpty() ? "this server" : host);
+            approve(first);
+            downloadAll(client, scan);
+            return;
+        }
+        if (Boolean.FALSE.equals(remembered)) {
+            declineAll(client, scan);
+            return;
+        }
+
+        Screen previous = client.gui.screen();
         Component message = Component.translatable(
                 "localpack-bypass.screen.message",
-                missing.size(),
-                hostSuffix(missing.get(0).packet().url()));
-        for (Incoming i : missing) {
+                scan.missing().size(),
+                hostSuffix(first.url()));
+        for (Incoming i : scan.missing()) {
             if (i.packet().prompt().isPresent()) {
                 message = message.copy().append(Component.literal("\n\n")).append(i.packet().prompt().get());
                 break;
             }
         }
 
-        client.gui.setScreen(new ConfirmScreen(
+        ConfirmScreen question = new ConfirmScreen(
                 accepted -> {
+                    asking = false;
+                    prompt = null;
                     client.gui.setScreen(previous);
+                    answer(first, accepted);
                     if (accepted) {
-                        approve(missing.get(0));
-                        downloadAll(client, dir, scan);
+                        approve(first);
+                        rememberConsent(first);
+                        downloadAll(client, scan);
                     } else {
-                        for (Incoming i : missing) {
-                            i.send(Action.DECLINED);
-                        }
-                        leaveServer(client, missing.get(0));
+                        PackRegistry.declined(host, first.hash());
+                        declineAll(client, scan);
                     }
                 },
                 Component.translatable("localpack-bypass.screen.title"),
                 message,
                 Component.translatable("localpack-bypass.screen.download"),
-                Component.translatable("localpack-bypass.screen.decline")));
+                Component.translatable("localpack-bypass.screen.decline"));
+        // This is a question about joining a server; a click of the mouse already under way when it
+        // appeared should not be able to answer it.
+        question.setDelay(10);
+
+        asking = true;
+        prompt = question;
+        client.gui.setScreen(question);
     }
 
-    /** Like vanilla on decline: disconnect from the server. */
-    private static void leaveServer(Minecraft client, Incoming any) {
+    /** Like vanilla on decline: say no, then leave the server. */
+    private static void declineAll(Minecraft client, Scan scan) {
+        for (Incoming i : scan.missing()) {
+            i.send(Action.DECLINED);
+        }
+        if (scan.missing().isEmpty()) {
+            finish(client);
+            return;
+        }
         QUEUE.clear();
         finish(client);
-        ((Disconnector) any.listener()).localpackBypass$disconnect(
-                Component.translatable("localpack-bypass.disconnect"));
+        ((Disconnector) scan.missing().get(0).listener())
+                .localpackBypass$disconnect(Component.translatable("localpack-bypass.disconnect"));
     }
 
-    private static void downloadAll(Minecraft client, Path dir, Scan scan) {
+    private static void downloadAll(Minecraft client, Scan scan) {
+        Path dir = PackStorage.downloadDir();
         for (Incoming i : scan.missing()) {
             i.send(Action.ACCEPTED);
         }
-        LOGGER.info("Downloading server resource packs: {}", scan.missing().size());
+        LOGGER.info("Downloading {} server resource pack(s) into {}", scan.missing().size(), dir);
 
-        // The same pack (by hash) is downloaded only once.
+        Duration timeout = Duration.ofSeconds(Config.get().downloadTimeoutSeconds());
+        int attempts = Config.get().downloadAttempts();
+
+        // The same pack (by hash) is downloaded only once, however many times it was pushed.
         Map<String, CompletableFuture<Outcome>> byHash = new LinkedHashMap<>();
         for (Incoming i : scan.missing()) {
-            String hash = i.packet().hash().toLowerCase(Locale.ROOT);
-            String url = i.packet().url();
+            String hash = i.hash();
+            String url = i.url();
+            String host = i.host();
             byHash.computeIfAbsent(hash, h -> CompletableFuture.supplyAsync(() -> {
+                long started = System.currentTimeMillis();
                 try {
-                    return new Outcome(LocalPackBypassHelper.download(url, h, dir), null);
+                    LocalPackBypassHelper.Downloaded downloaded =
+                            LocalPackBypassHelper.download(url, h, dir, timeout, attempts);
+                    PackStorage.ensureLoadable(dir.resolve(downloaded.fileName()));
+                    long took = System.currentTimeMillis() - started;
+                    PackRegistry.remember(h, downloaded.fileName(), downloaded.bytes(), host, url);
+                    PackRegistry.event(host, url, h, "downloaded", null, downloaded.bytes(), took);
+                    LOGGER.info("Downloaded {} ({} bytes) in {} ms", downloaded.fileName(), downloaded.bytes(), took);
+                    return new Outcome(downloaded.fileName(), null);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     return new Outcome(null, e);
                 } catch (Throwable t) {
+                    PackRegistry.event(host, url, h, "failed", t.toString(), 0L,
+                            System.currentTimeMillis() - started);
                     return new Outcome(null, t);
                 }
             }, IO));
@@ -231,17 +455,20 @@ public final class PackFlow {
                 .whenComplete((ignored, error) -> client.execute(() -> {
                     try {
                         List<Applied> all = new ArrayList<>(scan.found());
+                        List<Component> failures = new ArrayList<>();
                         for (Incoming i : scan.missing()) {
-                            Outcome o = byHash.get(i.packet().hash().toLowerCase(Locale.ROOT)).join();
+                            Outcome o = byHash.get(i.hash()).join();
                             if (o.error() == null) {
                                 all.add(new Applied(i, o.fileName()));
-                            } else {
-                                LOGGER.error("Could not download resource pack", o.error());
-                                i.send(o.error() instanceof IllegalArgumentException
-                                        ? Action.INVALID_URL : Action.FAILED_DOWNLOAD);
+                                continue;
                             }
+                            LOGGER.error("Could not download resource pack {} from {}", i.hash(), i.url(), o.error());
+                            i.send(o.error() instanceof IllegalArgumentException
+                                    ? Action.INVALID_URL : Action.FAILED_DOWNLOAD);
+                            failures.add(Component.translatable("localpack-bypass.screen.failed",
+                                    hostSuffix(i.url()), reason(o.error())));
                         }
-                        apply(client, all);
+                        apply(client, all, failures);
                     } catch (RuntimeException e) {
                         LOGGER.error("Error while processing resource packs", e);
                         finish(client);
@@ -249,10 +476,11 @@ public final class PackFlow {
                 }));
     }
 
-    /** Enables all packs of the batch at once, saves the selection and reloads resources once. */
-    private static void apply(Minecraft client, List<Applied> applied) {
+    /** Enables every pack of the batch at once, saves the selection and reloads resources once. */
+    private static void apply(Minecraft client, List<Applied> applied, List<Component> failures) {
         if (applied.isEmpty()) {
             finish(client);
+            show(client, failures);
             return;
         }
         for (Applied a : applied) {
@@ -263,14 +491,15 @@ public final class PackFlow {
         repository.reload();
 
         Set<String> ids = new LinkedHashSet<>();
+        Set<String> hosts = new LinkedHashSet<>();
         for (Applied a : applied) {
             ids.add(FILE_ID_PREFIX + a.fileName());
+            hosts.add(a.incoming().host());
         }
 
-        List<String> current = new ArrayList<>(repository.getSelectedIds());
-
-        // Remove old packs downloaded by the mod, except those received on this same connection.
-        Object connKey = ((Disconnector) applied.get(0).incoming().listener()).localpackBypass$connectionKey();
+        // Packs this mod enabled earlier on the same connection stay on, so a batch that arrived in
+        // two halves is not half switched off by the second half.
+        Object connKey = applied.get(0).incoming().connection();
         long now = System.currentTimeMillis();
         Set<String> keep = new LinkedHashSet<>();
         if (connKey != null && lastApplyConnection.get() == connKey && now - lastApplyMs < APPROVAL_WINDOW_MS) {
@@ -281,41 +510,58 @@ public final class PackFlow {
         lastApplyMs = now;
         lastApplyConnection = new WeakReference<>(connKey);
 
+        boolean keepEarlier = Config.get().keepEarlierPacks();
+        List<String> current = new ArrayList<>(repository.getSelectedIds());
         Set<String> selected = new LinkedHashSet<>(current);
-        selected.removeIf(s -> s.startsWith(AUTO_ID_PREFIX) && !keep.contains(s));
+        selected.removeIf(id -> {
+            if (!id.startsWith(AUTO_ID_PREFIX) || ids.contains(id) || keep.contains(id)) return false;
+            // The pack this server gave us last time is replaced by the one it is sending now. Packs
+            // from other servers are none of this batch's business, so they are left as they were
+            // unless the player asked for a clean slate.
+            String owner = PackRegistry.hostOfHash(hashOfId(id)).orElse(null);
+            if (owner != null && hosts.contains(owner)) return true;
+            return !keepEarlier;
+        });
         selected.addAll(ids);
 
-        if (new ArrayList<>(selected).equals(current)) {
-            // Everything is already enabled, no reload needed.
-            for (Applied a : applied) {
-                a.incoming().send(Action.SUCCESSFULLY_LOADED);
-            }
-            finish(client);
-            return;
+        if (!new ArrayList<>(selected).equals(current)) {
+            repository.setSelected(selected);
+            // Writes the selection to options.txt, and reloads the pack stack if it changed. Vanilla
+            // does both here, which is why there is no separate reload call: asking for one as well
+            // is the double reload of MC-252082.
+            client.options.updateResourcePacks(repository);
         }
 
-        repository.setSelected(selected);
-        Set<String> active = new LinkedHashSet<>(repository.getSelectedIds());
         List<Applied> good = new ArrayList<>();
+        List<Component> problems = new ArrayList<>(failures);
+        Set<String> active = new LinkedHashSet<>(repository.getSelectedIds());
         for (Applied a : applied) {
             if (active.contains(FILE_ID_PREFIX + a.fileName())) {
                 good.add(a);
             } else {
                 LOGGER.error("Pack {} could not be enabled (not found or incompatible)", a.fileName());
                 a.incoming().send(Action.FAILED_RELOAD);
+                problems.add(Component.translatable("localpack-bypass.screen.reloadFailed", a.fileName()));
             }
         }
-        client.options.updateResourcePacks(repository); // saves to options.txt
 
-        client.reloadResourcePacks().whenComplete((ignored, error) -> client.execute(() -> {
-            if (error != null) {
-                LOGGER.error("Error while reloading resources", error);
-            }
-            for (Applied a : good) {
-                a.incoming().send(error == null ? Action.SUCCESSFULLY_LOADED : Action.FAILED_RELOAD);
-            }
-            finish(client);
-        }));
+        // Answered here and now rather than from a reload callback. The server keeps a connection in
+        // its configuration phase until it hears one of these, and Minecraft defers a reload that is
+        // asked for while a loading overlay is up — returning a future that completes much later, or
+        // not at all if the join is abandoned. Waiting on it means a join that sits on "Joining
+        // world" forever; the packs are selected and the reload is on its way either way.
+        for (Applied a : good) {
+            a.incoming().send(Action.SUCCESSFULLY_LOADED);
+        }
+
+        finish(client);
+        show(client, problems);
+    }
+
+    /** The hash inside a {@code file/localpack-<hash>.zip} id. */
+    private static String hashOfId(String id) {
+        int end = id.endsWith(ZIP_SUFFIX) ? id.length() - ZIP_SUFFIX.length() : id.length();
+        return end > AUTO_ID_PREFIX.length() ? id.substring(AUTO_ID_PREFIX.length(), end) : "";
     }
 
     private static void finish(Minecraft client) {
@@ -326,12 +572,57 @@ public final class PackFlow {
         schedule(client); // in case more packs arrived meanwhile
     }
 
-    private static String hostSuffix(String url) {
+    /**
+     * Says what did not work. Leaving the player with a click that appears to have done nothing is
+     * the bug this exists to prevent, so anything that fails ends up here: on screen when the player
+     * is in a world or looking at one of this mod's screens, and as a toast when a join is in
+     * progress and the screen belongs to that join.
+     */
+    private static void show(Minecraft client, List<Component> problems) {
+        if (problems.isEmpty()) return;
+
+        Component message = Component.empty();
+        int shown = Math.min(problems.size(), 4);
+        for (int i = 0; i < shown; i++) {
+            if (i > 0) message = message.copy().append(Component.literal("\n"));
+            message = message.copy().append(problems.get(i));
+        }
+        if (problems.size() > shown) {
+            message = message.copy().append(Component.literal("\n"))
+                    .append(Component.translatable("localpack-bypass.screen.moreFailures", problems.size() - shown));
+        }
+
+        LOGGER.warn("Resource pack problem: {}", message.getString());
+        Component heading = Component.translatable("localpack-bypass.screen.failedTitle");
+
+        Screen current = client.gui.screen();
+        if (current == null || current instanceof InfoScreen) {
+            client.gui.setScreen(new InfoScreen(heading, message));
+            return;
+        }
+        SystemToast.addOrUpdate(client.gui.toastManager(), PROBLEM_TOAST, heading, message);
+    }
+
+    private static String hostOf(String url) {
         try {
             String host = URI.create(url).getHost();
-            return host == null ? "" : " (" + host + ")";
+            return host == null ? "" : host.toLowerCase(Locale.ROOT);
         } catch (RuntimeException e) {
             return "";
         }
+    }
+
+    private static String hostSuffix(String url) {
+        String host = hostOf(url);
+        return host.isEmpty() ? "" : " (" + host + ")";
+    }
+
+    /** What went wrong, in a line short enough to fit in a screen. */
+    private static Component reason(Throwable error) {
+        String text = error == null ? null : error.getMessage();
+        if (text == null || text.isBlank()) {
+            text = error == null ? "?" : error.getClass().getSimpleName();
+        }
+        return Component.literal(text);
     }
 }

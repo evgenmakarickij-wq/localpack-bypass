@@ -4,6 +4,7 @@ import com.localpack.bypass.LocalPackBypassHelper;
 import com.localpack.bypass.Disconnector;
 import com.localpack.bypass.PackFlow;
 import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
@@ -21,6 +22,10 @@ public abstract class ClientCommonPacketListenerMixin implements Disconnector {
     @Final
     protected Connection connection;
 
+    @Shadow
+    @Final
+    protected ServerData serverData;
+
     @Override
     public void localpackBypass$disconnect(Component reason) {
         this.connection.disconnect(reason);
@@ -29,6 +34,11 @@ public abstract class ClientCommonPacketListenerMixin implements Disconnector {
     @Override
     public Object localpackBypass$connectionKey() {
         return this.connection;
+    }
+
+    @Override
+    public ServerData localpackBypass$serverData() {
+        return this.serverData;
     }
 
     @Inject(method = "handleResourcePackPush", at = @At("HEAD"), cancellable = true)

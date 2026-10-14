@@ -6,16 +6,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Comparison for versions like "0.0.2", "v0.0.2", "1.2.0-beta", "1.2.0-beta.1".
+ * Comparison for versions like "0.0.2", "v0.0.2", "1.2.0-beta", "1.2.0-beta.1", "0.0.1.2026-alpha-build".
  *
  * <p>No dependency is pulled in for this: the release tags of this mod are plain dotted numbers
  * with an optional pre-release suffix, and a full semver library would be more code than the
  * comparison itself.
+ *
+ * <p>Any number of dotted numeric parts is accepted, not just three, because this mod's own tags
+ * carry a fourth one naming the build. Comparison walks the parts in order and treats a part that
+ * is missing on one side as zero, so "1.2" and "1.2.0.0" are the same version.
  */
 public final class ModVersion implements Comparable<ModVersion> {
 
-    private static final Pattern VERSION = Pattern.compile("^v?(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?(?:[-+](.+))?$");
+    private static final Pattern VERSION = Pattern.compile("^v?(\\d+(?:\\.\\d+)*)(?:[-+](.+))?$");
 
+    /** Parsed numeric parts, most significant first. Never empty. */
     private final int[] numbers;
     private final String preRelease;
 
@@ -29,12 +34,18 @@ public final class ModVersion implements Comparable<ModVersion> {
         Matcher matcher = VERSION.matcher(raw.trim());
         if (!matcher.matches()) return null;
 
-        int[] numbers = new int[3];
-        for (int i = 0; i < 3; i++) {
-            String part = matcher.group(i + 1);
-            numbers[i] = part == null ? 0 : Integer.parseInt(part);
+        String[] parts = matcher.group(1).split("\\.", -1);
+        int[] numbers = new int[parts.length];
+        try {
+            for (int i = 0; i < parts.length; i++) {
+                numbers[i] = Integer.parseInt(parts[i]);
+            }
+        } catch (NumberFormatException e) {
+            // A part with more digits than an int holds. No release of this mod will ever have one,
+            // and "unreadable" is the same answer the old three-part parser gave, so say that.
+            return null;
         }
-        return new ModVersion(numbers, matcher.group(4));
+        return new ModVersion(numbers, matcher.group(2));
     }
 
     /** Null-safe: an unparseable version on either side counts as "not newer". */
@@ -46,8 +57,8 @@ public final class ModVersion implements Comparable<ModVersion> {
 
     @Override
     public int compareTo(ModVersion other) {
-        for (int i = 0; i < 3; i++) {
-            int diff = Integer.compare(numbers[i], other.numbers[i]);
+        for (int i = 0; i < Math.max(numbers.length, other.numbers.length); i++) {
+            int diff = Integer.compare(numberAt(numbers, i), numberAt(other.numbers, i));
             if (diff != 0) return diff;
         }
         // No pre-release suffix means a final release, which is newer than any pre-release.
@@ -55,6 +66,10 @@ public final class ModVersion implements Comparable<ModVersion> {
         if (preRelease == null) return 1;
         if (other.preRelease == null) return -1;
         return comparePreRelease(preRelease, other.preRelease);
+    }
+
+    private static int numberAt(int[] numbers, int index) {
+        return index < numbers.length ? numbers[index] : 0;
     }
 
     /** "beta.10" must sort after "beta.9", so numeric identifiers are compared as numbers. */
@@ -66,17 +81,25 @@ public final class ModVersion implements Comparable<ModVersion> {
             if (i >= b.size()) return 1;
             String x = a.get(i);
             String y = b.get(i);
-            boolean xNumber = x.chars().allMatch(Character::isDigit);
-            boolean yNumber = y.chars().allMatch(Character::isDigit);
-            int diff;
-            if (xNumber && yNumber) {
-                diff = Integer.compare(Integer.parseInt(x), Integer.parseInt(y));
-            } else {
-                diff = x.compareTo(y);
-            }
+            // Numeric identifiers compare as numbers ("beta.10" after "beta.9"); anything else
+            // compares as text, including a digit run too long for an int.
+            Long xNumber = asNumber(x);
+            Long yNumber = asNumber(y);
+            int diff = xNumber != null && yNumber != null
+                    ? Long.compare(xNumber, yNumber)
+                    : x.compareTo(y);
             if (diff != 0) return diff;
         }
         return 0;
+    }
+
+    private static Long asNumber(String value) {
+        if (value.isEmpty() || !value.chars().allMatch(Character::isDigit)) return null;
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private static List<String> split(String value) {
@@ -89,6 +112,11 @@ public final class ModVersion implements Comparable<ModVersion> {
 
     @Override
     public String toString() {
-        return numbers[0] + "." + numbers[1] + "." + numbers[2] + (preRelease == null ? "" : "-" + preRelease);
+        StringBuilder sb = new StringBuilder();
+        for (int number : numbers) {
+            if (sb.length() > 0) sb.append('.');
+            sb.append(number);
+        }
+        return preRelease == null ? sb.toString() : sb + "-" + preRelease;
     }
 }
