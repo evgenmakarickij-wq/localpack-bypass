@@ -7,8 +7,15 @@
   "localpack-bypass.screen.failed": "Не удалось скачать %s: %s",
   "localpack-bypass.screen.reloadFailed": "Игра не смогла включить %s",
   "localpack-bypass.screen.moreFailures": "и ещё %s",
+  "localpack-bypass.error.url": "по адресу, которую он дал, скачать нельзя",
+  "localpack-bypass.error.status": "сервер ответил ошибкой (%s)",
+  "localpack-bypass.error.timeout": "скачивание заняло слишком много времени",
+  "localpack-bypass.error.connection": "соединение оборвалось, не дойдя до конца файла",
+  "localpack-bypass.error.checksum": "файл пришёл повреждённым, поэтому его отбросили",
+  "localpack-bypass.error.disk": "не удалось сохранить файл в папку с паками",
+  "localpack-bypass.error.stopped": "скачивание остановлено",
+  "localpack-bypass.error.other": "случилось что-то неожиданное (%s)",
   "localpack-bypass.disconnect": "Вы отказались скачивать ресурспаки сервера",
-
   "localpack-bypass.update.title": "Обновление мода",
   "localpack-bypass.update.message": "Доступна версия %s мода «Локальный кэш ресурспаков», у вас %s.\n\nСкачать её? Старая версия будет заменена, игру нужно перезапустить.",
   "localpack-bypass.update.download": "Скачать и установить",
@@ -20,7 +27,6 @@
   "localpack-bypass.update.dev": "Мод запущен из среды разработки, обновления отключены.",
   "localpack-bypass.update.failed": "Не удалось установить обновление: %s",
   "localpack-bypass.update.ok": "ОК",
-
   "localpack-bypass.config.title": "Настройки кэша ресурспаков",
   "localpack-bypass.config.header.storage": "Где хранятся паки",
   "localpack-bypass.config.folder": "Папка для скачанных паков",
@@ -32,13 +38,11 @@
   "localpack-bypass.config.folder.copied": "Паки хранятся вне папки игры, поэтому каждый из них дополнительно копируется в %s, прежде чем включиться.",
   "localpack-bypass.config.openStorage": "Открыть папку с паками",
   "localpack-bypass.config.openGame": "Открыть папку игры",
-
   "localpack-bypass.config.header.asking": "Вопросы и запоминание",
   "localpack-bypass.config.rememberServers": "Запоминать серверы, которым вы сказали «да»",
   "localpack-bypass.config.rememberServers.tooltip": "Сервер, с которого вы уже брали паки, больше не переспрашивается. Ответ также записывается в настройку игры для этого сервера — рядом с вариантами «Спрашивать», «Включено» и «Отключено».",
   "localpack-bypass.config.keepEarlier": "Оставлять паки с других серверов",
   "localpack-bypass.config.keepEarlier.tooltip": "Паки с других серверов остаются включёнными, когда новый сервер присылает свои. Отключите, чтобы на каждом сервере были только его собственные паки.",
-
   "localpack-bypass.config.header.download": "Скачивание",
   "localpack-bypass.config.batchWait": "Ждать перед вопросом",
   "localpack-bypass.config.batchWait.tooltip": "Сколько ждать остальные паки из серии. Сервер присылает все свои паки сразу, поэтому ожидание собирает их в один вопрос вместо нескольких.",
@@ -46,7 +50,6 @@
   "localpack-bypass.config.timeout.tooltip": "Сколько может длиться одно скачивание, прежде чем его бросят и попробуют снова.",
   "localpack-bypass.config.attempts": "Попыток",
   "localpack-bypass.config.attempts.tooltip": "Сколько раз повторять неудачное скачивание. Несовпадение контрольной суммы считается неудачей: именно так выглядит оборванная загрузка.",
-
   "localpack-bypass.config.header.history": "Запись того, что присылали серверы",
   "localpack-bypass.config.history": "Вести запись",
   "localpack-bypass.config.history.tooltip": "Записывает каждый ресурспак, который прислал сервер, что с ним стало и откуда он. Ничего никуда не отправляется: запись — это файл на вашем компьютере.",
@@ -54,11 +57,9 @@
   "localpack-bypass.config.historyLimit.tooltip": "Сколько записей хранится, прежде чем самые старые начнут исчезать.",
   "localpack-bypass.config.verbose": "Записывать и подробности",
   "localpack-bypass.config.verbose.tooltip": "Дополнительно сохраняет технические подробности: адреса, контрольные суммы, размеры и длительность каждой загрузки.",
-
   "localpack-bypass.config.header.manage": "Управление",
   "localpack-bypass.config.managePacks": "Скачанные паки",
   "localpack-bypass.config.openHistory": "Что присылали серверы",
-
   "localpack-bypass.packs.title": "Скачанные паки",
   "localpack-bypass.packs.empty": "Паки ещё не скачаны. Список наполняется, когда вы заходите на серверы, которые их используют.",
   "localpack-bypass.packs.server": "С %s (%s)",
@@ -75,7 +76,6 @@
   "localpack-bypass.packs.forgetAll.message": "Мод забудет, каким серверам вы сказали «да», какие паки он скачал, и всю запись того, что присылали серверы.\n\nНи один файл паков удалён не будет.",
   "localpack-bypass.packs.forgetAll.yes": "Забыть",
   "localpack-bypass.packs.forgetAll.no": "Отмена",
-
   "localpack-bypass.history.title": "Что присылали серверы",
   "localpack-bypass.history.clear": "Очистить запись",
   "localpack-bypass.history.refresh": "Обновить",
@@ -88,13 +88,11 @@
   "localpack-bypass.history.clear.message": "Все записи будут удалены. Скачанные паки не трогаются, и мод дальше будет помнить серверы, которым вы сказали «да».",
   "localpack-bypass.history.clear.yes": "Очистить",
   "localpack-bypass.history.clear.no": "Отмена",
-
   "localpack-bypass.result.found": "уже на диске",
   "localpack-bypass.result.downloaded": "скачано",
   "localpack-bypass.result.failed": "не скачалось",
   "localpack-bypass.result.declined": "отказано",
   "localpack-bypass.result.repeat": "прислано снова",
-
   "localpack-bypass.unit.ms": "%s мс",
   "localpack-bypass.unit.seconds": "%s с",
   "localpack-bypass.unit.times": "%s",
@@ -104,7 +102,6 @@
   "localpack-bypass.size.kb": "%s КБ",
   "localpack-bypass.size.mb": "%s МБ",
   "localpack-bypass.gui.close": "ОК",
-
   "modmenu.nameTranslation.localpack-bypass": "Локальный кэш ресурспаков",
   "modmenu.descriptionTranslation.localpack-bypass": "Скачивает ресурспаки сервера одной кнопкой, сохраняет их в resourcepacks и включает автоматически. Если пак уже скачан, вы заходите без запросов."
 }

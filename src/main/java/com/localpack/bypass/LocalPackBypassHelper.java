@@ -157,6 +157,51 @@ public final class LocalPackBypassHelper {
     /** What a finished download produced: the name it was saved under, and its size. */
     public record Downloaded(String fileName, long bytes) {}
 
+    /**
+     * Why a download did not work, in the few kinds that are worth telling a player apart.
+     *
+     * <p>A download fails with a message about sockets, status lines and digests, and none of that is
+     * something a player can act on — worse, it is written in whichever language the code happened to
+     * use, which is not the language the player is reading the rest of the game in. The kind is what
+     * the screens translate; the message that goes with it stays in the log, where a person debugging
+     * a server's pack can actually use it.
+     */
+    public enum Failure {
+        /** Not an http(s) address, or not an address at all. */
+        BAD_URL,
+        /** The server answered something other than 200. */
+        HTTP_STATUS,
+        /** The transfer took longer than the allowed time. */
+        TIMEOUT,
+        /** The connection dropped, or the address could not be reached. */
+        CONNECTION,
+        /** The bytes arrived but do not hash to what the server said they would. */
+        CHECKSUM,
+        /** The file could not be written: no room, no permission, or a folder in the way. */
+        DISK
+    }
+
+    /** A download that failed, carrying the kind of failure and the technical detail for the log. */
+    public static final class DownloadFailedException extends IOException {
+        private final Failure kind;
+        private final String detail;
+
+        DownloadFailedException(Failure kind, String detail, Throwable cause) {
+            super(detail, cause);
+            this.kind = kind;
+            this.detail = detail;
+        }
+
+        public Failure kind() {
+            return kind;
+        }
+
+        /** A short, language-neutral tag for the log and the record: "http 404", "checksum", "timeout". */
+        public String detail() {
+            return detail;
+        }
+    }
+
     /** A download with the settings the mod has always used. */
     public static String download(String url, String expectedHash, Path dir) throws IOException, InterruptedException {
         return download(url, expectedHash, dir, Duration.ofMinutes(10), 1).fileName();
@@ -174,25 +219,41 @@ public final class LocalPackBypassHelper {
     public static Downloaded download(String url, String expectedHash, Path dir, Duration timeout, int attempts)
             throws IOException, InterruptedException {
         URI uri = parseHttpUri(url);
-        Files.createDirectories(dir);
         String fileName = fileNameFor(expectedHash);
         Path target = dir.resolve(fileName);
         Path part = dir.resolve(fileName + ".part");
+        try {
+            Files.createDirectories(dir);
+        } catch (IOException e) {
+            throw new DownloadFailedException(Failure.DISK, "could not make " + dir, e);
+        }
 
         int tries = Math.max(1, attempts);
         for (int attempt = 1; ; attempt++) {
             try {
                 long bytes = downloadOnce(uri, expectedHash, part, timeout);
-                Files.move(part, target, StandardCopyOption.REPLACE_EXISTING);
+                try {
+                    Files.move(part, target, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    throw new DownloadFailedException(Failure.DISK, "could not save into " + dir, e);
+                }
                 return new Downloaded(fileName, bytes);
             } catch (IOException e) {
-                Files.deleteIfExists(part);
                 if (attempt >= tries || !worthRetrying(e)) throw e;
                 LOGGER.warn("Download of {} did not work (attempt {}/{}): {}", url, attempt, tries, e.toString());
                 Thread.sleep(Math.min(2_000L, 250L * attempt));
             } finally {
-                Files.deleteIfExists(part);
+                discard(part);
             }
+        }
+    }
+
+    /** Removes a half-written file. A failure to remove it is worth a line in the log, no more. */
+    private static void discard(Path part) {
+        try {
+            Files.deleteIfExists(part);
+        } catch (IOException e) {
+            LOGGER.warn("Could not remove {}: {}", part, e.toString());
         }
     }
 
@@ -201,11 +262,11 @@ public final class LocalPackBypassHelper {
         try {
             uri = URI.create(url);
         } catch (RuntimeException e) {
-            throw new IllegalArgumentException("Некорректный URL: " + url, e);
+            throw new DownloadFailedException(Failure.BAD_URL, "not a parseable address", e);
         }
         String scheme = uri.getScheme();
         if (scheme == null || !(scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"))) {
-            throw new IllegalArgumentException("Неподдерживаемая схема URL: " + scheme);
+            throw new DownloadFailedException(Failure.BAD_URL, "scheme " + scheme, null);
         }
         return uri;
     }
@@ -213,6 +274,8 @@ public final class LocalPackBypassHelper {
     /** Writes to {@code part} and returns the number of bytes read. */
     private static long downloadOnce(URI uri, String expectedHash, Path part, Duration timeout)
             throws IOException, InterruptedException {
+        long bytes;
+        MessageDigest digest = digest();
         try {
             HttpRequest request = HttpRequest.newBuilder(uri)
                     .timeout(timeout)
@@ -222,46 +285,63 @@ public final class LocalPackBypassHelper {
             HttpResponse<InputStream> response = HTTP.send(request, HttpResponse.BodyHandlers.ofInputStream());
             if (response.statusCode() != 200) {
                 response.body().close();
-                throw new HttpStatusException(response.statusCode());
+                throw new DownloadFailedException(Failure.HTTP_STATUS, "http " + response.statusCode(), null);
             }
 
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            long bytes;
             try (InputStream in = new DigestInputStream(response.body(), digest)) {
                 bytes = Files.copy(in, part, StandardCopyOption.REPLACE_EXISTING);
             }
+        } catch (IOException e) {
+            // Whatever the socket library said, what a player needs to know is which of these it was.
+            throw asFailure(e);
+        }
 
-            String actual = HexFormat.of().formatHex(digest.digest());
-            if (!actual.equalsIgnoreCase(expectedHash)) {
-                throw new IOException("SHA-1 не совпадает: ожидался " + expectedHash + ", получен " + actual);
-            }
-            return bytes;
+        String actual = HexFormat.of().formatHex(digest.digest());
+        if (!actual.equalsIgnoreCase(expectedHash)) {
+            throw new DownloadFailedException(Failure.CHECKSUM,
+                    "sha1 " + actual + " but the server said " + expectedHash, null);
+        }
+        return bytes;
+    }
+
+    private static MessageDigest digest() {
+        try {
+            return MessageDigest.getInstance("SHA-1");
         } catch (NoSuchAlgorithmException e) {
-            throw new IOException(e);
+            throw new IllegalStateException("SHA-1 is not available in this runtime", e);
         }
     }
 
-    /** An HTTP answer that is not 200. Kept apart from other errors so it can be judged for retrying. */
-    private static final class HttpStatusException extends IOException {
-        private final int status;
-
-        HttpStatusException(int status) {
-            super("Сервер ответил HTTP " + status);
-            this.status = status;
+    /** Puts one of the socket, timeout and disk failures into the kind a player is told about. */
+    private static DownloadFailedException asFailure(IOException e) {
+        if (e instanceof DownloadFailedException failed) return failed;
+        if (e instanceof java.net.http.HttpTimeoutException) {
+            return new DownloadFailedException(Failure.TIMEOUT, "timed out", e);
         }
-
-        int status() {
-            return status;
+        if (e instanceof java.net.UnknownHostException || e instanceof java.net.ConnectException) {
+            return new DownloadFailedException(Failure.CONNECTION, "could not reach the address", e);
         }
+        if (e instanceof java.io.FileSystemException || e instanceof java.nio.file.FileSystemException) {
+            return new DownloadFailedException(Failure.DISK, "could not be written to the folder", e);
+        }
+        return new DownloadFailedException(Failure.CONNECTION, "the transfer stopped early", e);
     }
 
     private static boolean worthRetrying(IOException e) {
-        if (e instanceof HttpStatusException status) {
-            // 4xx means the request itself is the problem, except for the two that mean "ask again".
-            int code = status.status();
-            return code >= 500 || code == 408 || code == 429;
+        if (e instanceof DownloadFailedException failed) {
+            return switch (failed.kind()) {
+                // 4xx means the request itself is the problem, except for the two that mean "ask
+                // again". A bad address and an unwritable folder will be the same on every attempt.
+                case HTTP_STATUS -> {
+                    String detail = failed.detail();
+                    int code = detail.startsWith("http ") ? Integer.parseInt(detail.substring(5)) : 0;
+                    yield code >= 500 || code == 408 || code == 429;
+                }
+                case BAD_URL, DISK -> false;
+                // Timeouts, dropped connections and wrong hashes: the next attempt may well be fine.
+                case TIMEOUT, CONNECTION, CHECKSUM -> true;
+            };
         }
-        // Timeouts, resets and wrong hashes: the next attempt may well be fine.
         return true;
     }
 }

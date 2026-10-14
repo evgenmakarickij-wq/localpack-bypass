@@ -7,6 +7,16 @@
   "localpack-bypass.screen.failed": "Could not download %s: %s",
   "localpack-bypass.screen.reloadFailed": "The game would not switch on %s",
   "localpack-bypass.screen.moreFailures": "and %s more",
+
+  "localpack-bypass.error.url": "the address it gave cannot be downloaded from",
+  "localpack-bypass.error.status": "the server answered with an error (%s)",
+  "localpack-bypass.error.timeout": "the download took too long",
+  "localpack-bypass.error.connection": "the connection broke before the file was complete",
+  "localpack-bypass.error.checksum": "the file arrived damaged, so it was thrown away",
+  "localpack-bypass.error.disk": "the file could not be saved to the packs folder",
+  "localpack-bypass.error.stopped": "the download was stopped",
+  "localpack-bypass.error.other": "something unexpected went wrong (%s)",
+
   "localpack-bypass.disconnect": "You declined to download the server's resource packs",
 
   "localpack-bypass.update.title": "Mod update",

@@ -407,10 +407,10 @@ public final class Updater {
                 staged = download(info);
             } catch (IOException e) {
                 LOGGER.error("Could not download update {}", info.version(), e);
-                return new InstallResult(InstallResult.Kind.FAILED, info.version(), e.toString());
+                return new InstallResult(InstallResult.Kind.FAILED, info.version(), readable(e));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                return new InstallResult(InstallResult.Kind.FAILED, info.version(), e.toString());
+                return new InstallResult(InstallResult.Kind.FAILED, info.version(), readable(e));
             }
 
             Path target = GamePaths.modsDir().resolve(info.file());
@@ -423,6 +423,12 @@ public final class Updater {
 
             return removeRunningJar(info, running.get(), staged, target);
         }, IO);
+    }
+
+    /** The message as a person would read it: no class name in front of it when there is a message. */
+    private static String readable(Throwable error) {
+        String message = error.getMessage();
+        return message == null || message.isBlank() ? error.getClass().getSimpleName() : message;
     }
 
     private static Path download(UpdateInfo info) throws IOException, InterruptedException {

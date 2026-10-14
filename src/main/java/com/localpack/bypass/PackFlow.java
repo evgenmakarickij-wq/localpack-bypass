@@ -458,7 +458,7 @@ public final class PackFlow {
                     Thread.currentThread().interrupt();
                     return new Outcome(null, e);
                 } catch (Throwable t) {
-                    PackRegistry.event(host, url, h, "failed", t.toString(), 0L,
+                    PackRegistry.event(host, url, h, "failed", detailOf(t), 0L,
                             System.currentTimeMillis() - started);
                     return new Outcome(null, t);
                 }
@@ -477,8 +477,7 @@ public final class PackFlow {
                                 continue;
                             }
                             LOGGER.error("Could not download resource pack {} from {}", i.hash(), i.url(), o.error());
-                            i.send(o.error() instanceof IllegalArgumentException
-                                    ? Action.INVALID_URL : Action.FAILED_DOWNLOAD);
+                            i.send(isBadUrl(o.error()) ? Action.INVALID_URL : Action.FAILED_DOWNLOAD);
                             failures.add(Component.translatable("localpack-bypass.screen.failed",
                                     hostSuffix(i.url()), reason(o.error())));
                         }
@@ -631,12 +630,55 @@ public final class PackFlow {
         return host.isEmpty() ? "" : " (" + host + ")";
     }
 
-    /** What went wrong, in a line short enough to fit in a screen. */
+    /**
+     * What went wrong, in the player's language, as a line short enough to fit in a screen.
+     *
+     * <p>The message the exception carries is about sockets and digests and is written in whatever
+     * language the code uses; it goes to the log and to the record, and the player gets one of these
+     * instead.
+     */
     private static Component reason(Throwable error) {
+        if (error instanceof LocalPackBypassHelper.DownloadFailedException failed) {
+            return switch (failed.kind()) {
+                case BAD_URL -> Component.translatable("localpack-bypass.error.url");
+                case HTTP_STATUS -> Component.translatable("localpack-bypass.error.status", httpCode(failed));
+                case TIMEOUT -> Component.translatable("localpack-bypass.error.timeout");
+                case CHECKSUM -> Component.translatable("localpack-bypass.error.checksum");
+                case DISK -> Component.translatable("localpack-bypass.error.disk");
+                case CONNECTION -> Component.translatable("localpack-bypass.error.connection");
+            };
+        }
+        if (error instanceof InterruptedException) {
+            return Component.translatable("localpack-bypass.error.stopped");
+        }
         String text = error == null ? null : error.getMessage();
         if (text == null || text.isBlank()) {
             text = error == null ? "?" : error.getClass().getSimpleName();
         }
-        return Component.literal(text);
+        return Component.translatable("localpack-bypass.error.other", text);
+    }
+
+    /** True when there is no point trying this address again: the server gave one that cannot be used. */
+    private static boolean isBadUrl(Throwable error) {
+        return error instanceof LocalPackBypassHelper.DownloadFailedException failed
+                && failed.kind() == LocalPackBypassHelper.Failure.BAD_URL;
+    }
+
+    /**
+     * The line the record keeps about a failure: what kind it was and the one detail that goes with
+     * it. Kept separate from what the player is shown, because this is what a server's pack has to be
+     * judged by and it has to read the same in every language.
+     */
+    private static String detailOf(Throwable error) {
+        if (error instanceof LocalPackBypassHelper.DownloadFailedException failed) {
+            return failed.detail();
+        }
+        return error == null ? "" : error.toString();
+    }
+
+    /** The number inside a "http 404" detail, or a dash when it cannot be read. */
+    private static String httpCode(LocalPackBypassHelper.DownloadFailedException failed) {
+        String detail = failed.detail();
+        return detail.startsWith("http ") ? detail.substring(5) : detail;
     }
 }
