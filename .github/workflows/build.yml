@@ -32,10 +32,15 @@ jobs:
             gradle build --no-daemon
           fi
 
+      # Only the mod jar: the -sources jar Loom also produces is not what players install,
+      # and publishing it as the run's artifact only leads to the wrong file being downloaded.
       - uses: actions/upload-artifact@v4
         with:
           name: localpack-bypass-jar
-          path: build/libs/*.jar
+          path: |
+            build/libs/*.jar
+            !build/libs/*-sources.jar
+          if-no-files-found: error
 
       # In-game updates read update.json from the newest release: it names the jar to fetch
       # and the SHA-256 the mod verifies it against.
@@ -59,6 +64,15 @@ jobs:
             "${version}" "${version}" "${sha}" > update.json
           cat update.json
 
-          gh release create "${GITHUB_REF_NAME}" "${jar}" update.json \
-            --title "localpack-bypass ${version}" \
-            --generate-notes
+          # Hand-written notes when we have them: .github/release-notes/<version>.md describes what
+          # that version contains. Otherwise fall back to the list of commits.
+          notes=".github/release-notes/${version}.md"
+          if [ -f "${notes}" ]; then
+            gh release create "${GITHUB_REF_NAME}" "${jar}" update.json \
+              --title "localpack-bypass ${version}" \
+              --notes-file "${notes}"
+          else
+            gh release create "${GITHUB_REF_NAME}" "${jar}" update.json \
+              --title "localpack-bypass ${version}" \
+              --generate-notes
+          fi

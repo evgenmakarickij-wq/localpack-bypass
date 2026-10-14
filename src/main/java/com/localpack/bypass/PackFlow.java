@@ -258,6 +258,8 @@ public final class PackFlow {
     private static void onScanned(Minecraft client, Scan scan) {
         for (Applied a : scan.found()) {
             LOGGER.info("Found local resource pack: {}", a.fileName());
+            PackRegistry.event(a.incoming().host(), a.incoming().url(), a.incoming().hash(),
+                    "found", a.fileName(), 0L, 0L);
             a.incoming().send(Action.ACCEPTED);
         }
         if (scan.missing().isEmpty()) {
@@ -382,6 +384,9 @@ public final class PackFlow {
                         downloadAll(client, scan);
                     } else {
                         PackRegistry.declined(host, first.hash());
+                        for (Incoming i : scan.missing()) {
+                            PackRegistry.event(i.host(), i.url(), i.hash(), "declined", null, 0L, 0L);
+                        }
                         declineAll(client, scan);
                     }
                 },

@@ -21,6 +21,20 @@
 - **New or changed pack:** one screen with **Download all resource packs**. Packs are saved to `resourcepacks/localpack-<sha1>.zip`, verified by SHA-1, enabled and saved to your options.
 - **Decline and leave:** you are disconnected from the server.
 - **Older packs:** packs previously downloaded by the mod are deselected when a newer version arrives. The files stay on disk, so going back is instant.
+- **Nothing fails silently:** a download that did not work, a checksum that did not match, or a file the game would not switch on is reported on screen, or as a notification if no screen is available.
+
+## Settings (Mod Menu)
+
+With [Mod Menu](https://modrinth.com/mod/modmenu) installed the mod appears in the mod list with a settings screen of its own. No hotkeys were added; everything is there.
+
+- **Folder for downloaded packs** — where packs are kept. Leave it empty for the game's own `resourcepacks` folder. Any other folder works, including a different drive or an Android shared folder; packs are then also copied into `resourcepacks` before they are switched on, because that is the only folder the game itself reads. Buttons open either folder.
+- **Remember servers you said yes to** — a server you have already taken packs from is not asked about again. The answer is written into the game's own per-server *Server Resource Packs* setting as well, next to Prompt, Enabled and Disabled.
+- **Keep packs from other servers** — leave this on to keep the packs you already have. Turn it off to start each server with only that server's packs.
+- **Wait before asking** — how long to collect the rest of a batch before the screen appears, in milliseconds or seconds. Servers send all their packs at once, so waiting turns several questions into one.
+- **Give up after** and **Tries** — how long one download may take, and how many times a failed one is retried. A checksum that does not match counts as a failure, because that is what a half-finished transfer looks like.
+- **Keep a record** — every resource pack a server sends is written down: which server, which address, the checksum, the size, what happened to it and how long it took. It is a file on your own computer; nothing is sent anywhere.
+- **Downloaded packs** — the packs the mod has downloaded, grouped by the server they came from, showing whether each is on, off, or gone from the folder. Press one to switch it on or off; a pack whose file has disappeared can be forgotten. **Forget everything** clears what the mod remembers and never deletes a pack file.
+- **What servers sent** — the record itself, newest first, with the details of every entry.
 
 ## Updates
 
@@ -34,6 +48,8 @@ On Windows a jar that is currently loaded cannot be deleted, so a short generate
 
 The check is a plain anonymous GitHub API request (no token, no account), the mod has no telemetry and no server of its own. Skipping a version is remembered, and `-Dlocalpack.bypass.updateCheck=false` disables updates entirely.
 
+**Version numbering caveat:** `0.0.1.2026-alpha-build-beta-release` is read as `[0, 0, 1, 2026]`, which sorts *below* the earlier `0.0.3-beta` (`[0, 0, 3]`). Builds numbered `0.0.3-beta` or higher will not be offered this one automatically and have to be replaced by hand.
+
 ## Requirements
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ The check is a plain anonymous GitHub API request (no token, no account), the mo
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux or an Android launcher such as [PojavLauncher](https://pojavlauncherteam.github.io/): every file the mod touches is resolved from the launcher's game directory, so no folder has to be set up by hand
-- Optional: [Mod Menu](https://modrinth.com/mod/modmenu), which shows the mod name and description in your language
+- Optional: [Mod Menu](https://modrinth.com/mod/modmenu), which shows the mod name and description in your language and gives the mod its [settings screen](#settings-mod-menu)
 
 ## Build
 
