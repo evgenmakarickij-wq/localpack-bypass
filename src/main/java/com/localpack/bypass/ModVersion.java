@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * with an optional pre-release suffix, and a full semver library would be more code than the
  * comparison itself.
  */
-public final class ModVersion {
+public final class ModVersion implements Comparable<ModVersion> {
 
     private static final Pattern VERSION = Pattern.compile("^v?(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?(?:[-+](.+))?$");
 
