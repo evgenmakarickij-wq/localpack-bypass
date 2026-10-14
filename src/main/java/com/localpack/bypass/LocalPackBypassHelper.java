@@ -2,6 +2,7 @@ package com.localpack.bypass;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -9,6 +10,7 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -40,6 +42,13 @@ public final class LocalPackBypassHelper {
     private static final HttpClient HTTP = HttpClient.newBuilder()
             .followRedirects(HttpClient.Redirect.NORMAL)
             .connectTimeout(Duration.ofSeconds(15))
+            // HTTP/2 is what the client negotiates by default, and a transfer that stops half way
+            // through is what it looks like when the connection between the game and a small pack
+            // host does not carry a multiplexed stream properly — which is common on mobile networks
+            // and behind the kind of proxy that inspects traffic. The packs here are single large
+            // files fetched one after another, so nothing is lost by asking for the older, plainer
+            // protocol that the whole path understands.
+            .version(HttpClient.Version.HTTP_1_1)
             .build();
 
     private LocalPackBypassHelper() {}
@@ -215,6 +224,13 @@ public final class LocalPackBypassHelper {
      * mirror that answers 503. A wrong hash is retried too — that is what a truncated transfer looks
      * like. What is not retried is an answer that will be the same every time: a 404, a 403, or a URL
      * that is not a URL.
+     *
+     * <p>What arrived before a failure is kept, and the next attempt asks the server for the rest of
+     * the file rather than for all of it again. A pack that is large is exactly the pack that gets
+     * interrupted, and starting such a download from nothing every time is how a transfer that keeps
+     * dying at nine tenths ends up never finishing at all. The half-written file sits under the name
+     * of the hash it is being checked against, so a part left over from anything else cannot be
+     * mistaken for it.
      */
     public static Downloaded download(String url, String expectedHash, Path dir, Duration timeout, int attempts)
             throws IOException, InterruptedException {
@@ -239,11 +255,17 @@ public final class LocalPackBypassHelper {
                 }
                 return new Downloaded(fileName, bytes);
             } catch (IOException e) {
-                if (attempt >= tries || !worthRetrying(e)) throw e;
-                LOGGER.warn("Download of {} did not work (attempt {}/{}): {}", url, attempt, tries, e.toString());
+                boolean giveUp = attempt >= tries || !worthRetrying(e);
+                // The half-written file is deliberately left behind for the next attempt, except
+                // when the bytes that arrived do not hash to what the server promised: resuming onto
+                // those would only carry the damage forward.
+                boolean keepPartial = !giveUp && !(e instanceof DownloadFailedException failed
+                        && failed.kind() == Failure.CHECKSUM);
+                if (!keepPartial) discard(part);
+                if (giveUp) throw e;
+                LOGGER.warn("Download of {} did not work (attempt {}/{}), resuming: {}",
+                        url, attempt, tries, e.toString());
                 Thread.sleep(Math.min(2_000L, 250L * attempt));
-            } finally {
-                discard(part);
             }
         }
     }
@@ -271,37 +293,99 @@ public final class LocalPackBypassHelper {
         return uri;
     }
 
-    /** Writes to {@code part} and returns the number of bytes read. */
+    /**
+     * Writes to {@code part} and returns the number of bytes read.
+     *
+     * <p>If {@code part} already holds part of the file, the request asks for the remainder with a
+     * range and appends to it. The digest is fed from what is already there first, so the finished
+     * file is still checked against the server's hash as a whole. A server that answers the ranged
+     * request with everything it has (a plain 200) is simply obeyed: the file is started again.
+     */
     private static long downloadOnce(URI uri, String expectedHash, Path part, Duration timeout)
             throws IOException, InterruptedException {
-        long bytes;
         MessageDigest digest = digest();
-        try {
-            HttpRequest request = HttpRequest.newBuilder(uri)
+        long have = sizeOf(part);
+        if (have > 0) seedDigest(digest, part);
+
+        for (int round = 0; ; round++) {
+            HttpRequest.Builder request = HttpRequest.newBuilder(uri)
                     .timeout(timeout)
                     .header("User-Agent", "localpack-bypass")
-                    .GET()
-                    .build();
-            HttpResponse<InputStream> response = HTTP.send(request, HttpResponse.BodyHandlers.ofInputStream());
-            if (response.statusCode() != 200) {
+                    .GET();
+            if (have > 0) request.header("Range", "bytes=" + have + "-");
+
+            HttpResponse<InputStream> response;
+            try {
+                response = HTTP.send(request.build(), HttpResponse.BodyHandlers.ofInputStream());
+            } catch (IOException e) {
+                // Whatever the socket library said, what a player needs to know is which of these it was.
+                throw asFailure(e);
+            }
+
+            int status = response.statusCode();
+            if (status == 416 && round == 0) {
+                // The file is already as long as the server's copy: either it is whole, or the two
+                // sides count it differently. Asking for all of it again is the answer that cannot
+                // be wrong, and it can only happen once.
                 response.body().close();
-                throw new DownloadFailedException(Failure.HTTP_STATUS, "http " + response.statusCode(), null);
+                discard(part);
+                have = 0;
+                digest.reset();
+                continue;
+            }
+            if (status != 200 && status != 206) {
+                response.body().close();
+                throw new DownloadFailedException(Failure.HTTP_STATUS, "http " + status, null);
             }
 
-            try (InputStream in = new DigestInputStream(response.body(), digest)) {
-                bytes = Files.copy(in, part, StandardCopyOption.REPLACE_EXISTING);
+            boolean append = status == 206 && have > 0;
+            if (!append) {
+                have = 0;
+                digest.reset();
             }
+
+            long bytes = have;
+            try (InputStream in = new DigestInputStream(response.body(), digest);
+                 OutputStream out = Files.newOutputStream(part,
+                         StandardOpenOption.CREATE, StandardOpenOption.WRITE,
+                         append ? StandardOpenOption.APPEND : StandardOpenOption.TRUNCATE_EXISTING)) {
+                byte[] buffer = new byte[65536];
+                int n;
+                while ((n = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, n);
+                    bytes += n;
+                }
+            } catch (IOException e) {
+                throw asFailure(e);
+            }
+
+            String actual = HexFormat.of().formatHex(digest.digest());
+            if (!actual.equalsIgnoreCase(expectedHash)) {
+                throw new DownloadFailedException(Failure.CHECKSUM,
+                        "sha1 " + actual + " but the server said " + expectedHash, null);
+            }
+            return bytes;
+        }
+    }
+
+    /** How much of the file is already on disk, or nothing if there is no part file to resume from. */
+    private static long sizeOf(Path part) {
+        try {
+            return Files.isRegularFile(part) ? Files.size(part) : 0L;
         } catch (IOException e) {
-            // Whatever the socket library said, what a player needs to know is which of these it was.
-            throw asFailure(e);
+            return 0L;
         }
+    }
 
-        String actual = HexFormat.of().formatHex(digest.digest());
-        if (!actual.equalsIgnoreCase(expectedHash)) {
-            throw new DownloadFailedException(Failure.CHECKSUM,
-                    "sha1 " + actual + " but the server said " + expectedHash, null);
+    /** Feeds the bytes that are already in the part file into the digest, so it covers the whole file. */
+    private static void seedDigest(MessageDigest digest, Path part) throws IOException {
+        try (InputStream in = Files.newInputStream(part)) {
+            byte[] buffer = new byte[65536];
+            int n;
+            while ((n = in.read(buffer)) != -1) {
+                digest.update(buffer, 0, n);
+            }
         }
-        return bytes;
     }
 
     private static MessageDigest digest() {
