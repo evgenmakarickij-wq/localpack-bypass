@@ -321,7 +321,7 @@ public final class LocalPackBypassHelper {
         if (e instanceof java.net.UnknownHostException || e instanceof java.net.ConnectException) {
             return new DownloadFailedException(Failure.CONNECTION, "could not reach the address", e);
         }
-        if (e instanceof java.io.FileSystemException || e instanceof java.nio.file.FileSystemException) {
+        if (e instanceof java.nio.file.FileSystemException) {
             return new DownloadFailedException(Failure.DISK, "could not be written to the folder", e);
         }
         return new DownloadFailedException(Failure.CONNECTION, "the transfer stopped early", e);
