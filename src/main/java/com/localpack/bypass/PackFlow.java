@@ -372,8 +372,20 @@ public final class PackFlow {
             }
         }
 
+        // The click that started the join is often still in flight when this screen appears, and the
+        // button that started it sits roughly where these two do, so a click landing in the first
+        // moment is that one rather than an answer.
+        //
+        // A timestamp is used for this rather than ConfirmScreen.setDelay, which looks like the
+        // obvious tool but is not: it switches both buttons off and leaves them off until tick() has
+        // run ten times, and it dereferences buttons that only exist once the screen has been shown.
+        // A question the player cannot answer is worse than one they answer a little too early, so
+        // the screen stays fully usable and a too-early click is simply ignored.
+        final long ignoreClicksUntil = System.currentTimeMillis() + 300;
+
         ConfirmScreen question = new ConfirmScreen(
                 accepted -> {
+                    if (System.currentTimeMillis() < ignoreClicksUntil) return;
                     asking = false;
                     prompt = null;
                     client.gui.setScreen(previous);
@@ -394,9 +406,6 @@ public final class PackFlow {
                 message,
                 Component.translatable("localpack-bypass.screen.download"),
                 Component.translatable("localpack-bypass.screen.decline"));
-        // This is a question about joining a server; a click of the mouse already under way when it
-        // appeared should not be able to answer it.
-        question.setDelay(10);
 
         asking = true;
         prompt = question;
