@@ -21,6 +21,20 @@
 - **Paket baru atau berubah:** satu layar dengan **Unduh semua paket sumber daya**. Paket disimpan ke `resourcepacks/localpack-<sha1>.zip`, diverifikasi dengan SHA-1, diaktifkan, dan disimpan ke opsi Anda.
 - **Menolak dan keluar:** Anda diputuskan dari server.
 - **Paket lama:** paket yang sebelumnya diunduh oleh mod akan dibatalkan pilihannya saat versi yang lebih baru datang. Berkasnya tetap ada di disk, jadi berpindah kembali bisa seketika.
+- **Tidak ada yang gagal secara diam-diam:** unduhan yang tidak berhasil, checksum yang tidak cocok, atau berkas yang tidak mau diaktifkan oleh permainan dilaporkan di layar, atau sebagai notifikasi jika tidak ada layar yang tersedia.
+
+## Pengaturan (Mod Menu)
+
+Dengan [Mod Menu](https://modrinth.com/mod/modmenu) terpasang, mod muncul di daftar mod dengan layar pengaturannya sendiri. Tidak ada tombol pintas yang ditambahkan; semuanya ada di sana.
+
+- **Folder untuk paket yang diunduh** — tempat paket disimpan. Biarkan kosong untuk memakai folder `resourcepacks` milik permainan sendiri. Folder lain apa pun bisa dipakai, termasuk drive lain atau folder bersama Android; paket kemudian juga disalin ke `resourcepacks` sebelum diaktifkan, karena hanya folder itulah yang dibaca oleh permainan sendiri. Tombol membuka salah satu folder.
+- **Ingat server yang telah Anda setujui** — server yang paketnya sudah pernah Anda ambil tidak akan ditanyakan lagi. Jawabannya juga ditulis ke pengaturan *Server Resource Packs* per server milik permainan sendiri, di samping Prompt, Enabled, dan Disabled.
+- **Simpan paket dari server lain** — biarkan ini aktif untuk menyimpan paket yang sudah Anda miliki. Matikan untuk memulai setiap server hanya dengan paket dari server itu.
+- **Tunggu sebelum bertanya** — berapa lama menunggu sisa satu kumpulan sebelum layarnya muncul, dalam milidetik atau detik. Server mengirim semua paketnya sekaligus, jadi menunggu mengubah beberapa pertanyaan menjadi satu.
+- **Menyerah setelah** dan **Percobaan** — berapa lama satu unduhan boleh berlangsung, dan berapa kali unduhan yang gagal dicoba lagi. Checksum yang tidak cocok dianggap sebagai kegagalan, karena seperti itulah transfer yang belum selesai.
+- **Simpan catatan** — setiap paket sumber daya yang dikirim server dicatat: server mana, alamat mana, checksum, ukuran, apa yang terjadi padanya dan berapa lama prosesnya. Itu adalah berkas di komputer Anda sendiri; tidak ada yang dikirim ke mana pun.
+- **Paket yang diunduh** — paket yang telah diunduh mod, dikelompokkan menurut server asalnya, menampilkan apakah masing-masing aktif, nonaktif, atau hilang dari folder. Tekan salah satunya untuk mengaktifkan atau menonaktifkannya; paket yang berkasnya hilang bisa dilupakan. **Lupakan semuanya** menghapus apa yang diingat mod dan tidak pernah menghapus berkas paket.
+- **Apa yang dikirim server** — catatannya sendiri, yang terbaru lebih dulu, dengan rincian setiap entri.
 
 ## Pembaruan
 
@@ -34,6 +48,8 @@ Di Windows, berkas JAR yang sedang dimuat tidak dapat dihapus, jadi skrip singka
 
 Pemeriksaan ini adalah permintaan anonim biasa ke GitHub API (tanpa token, tanpa akun), mod tidak memiliki telemetri maupun server sendiri. Versi yang dilewati akan diingat, dan `-Dlocalpack.bypass.updateCheck=false` menonaktifkan pembaruan sepenuhnya.
 
+**Catatan tentang penomoran versi:** `0.0.1.2026-alpha-build-beta-release` dibaca sebagai `[0, 0, 1, 2026]`, yang berada *di bawah* `0.0.3-beta` yang lebih dahulu (`[0, 0, 3]`). Versi bernomor `0.0.3-beta` atau lebih tinggi tidak akan otomatis ditawari versi ini dan harus diganti secara manual.
+
 ## Persyaratan
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Pemeriksaan ini adalah permintaan anonim biasa ke GitHub API (tanpa token, tanpa
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux, atau peluncur Android seperti [PojavLauncher](https://pojavlauncherteam.github.io/): setiap berkas yang disentuh mod diselesaikan dari direktori permainan peluncur, jadi tidak ada folder yang perlu disiapkan secara manual
-- Opsional: [Mod Menu](https://modrinth.com/mod/modmenu), yang menampilkan nama dan deskripsi mod dalam bahasa Anda
+- Opsional: [Mod Menu](https://modrinth.com/mod/modmenu), yang menampilkan nama dan deskripsi mod dalam bahasa Anda dan memberi mod ini layar pengaturan
 
 ## Membangun sendiri
 

@@ -21,6 +21,20 @@
 - **Paquet nou o modificat:** una pantalla amb **Descarrega tots els paquets de recursos**. Els paquets es desen a `resourcepacks/localpack-<sha1>.zip`, es verifiquen per SHA-1, s'activen i es desen a les teves opcions.
 - **Rebutjar i sortir:** et desconnecta del servidor.
 - **Paquets més antics:** els paquets descarregats prèviament pel mod es desmarquen quan arriba una versió més nova. Els fitxers romanen al disc, així que pots tornar enrere immediatament.
+- **Res no falla en silenci:** una descàrrega que no ha funcionat, una suma de comprovació que no coincideix o un fitxer que el joc no ha volgut activar es notifica a la pantalla, o com a notificació si no hi ha cap pantalla disponible.
+
+## Configuració (Mod Menu)
+
+Amb el [Mod Menu](https://modrinth.com/mod/modmenu) instal·lat, el mod apareix a la llista de mods amb una pantalla de configuració pròpia. No s'hi han afegit tecles de drecera; tot hi és.
+
+- **Carpeta per als paquets descarregats** — on es guarden els paquets. Deixa-la buida per a la carpeta pròpia del joc `resourcepacks`. Qualsevol altra carpeta serveix, incloent-hi una unitat diferent o una carpeta compartida d'Android; llavors els paquets també es copien a `resourcepacks` abans d'activar-se, perquè és l'única carpeta que llegeix el joc mateix. Els botons obren una carpeta o l'altra.
+- **Recorda els servidors que has acceptat** — un servidor del qual ja has pres paquets no es torna a preguntar. La resposta també s'escriu a la configuració pròpia del joc per servidor *Paquets de recursos del servidor*, al costat de Pregunta, Activat i Desactivat.
+- **Mantén els paquets d'altres servidors** — deixa-ho activat per conservar els paquets que ja tens. Desactiva-ho per començar cada servidor només amb els paquets d'aquell servidor.
+- **Espera abans de preguntar** — quant de temps es recull la resta d'un lot abans que aparegui la pantalla, en mil·lisegons o segons. Els servidors envien tots els seus paquets alhora, així que esperar converteix diverses preguntes en una.
+- **Rendir-se després de** i **Intents** — quant de temps pot durar una descàrrega i quantes vegades es reintenta una de fallida. Una suma de comprovació que no coincideix compta com a fallida, perquè això és el que sembla una transferència a mig fer.
+- **Mantén un registre** — cada paquet de recursos que envia un servidor s'anota: quin servidor, quina adreça, la suma de comprovació, la mida, què li ha passat i quant de temps ha trigat. És un fitxer al teu ordinador; no s'envia enlloc.
+- **Paquets descarregats** — els paquets que el mod ha descarregat, agrupats pel servidor d'on provenen, i es mostra si cadascun està activat, desactivat o ha desaparegut de la carpeta. Prem-ne un per activar-lo o desactivar-lo; un paquet el fitxer del qual ha desaparegut es pot oblidar. **Oblida-ho tot** esborra el que el mod recorda i mai no suprimeix cap fitxer de paquet.
+- **Què han enviat els servidors** — el registre mateix, del més recent al més antic, amb els detalls de cada entrada.
 
 ## Actualitzacions
 
@@ -34,6 +48,8 @@ A Windows no es pot suprimir un fitxer JAR que està carregat en aquell moment, 
 
 La consulta és una petició anònima normal a l'API de GitHub (sense testimoni ni compte); el mod no té telemetria ni servidor propi. Una versió omesa es recorda, i `-Dlocalpack.bypass.updateCheck=false` desactiva completament les actualitzacions.
 
+**Advertiment sobre la numeració de versions:** `0.0.1.2026-alpha-build-beta-release` es llegeix com a `[0, 0, 1, 2026]`, que se situa *per sota* de l'anterior `0.0.3-beta` (`[0, 0, 3]`). Les compilacions numerades `0.0.3-beta` o superior no rebran aquesta automàticament i caldrà substituir-la a mà.
+
 ## Requisits
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ La consulta és una petició anònima normal a l'API de GitHub (sense testimoni 
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux o un llançador d'Android com ara [PojavLauncher](https://pojavlauncherteam.github.io/): cada fitxer que toca el mod es determina a partir del directori de joc del llançador, així que no cal configurar cap carpeta a mà
-- Opcional: [Mod Menu](https://modrinth.com/mod/modmenu), que mostra el nom i la descripció del mod en el teu idioma
+- Opcional: [Mod Menu](https://modrinth.com/mod/modmenu), que mostra el nom i la descripció del mod en el teu idioma i dona al mod una pantalla de configuració
 
 ## Compilar-ho tu mateix
 

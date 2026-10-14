@@ -21,6 +21,20 @@
 - **Paquete nuevo o modificado:** una pantalla con **Descargar todos los paquetes de recursos**. Los paquetes se guardan en `resourcepacks/localpack-<sha1>.zip`, se verifican por SHA-1, se activan y se guardan en tus opciones.
 - **Rechazar y salir:** te desconectas del servidor.
 - **Paquetes antiguos:** los paquetes descargados antes por el mod se desmarcan cuando llega una versión más reciente. Los archivos permanecen en el disco, así que volver atrás es instantáneo.
+- **Nada falla en silencio:** una descarga que no funcionó, una suma de comprobación que no coincidió o un archivo que el juego no quiso activar se informa en pantalla, o como notificación si no hay ninguna pantalla disponible.
+
+## Configuración (Mod Menu)
+
+Con [Mod Menu](https://modrinth.com/mod/modmenu) instalado, el mod aparece en la lista de mods con su propia pantalla de configuración. No se añadió ninguna tecla de acceso rápido; todo está ahí.
+
+- **Carpeta para los paquetes descargados** — dónde se guardan los paquetes. Déjala vacía para la carpeta `resourcepacks` propia del juego. Cualquier otra carpeta funciona, incluso otra unidad o una carpeta compartida de Android; los paquetes también se copian entonces en `resourcepacks` antes de activarse, porque esa es la única carpeta que el propio juego lee. Los botones abren cualquiera de las dos carpetas.
+- **Recordar los servidores que aceptaste** — a un servidor del que ya has tomado paquetes no se le pregunta de nuevo. La respuesta también se escribe en el propio ajuste por servidor del juego *Paquetes de recursos del servidor*, junto a Preguntar, Activado y Desactivado.
+- **Conservar los paquetes de otros servidores** — déjalo activado para conservar los paquetes que ya tienes. Desactívalo para empezar cada servidor solo con los paquetes de ese servidor.
+- **Esperar antes de preguntar** — cuánto tiempo se recoge el resto de un lote antes de que aparezca la pantalla, en milisegundos o segundos. Los servidores envían todos sus paquetes de una vez, así que esperar convierte varias preguntas en una.
+- **Rendirse después de** y **Intentos** — cuánto tiempo puede tardar una descarga y cuántas veces se reintenta una que falló. Una suma de comprobación que no coincide cuenta como un fallo, porque así es como se ve una transferencia a medio terminar.
+- **Llevar un registro** — cada paquete de recursos que envía un servidor queda anotado: qué servidor, qué dirección, la suma de comprobación, el tamaño, qué le ocurrió y cuánto tardó. Es un archivo en tu propio ordenador; no se envía nada a ningún sitio.
+- **Paquetes descargados** — los paquetes que el mod ha descargado, agrupados por el servidor del que vinieron, mostrando si cada uno está activado, desactivado o ha desaparecido de la carpeta. Pulsa uno para activarlo o desactivarlo; un paquete cuyo archivo ha desaparecido se puede olvidar. **Olvidar todo** borra lo que el mod recuerda y nunca elimina un archivo de paquete.
+- **Lo que enviaron los servidores** — el propio registro, con lo más reciente primero, con los detalles de cada entrada.
 
 ## Actualizaciones
 
@@ -34,6 +48,8 @@ En Windows no se puede eliminar un archivo JAR que está cargado en ese momento,
 
 La comprobación es una petición anónima normal a la API de GitHub (sin token ni cuenta); el mod no tiene telemetría ni servidor propio. Una versión omitida se recuerda, y `-Dlocalpack.bypass.updateCheck=false` desactiva las actualizaciones por completo.
 
+**Advertencia sobre la numeración de versiones:** `0.0.1.2026-alpha-build-beta-release` se lee como `[0, 0, 1, 2026]`, lo que se ordena *por debajo* de la anterior `0.0.3-beta` (`[0, 0, 3]`). A las compilaciones numeradas `0.0.3-beta` o superior no se les ofrecerá esta automáticamente y tendrán que reemplazarse a mano.
+
 ## Requisitos
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ La comprobación es una petición anónima normal a la API de GitHub (sin token 
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux o un lanzador de Android como [PojavLauncher](https://pojavlauncherteam.github.io/): cada archivo que toca el mod se obtiene del directorio de juego del lanzador, así que no hay que configurar ninguna carpeta a mano
-- Opcional: [Mod Menu](https://modrinth.com/mod/modmenu), que muestra el nombre y la descripción del mod en tu idioma
+- Opcional: [Mod Menu](https://modrinth.com/mod/modmenu), que muestra el nombre y la descripción del mod en tu idioma y le da al mod una pantalla de configuración
 
 ## Compilarlo tú mismo
 

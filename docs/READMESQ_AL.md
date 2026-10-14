@@ -21,6 +21,20 @@
 - **Paketë e re ose e ndryshuar:** një ekran me **Shkarko të gjitha paketat e burimeve**. Paketat ruhen në `resourcepacks/localpack-<sha1>.zip`, verifikohen me SHA-1, aktivizohen dhe ruhen në cilësimet e tua.
 - **Refuzo dhe dil:** do të shkëputesh nga serveri.
 - **Paketat e vjetra:** paketat e shkarkuara më parë nga modi çaktivizohen kur mbërrin një version më i ri. Skedarët mbeten në disk, kështu që kthimi është i menjëhershëm.
+- **Asgjë nuk dështon në heshtje:** një shkarkim që nuk funksionoi, një shumë kontrolli që nuk përputhej, ose një skedar që loja nuk do ta aktivizonte raportohet në ekran, ose si një njoftim nëse nuk ka ekran në dispozicion.
+
+## Cilësimet (Mod Menu)
+
+Me [Mod Menu](https://modrinth.com/mod/modmenu) të instaluar, modi shfaqet në listën e modave me një ekran cilësimesh të vetin. Nuk u shtuan shkurtore; gjithçka është aty.
+
+- **Dosja për paketat e shkarkuara** — ku mbahen paketat. Lëre bosh për dosjen e vetë lojës `resourcepacks`. Çdo dosje tjetër funksionon, përfshirë një disk tjetër ose një dosje të përbashkët në Android; paketat pastaj kopjohen edhe në `resourcepacks` përpara se të aktivizohen, sepse kjo është e vetmja dosje që lexon vetë loja. Butonat hapin njërën ose tjetrën dosje.
+- **Mbaj mend serverat të cilëve u the po** — një server nga i cili ke marrë tashmë paketa nuk pyetet më. Përgjigja shkruhet edhe në cilësimin e vetë lojës për çdo server, *paketat e burimeve të serverit*, pranë Pyet, Aktivizuar dhe Çaktivizuar.
+- **Mbaj paketat nga servera të tjerë** — lëre aktiv për të mbajtur paketat që ke tashmë. Çaktivizoje për ta nisur çdo server vetëm me paketat e atij serveri.
+- **Prit para se të pyesësh** — sa kohë të mblidhet pjesa tjetër e një grupi përpara se të shfaqet ekrani, në milisekonda ose sekonda. Serverat i dërgojnë të gjitha paketat e tyre menjëherë, kështu që pritja i kthen disa pyetje në një të vetme.
+- **Hiq dorë pas** dhe **Përpjekje** — sa kohë mund të zgjasë një shkarkim dhe sa herë përsëritet një i dështuar. Një shumë kontrolli që nuk përputhet llogaritet si dështim, sepse kështu duket një transferim gjysmë i përfunduar.
+- **Mbaj një regjistër** — çdo paketë burimesh që dërgon një server shkruhet: cili server, cila adresë, shuma e kontrollit, madhësia, çfarë ndodhi me të dhe sa kohë zgjati. Është një skedar në kompjuterin tënd; asgjë nuk dërgohet askund.
+- **Paketat e shkarkuara** — paketat që ka shkarkuar modi, të grupuara sipas serverit nga i cili erdhën, duke treguar nëse secila është aktive, joaktive ose zhdukur nga dosja. Shtyp njërën për ta aktivizuar ose çaktivizuar; një paketë skedari i së cilës është zhdukur mund të harrohet. **Harro gjithçka** fshin atë që mban mend modi dhe nuk fshin kurrë një skedar pakete.
+- **Çfarë dërguan serverat** — vetë regjistri, më të rejat të parat, me detajet e çdo zëri.
 
 ## Përditësimet
 
@@ -34,6 +48,8 @@ Në Windows një skedar JAR që është i ngarkuar pikërisht tani nuk mund të 
 
 Kërkesa është një kërkesë e zakonshme anonime drejt API-t të GitHub (pa token, pa llogari), modi nuk ka telemetri dhe pa server të vetin. Versioni i anashkaluar mbahet mend, dhe `-Dlocalpack.bypass.updateCheck=false` i çaktivizon plotësisht përditësimet.
 
+**Vërejtje mbi numërimin e versioneve:** `0.0.1.2026-alpha-build-beta-release` lexohet si `[0, 0, 1, 2026]`, që renditet *poshtë* versionit të mëparshëm `0.0.3-beta` (`[0, 0, 3]`). Ndërtimet e numëruara `0.0.3-beta` ose më lart nuk do ta marrin këtë automatikisht dhe duhet të zëvendësohen me dorë.
+
 ## Kërkesat
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Kërkesa është një kërkesë e zakonshme anonime drejt API-t të GitHub (pa t
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux ose një launcher Android si [PojavLauncher](https://pojavlauncherteam.github.io/): çdo skedar që prek modi përcaktohet nga drejtoria e lojës e launcherit, kështu që nuk duhet të përgatitet asnjë dosje me dorë
-- Opsionale: [Mod Menu](https://modrinth.com/mod/modmenu), që shfaq emrin dhe përshkrimin e modit në gjuhën tënde
+- Opsionale: [Mod Menu](https://modrinth.com/mod/modmenu), që shfaq emrin dhe përshkrimin e modit në gjuhën tënde dhe i jep modit një ekran cilësimesh
 
 ## Ndërtoje vetë
 

@@ -21,6 +21,20 @@
 - **Nieuw of gewijzigd pakket:** één scherm met **Alle bronpakketten downloaden**. Pakketten worden opgeslagen als `resourcepacks/localpack-<sha1>.zip`, met SHA-1 gecontroleerd, geactiveerd en in je instellingen opgeslagen.
 - **Weigeren en verlaten:** je wordt van de server losgekoppeld.
 - **Oudere pakketten:** eerder door de mod gedownloade pakketten worden uitgeschakeld wanneer een nieuwere versie binnenkomt. De bestanden blijven op de schijf staan, dus terugschakelen is direct mogelijk.
+- **Niets mislukt stilzwijgend:** een download die niet werkte, een controlesom die niet klopte, of een bestand dat het spel niet wilde inschakelen, wordt op het scherm gemeld, of als melding wanneer er geen scherm beschikbaar is.
+
+## Instellingen (Mod Menu)
+
+Met [Mod Menu](https://modrinth.com/mod/modmenu) geïnstalleerd verschijnt de mod in de modlijst met een eigen instellingenscherm. Er zijn geen sneltoetsen toegevoegd; alles staat er.
+
+- **Map voor gedownloade pakketten** — waar pakketten worden bewaard. Laat die leeg voor de eigen `resourcepacks`-map van het spel. Elke andere map werkt, ook een andere schijf of een gedeelde Android-map; pakketten worden dan ook naar `resourcepacks` gekopieerd voordat ze worden ingeschakeld, omdat dat de enige map is die het spel zelf leest. Knoppen openen een van beide mappen.
+- **Onthouden bij welke servers je ja hebt gezegd** — aan een server waarvan je al pakketten hebt genomen, wordt niet opnieuw gevraagd. Het antwoord wordt ook in de eigen per-server-instelling *Server Resource Packs* van het spel geschreven, naast Prompt, Enabled en Disabled.
+- **Pakketten van andere servers bewaren** — laat dit aan om de pakketten die je al hebt te bewaren. Zet het uit om elke server te beginnen met alleen de pakketten van die server.
+- **Wachten voordat er wordt gevraagd** — hoe lang de rest van een partij wordt verzameld voordat het scherm verschijnt, in milliseconden of seconden. Servers sturen al hun pakketten in één keer, dus wachten maakt van meerdere vragen één.
+- **Opgeven na** en **Pogingen** — hoe lang één download mag duren, en hoe vaak een mislukte opnieuw wordt geprobeerd. Een controlesom die niet klopt telt als een mislukking, want zo ziet een halfvoltooide overdracht eruit.
+- **Een verslag bijhouden** — elk bronpakket dat een server stuurt, wordt vastgelegd: welke server, welk adres, de controlesom, de grootte, wat ermee is gebeurd en hoe lang het duurde. Het is een bestand op je eigen computer; er wordt niets ergens naartoe gestuurd.
+- **Gedownloade pakketten** — de pakketten die de mod heeft gedownload, gegroepeerd per server waar ze vandaan komen, met vermelding of elk aan, uit of verdwenen uit de map is. Druk op een ervan om het aan of uit te zetten; een pakket waarvan het bestand is verdwenen, kan worden vergeten. **Alles vergeten** wist wat de mod onthoudt en verwijdert nooit een pakketbestand.
+- **Wat servers hebben gestuurd** — het verslag zelf, nieuwste eerst, met de details van elke vermelding.
 
 ## Updates
 
@@ -34,6 +48,8 @@ Onder Windows kan een JAR-bestand dat op dat moment geladen is, niet worden verw
 
 De vraag is een gewoon anoniem verzoek aan de GitHub-API (geen token, geen account); de mod heeft geen telemetrie en geen eigen server. Een overgeslagen versie wordt onthouden, en `-Dlocalpack.bypass.updateCheck=false` schakelt updates volledig uit.
 
+**Kanttekening bij de versienummering:** `0.0.1.2026-alpha-build-beta-release` wordt gelezen als `[0, 0, 1, 2026]`, wat *lager* sorteert dan de eerdere `0.0.3-beta` (`[0, 0, 3]`). Builds met nummer `0.0.3-beta` of hoger krijgen deze niet automatisch aangeboden en moeten met de hand worden vervangen.
+
 ## Vereisten
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ De vraag is een gewoon anoniem verzoek aan de GitHub-API (geen token, geen accou
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux of een Android-launcher zoals [PojavLauncher](https://pojavlauncherteam.github.io/): elk bestand dat de mod aanraakt, wordt bepaald uit de spelmap van de launcher, dus er hoeft geen map handmatig te worden ingesteld
-- Optioneel: [Mod Menu](https://modrinth.com/mod/modmenu), dat de modnaam en -beschrijving in je taal toont
+- Optioneel: [Mod Menu](https://modrinth.com/mod/modmenu), dat de modnaam en -beschrijving in je taal toont en de mod een instellingenscherm geeft
 
 ## Zelf bouwen
 

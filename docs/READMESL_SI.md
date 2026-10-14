@@ -21,6 +21,20 @@
 - **Nov ali spremenjen paket:** zaslon s **Prenesi vse pakete virov**. Paketi se shranijo v `resourcepacks/localpack-<sha1>.zip`, preverijo s SHA-1, omogočijo in shranijo v tvoje nastavitve.
 - **Zavrni in izstopi:** odklopjen si od strežnika.
 - **Starejši paketi:** paketi, ki jih je mod prej prenesel, se odznačijo, ko prispe novejša različica. Datoteke ostanejo na disku, zato je vrnitev takojšnja.
+- **Nič ne spodleti tiho:** prenos, ki ni uspel, kontrolna vsota, ki se ni ujemala, ali datoteka, ki je igra ne bi vklopila, se sporoči na zaslonu ali kot obvestilo, če zaslona ni na voljo.
+
+## Nastavitve (Mod Menu)
+
+Z nameščenim [Mod Menu](https://modrinth.com/mod/modmenu) se mod pojavi na seznamu modov z lastnim zaslonom nastavitev. Bližnjic ni bilo dodanih; vse je tam.
+
+- **Mapa za prenesene pakete** — kje so paketi shranjeni. Pusti jo prazno za igrino lastno mapo `resourcepacks`. Deluje vsaka druga mapa, tudi na drugem disku ali v skupni mapi v sistemu Android; paketi se nato pred vklopom kopirajo tudi v `resourcepacks`, ker je to edina mapa, ki jo bere igra sama. Gumbi odprejo eno ali drugo mapo.
+- **Zapomni si strežnike, ki si jim rekel da** — strežnik, od katerega si že vzel pakete, ni več vprašan. Odgovor se zapiše tudi v igrino lastno nastavitev za posamezni strežnik, *paketi virov strežnika*, poleg možnosti Vprašaj, Omogočeno in Onemogočeno.
+- **Obdrži pakete z drugih strežnikov** — pusti vklopljeno, da obdržiš pakete, ki jih že imaš. Izklopi, da vsak strežnik začneš samo s paketi tega strežnika.
+- **Počakaj pred vprašanjem** — koliko časa zbirati preostanek serije, preden se pojavi zaslon, v milisekundah ali sekundah. Strežniki pošljejo vse svoje pakete naenkrat, zato čakanje spremeni več vprašanj v eno.
+- **Obupaj po** in **Poskusi** — koliko časa lahko traja en prenos in kolikokrat se neuspešen ponovi. Kontrolna vsota, ki se ne ujema, šteje kot neuspeh, ker tako izgleda napol dokončan prenos.
+- **Vodi zapis** — vsak paket virov, ki ga pošlje strežnik, se zapiše: kateri strežnik, kateri naslov, kontrolna vsota, velikost, kaj se je z njim zgodilo in koliko je trajalo. To je datoteka na tvojem računalniku; nič se ne pošilja nikamor.
+- **Preneseni paketi** — paketi, ki jih je prenesel mod, razvrščeni po strežniku, od koder prihajajo, s prikazom, ali je vsak vklopljen, izklopljen ali izginil iz mape. Pritisni enega, da ga vklopiš ali izklopiš; paket, katerega datoteka je izginila, je mogoče pozabiti. **Pozabi vse** izbriše, kar si mod zapomni, in nikoli ne izbriše datoteke paketa.
+- **Kaj so poslali strežniki** — zapis sam, najnovejši najprej, s podrobnostmi vsakega vnosa.
 
 ## Posodobitve
 
@@ -34,6 +48,8 @@ V sistemu Windows datoteke JAR, ki je pravkar naložena, ni mogoče izbrisati, z
 
 Poizvedba je običajna anonimna zahteva API-ju GitHub (brez žetona, brez računa), mod nima telemetrije in lastnega strežnika. Preskočeno različico si mod zapomni, `-Dlocalpack.bypass.updateCheck=false` pa posodobitve popolnoma izklopi.
 
+**Pridržek glede številčenja različic:** `0.0.1.2026-alpha-build-beta-release` se bere kot `[0, 0, 1, 2026]`, kar se uvrsti *pod* prejšnjo `0.0.3-beta` (`[0, 0, 3]`). Različice, oštevilčene `0.0.3-beta` ali višje, te ne bodo samodejno prejele in jih je treba zamenjati ročno.
+
 ## Zahteve
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Poizvedba je običajna anonimna zahteva API-ju GitHub (brez žetona, brez račun
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux ali zaganjalnik za Android, kot je [PojavLauncher](https://pojavlauncherteam.github.io/): vsaka datoteka, ki se je mod dotakne, se določi iz igrine mape zaganjalnika, zato ni treba ročno nastavljati mape
-- Neobvezno: [Mod Menu](https://modrinth.com/mod/modmenu), ki prikaže ime in opis moda v tvojem jeziku
+- Neobvezno: [Mod Menu](https://modrinth.com/mod/modmenu), ki prikaže ime in opis moda v tvojem jeziku in modu doda zaslon nastavitev
 
 ## Gradnja sam
 

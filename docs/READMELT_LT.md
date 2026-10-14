@@ -21,6 +21,20 @@
 - **Naujas ar pasikeitęs paketas:** ekranas su mygtuku **Atsisiųsti visus resursų paketus**. Paketai saugomi kaip `resourcepacks/localpack-<sha1>.zip`, patikrinami pagal SHA-1, įjungiami ir išsaugomi jūsų nustatymuose.
 - **Atsisakymas ir išėjimas:** būsite atjungti nuo serverio.
 - **Senesni paketai:** anksčiau šio modo atsisiųsti paketai atžymimi, kai pasirodo naujesnė versija. Failai lieka diske, todėl grįžti galima akimirksniu.
+- **Niekas nepavyksta tyliai:** nepavykęs atsisiuntimas, nesutapusi kontrolinė suma ar failas, kurio žaidimas neįjungė, yra pranešama ekrane arba kaip pranešimas, jei ekranas neprieinamas.
+
+## Nustatymai (Mod Menu)
+
+Kai įdiegtas [Mod Menu](https://modrinth.com/mod/modmenu), modas rodomas modų sąraše su atskiru savo nustatymų ekranu. Jokie spartieji klavišai nebuvo pridėti; viskas yra ten.
+
+- **Atsisiųstų paketų aplankas** — kur laikomi paketai. Palikite jį tuščią, kad būtų naudojamas paties žaidimo aplankas `resourcepacks`. Tinka ir bet kuris kitas aplankas, įskaitant kitą diską ar „Android“ bendrinamą aplanką; tuomet paketai prieš įjungiant taip pat nukopijuojami į `resourcepacks`, nes tai vienintelis aplankas, kurį skaito pats žaidimas. Mygtukai atveria bet kurį iš šių aplankų.
+- **Atsiminti serverius, kuriems sutikote** — serverio, iš kurio jau gavote paketų, daugiau neklausiama. Atsakymas taip pat įrašomas į paties žaidimo kiekvieno serverio *Serverio išteklių paketai* nustatymą, šalia Klausti, Įjungta ir Išjungta.
+- **Išlaikyti kitų serverių paketus** — palikite įjungtą, kad išlaikytumėte jau turimus paketus. Išjunkite, kad kiekvieną serverį pradėtumėte tik su to serverio paketais.
+- **Palaukti prieš klausiant** — kiek laiko rinkti likusią partiją prieš pasirodant ekranui, milisekundėmis arba sekundėmis. Serveriai siunčia visus savo paketus iš karto, tad laukimas kelis klausimus paverčia vienu.
+- **Nustoti po** ir **Bandymai** — kiek laiko gali užtrukti vienas atsisiuntimas ir kiek kartų nepavykęs bandomas iš naujo. Nesutapusi kontrolinė suma laikoma nesėkme, nes taip atrodo nebaigtas perkėlimas.
+- **Vesti įrašą** — kiekvienas serverio siunčiamas išteklių paketas užrašomas: kuris serveris, kuris adresas, kontrolinė suma, dydis, kas jam nutiko ir kiek tai užtruko. Tai failas jūsų pačių kompiuteryje; nieko niekur nesiunčiama.
+- **Atsisiųsti paketai** — paketai, kuriuos modas atsisiuntė, sugrupuoti pagal serverį, iš kurio jie atėjo, rodant, ar kiekvienas įjungtas, išjungtas ar dingo iš aplanko. Paspauskite vieną, kad jį įjungtumėte arba išjungtumėte; paketą, kurio failas dingo, galima pamiršti. **Pamiršti viską** išvalo tai, ką modas atsimena, ir niekada neištrina paketo failo.
+- **Ką serveriai atsiuntė** — pats įrašas, naujausi viršuje, su kiekvieno įrašo informacija.
 
 ## Atnaujinimai
 
@@ -34,6 +48,8 @@ Windows sistemoje šiuo metu įkelta JAR failo ištrinti negalima, todėl trumpa
 
 Užklausa yra įprasta anoniminė GitHub API užklausa (jokio žetono, jokios paskyros); modas neturi telemetrijos ir savo serverio. Praleista versija įsimenama, o `-Dlocalpack.bypass.updateCheck=false` visiškai išjungia atnaujinimus.
 
+**Įspėjimas dėl versijų numeravimo:** `0.0.1.2026-alpha-build-beta-release` skaitomas kaip `[0, 0, 1, 2026]`, o tai rikiuojasi *žemiau* ankstesnės `0.0.3-beta` (`[0, 0, 3]`). Versijos, pažymėtos `0.0.3-beta` ar aukštesne, negaus šios automatiškai ir turės būti pakeistos rankiniu būdu.
+
 ## Reikalavimai
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Užklausa yra įprasta anoniminė GitHub API užklausa (jokio žetono, jokios pa
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux arba Android paleidėjas, pavyzdžiui, [PojavLauncher](https://pojavlauncherteam.github.io/): kiekvienas failas, kurį liečia modas, nustatomas pagal paleidėjo žaidimo katalogą, todėl jokio aplanko nereikia nustatyti rankiniu būdu
-- Neprivaloma: [Mod Menu](https://modrinth.com/mod/modmenu), kuris rodo modo pavadinimą ir aprašymą jūsų kalba
+- Neprivaloma: [Mod Menu](https://modrinth.com/mod/modmenu), kuris rodo modo pavadinimą ir aprašymą jūsų kalba ir suteikia modui nustatymų ekraną
 
 ## Kaip susikompiliuoti
 

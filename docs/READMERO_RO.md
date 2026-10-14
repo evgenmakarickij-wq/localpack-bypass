@@ -21,6 +21,20 @@
 - **Pachet nou sau modificat:** un ecran cu **Descarcă toate pachetele de resurse**. Pachetele sunt salvate la `resourcepacks/localpack-<sha1>.zip`, verificate prin SHA-1, activate și salvate în opțiunile tale.
 - **Refuz și ieșire:** ești deconectat de la server.
 - **Pachete mai vechi:** pachetele descărcate anterior de mod sunt debifate când sosește o versiune mai nouă. Fișierele rămân pe disc, așa că poți reveni imediat.
+- **Nimic nu eșuează în tăcere:** o descărcare care nu a funcționat, o sumă de control care nu s-a potrivit sau un fișier pe care jocul nu l-ar activa este raportat pe ecran, sau ca notificare dacă nu există niciun ecran disponibil.
+
+## Setări (Mod Menu)
+
+Cu [Mod Menu](https://modrinth.com/mod/modmenu) instalat, modul apare în lista de moduri cu un ecran de setări propriu. Nu au fost adăugate combinații de taste; totul este acolo.
+
+- **Folder pentru pachetele descărcate** — unde sunt păstrate pachetele. Lasă-l gol pentru folderul propriu al jocului, `resourcepacks`. Orice alt folder funcționează, inclusiv un alt disc sau un folder partajat Android; pachetele sunt atunci copiate și în `resourcepacks` înainte de a fi activate, pentru că acesta este singurul folder pe care îl citește jocul însuși. Butoanele deschid oricare dintre foldere.
+- **Reține serverele cărora le-ai spus da** — un server de la care ai luat deja pachete nu mai este întrebat din nou. Răspunsul este scris și în setarea proprie a jocului pentru fiecare server, *pachetele de resurse ale serverului*, lângă Întreabă, Activat și Dezactivat.
+- **Păstrează pachetele de la alte servere** — lasă această opțiune activată pentru a păstra pachetele pe care le ai deja. Dezactivează-o pentru a începe fiecare server doar cu pachetele acelui server.
+- **Așteaptă înainte de a întreba** — cât timp să adune restul unui lot înainte de a apărea ecranul, în milisecunde sau secunde. Serverele își trimit toate pachetele deodată, așa că așteptarea transformă mai multe întrebări într-una singură.
+- **Renunță după** și **Încercări** — cât poate dura o descărcare și de câte ori este reîncercată una eșuată. O sumă de control care nu se potrivește contează ca eșec, pentru că așa arată un transfer pe jumătate terminat.
+- **Ține o evidență** — fiecare pachet de resurse pe care îl trimite un server este notat: ce server, ce adresă, suma de control, dimensiunea, ce s-a întâmplat cu el și cât a durat. Este un fișier pe propriul tău computer; nimic nu este trimis nicăieri.
+- **Pachete descărcate** — pachetele pe care le-a descărcat modul, grupate după serverul de la care provin, arătând dacă fiecare este activat, dezactivat sau dispărut din folder. Apasă pe unul pentru a-l activa sau dezactiva; un pachet al cărui fișier a dispărut poate fi uitat. **Uită tot** șterge ce reține modul și nu șterge niciodată un fișier de pachet.
+- **Ce au trimis serverele** — evidența în sine, cele mai noi primele, cu detaliile fiecărei intrări.
 
 ## Actualizări
 
@@ -34,6 +48,8 @@ Pe Windows, un fișier JAR care tocmai este încărcat nu poate fi șters, așa 
 
 Interogarea este o cerere anonimă obișnuită către API-ul GitHub (fără token, fără cont); modul nu are telemetrie și nici server propriu. O versiune omisă este reținută, iar `-Dlocalpack.bypass.updateCheck=false` dezactivează complet actualizările.
 
+**Avertisment privind numerotarea versiunilor:** `0.0.1.2026-alpha-build-beta-release` este citit ca `[0, 0, 1, 2026]`, ceea ce se clasează *sub* versiunea anterioară `0.0.3-beta` (`[0, 0, 3]`). Versiunile numerotate `0.0.3-beta` sau mai mare nu vor primi automat această versiune și trebuie înlocuite manual.
+
 ## Cerințe
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Interogarea este o cerere anonimă obișnuită către API-ul GitHub (fără toke
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux sau un launcher de Android precum [PojavLauncher](https://pojavlauncherteam.github.io/): fiecare fișier pe care îl atinge modul este determinat din directorul de joc al launcherului, așa că nu trebuie configurat niciun folder manual
-- Opțional: [Mod Menu](https://modrinth.com/mod/modmenu), care afișează numele și descrierea modului în limba ta
+- Opțional: [Mod Menu](https://modrinth.com/mod/modmenu), care afișează numele și descrierea modului în limba ta și îi oferă modului un ecran de setări
 
 ## Compilarea proprie
 

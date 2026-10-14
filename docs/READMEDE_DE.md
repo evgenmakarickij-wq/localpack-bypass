@@ -21,6 +21,20 @@
 - **Neues oder geändertes Paket:** ein Bildschirm mit **Alle Ressourcenpakete herunterladen**. Pakete werden unter `resourcepacks/localpack-<sha1>.zip` gespeichert, per SHA-1 geprüft, aktiviert und in deinen Optionen gespeichert.
 - **Ablehnen und verlassen:** du wirst vom Server getrennt.
 - **Ältere Pakete:** zuvor vom Mod heruntergeladene Pakete werden abgewählt, wenn eine neuere Version eintrifft. Die Dateien bleiben auf der Festplatte, ein Zurückwechseln ist also sofort möglich.
+- **Nichts schlägt stillschweigend fehl:** ein Download, der nicht geklappt hat, eine Prüfsumme, die nicht gestimmt hat, oder eine Datei, die das Spiel nicht einschalten wollte, werden auf dem Bildschirm gemeldet oder als Benachrichtigung, wenn kein Bildschirm verfügbar ist.
+
+## Einstellungen (Mod Menu)
+
+Mit installiertem [Mod Menu](https://modrinth.com/mod/modmenu) erscheint das Mod in der Mod-Liste mit einem eigenen Einstellungsbildschirm. Es wurden keine Tastenkürzel hinzugefügt; alles ist dort.
+
+- **Ordner für heruntergeladene Pakete** — wo die Pakete aufbewahrt werden. Lass ihn leer für den spieleigenen Ordner `resourcepacks`. Jeder andere Ordner funktioniert, auch ein anderes Laufwerk oder ein geteilter Android-Ordner; die Pakete werden dann zusätzlich in `resourcepacks` kopiert, bevor sie eingeschaltet werden, denn das ist der einzige Ordner, den das Spiel selbst liest. Schaltflächen öffnen beide Ordner.
+- **Server merken, denen du zugestimmt hast** — ein Server, von dem du bereits Pakete bezogen hast, wird nicht erneut gefragt. Die Antwort wird zusätzlich in die spieleigene *Server-Ressourcenpakete*-Einstellung pro Server geschrieben, neben Nachfragen, Aktiviert und Deaktiviert.
+- **Pakete von anderen Servern behalten** — lass dies an, um die Pakete zu behalten, die du bereits hast. Schalte es aus, um jeden Server nur mit den Paketen dieses Servers zu starten.
+- **Warten vor dem Fragen** — wie lange der Rest eines Stapels gesammelt wird, bevor der Bildschirm erscheint, in Millisekunden oder Sekunden. Server senden alle ihre Pakete auf einmal, das Warten macht also aus mehreren Fragen eine.
+- **Aufgeben nach** und **Versuche** — wie lange ein Download dauern darf und wie oft ein fehlgeschlagener wiederholt wird. Eine Prüfsumme, die nicht stimmt, zählt als Fehlschlag, denn so sieht eine halbfertige Übertragung aus.
+- **Buch führen** — jedes Ressourcenpaket, das ein Server sendet, wird festgehalten: welcher Server, welche Adresse, die Prüfsumme, die Größe, was damit passiert ist und wie lange es gedauert hat. Es ist eine Datei auf deinem eigenen Computer; nichts wird irgendwohin gesendet.
+- **Heruntergeladene Pakete** — die Pakete, die das Mod heruntergeladen hat, gruppiert nach dem Server, von dem sie stammen, und es wird angezeigt, ob jedes an, aus oder aus dem Ordner verschwunden ist. Drücke eines, um es ein- oder auszuschalten; ein Paket, dessen Datei verschwunden ist, kann vergessen werden. **Alles vergessen** löscht, was das Mod sich merkt, und löscht niemals eine Paketdatei.
+- **Was Server gesendet haben** — die Aufzeichnung selbst, neueste zuerst, mit den Details jedes Eintrags.
 
 ## Aktualisierungen
 
@@ -34,6 +48,8 @@ Unter Windows lässt sich eine JAR-Datei, die gerade geladen ist, nicht löschen
 
 Die Abfrage ist eine gewöhnliche anonyme Anfrage an die GitHub-API (kein Token, kein Konto), das Mod hat keine Telemetrie und keinen eigenen Server. Eine übersprungene Version wird gemerkt, und `-Dlocalpack.bypass.updateCheck=false` schaltet Aktualisierungen vollständig ab.
 
+**Hinweis zur Versionsnummerierung:** `0.0.1.2026-alpha-build-beta-release` wird als `[0, 0, 1, 2026]` gelesen, was *unter* der früheren `0.0.3-beta` (`[0, 0, 3]`) einsortiert wird. Builds mit der Nummer `0.0.3-beta` oder höher wird diese nicht automatisch angeboten und müssen von Hand ersetzt werden.
+
 ## Voraussetzungen
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Die Abfrage ist eine gewöhnliche anonyme Anfrage an die GitHub-API (kein Token,
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux oder ein Android-Launcher wie [PojavLauncher](https://pojavlauncherteam.github.io/): jede Datei, die das Mod anfasst, wird aus dem Spielverzeichnis des Launchers ermittelt, es muss also kein Ordner von Hand eingerichtet werden
-- Optional: [Mod Menu](https://modrinth.com/mod/modmenu), das Mod-Name und -Beschreibung in deiner Sprache anzeigt
+- Optional: [Mod Menu](https://modrinth.com/mod/modmenu), das Mod-Name und -Beschreibung in deiner Sprache anzeigt und dem Mod einen Einstellungsbildschirm gibt
 
 ## Selbst bauen
 

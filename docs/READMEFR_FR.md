@@ -21,6 +21,20 @@
 - **Pack nouveau ou modifié :** un écran avec **Télécharger tous les packs de ressources**. Les packs sont enregistrés dans `resourcepacks/localpack-<sha1>.zip`, vérifiés par SHA-1, activés et enregistrés dans vos options.
 - **Refuser et quitter :** vous êtes déconnecté du serveur.
 - **Packs plus anciens :** les packs précédemment téléchargés par le mod sont décochés lorsqu'une version plus récente arrive. Les fichiers restent sur le disque, revenir en arrière est donc instantané.
+- **Rien n'échoue en silence :** un téléchargement qui n'a pas fonctionné, une somme de contrôle qui ne correspondait pas, ou un fichier que le jeu n'a pas voulu activer est signalé à l'écran, ou par une notification si aucun écran n'est disponible.
+
+## Paramètres (Mod Menu)
+
+Une fois [Mod Menu](https://modrinth.com/mod/modmenu) installé, le mod apparaît dans la liste des mods avec son propre écran de paramètres. Aucun raccourci clavier n'a été ajouté ; tout est là.
+
+- **Dossier des packs téléchargés** — où les packs sont conservés. Laissez-le vide pour utiliser le dossier `resourcepacks` du jeu. Tout autre dossier fonctionne, y compris un autre disque ou un dossier partagé Android ; les packs sont alors aussi copiés dans `resourcepacks` avant d'être activés, car c'est le seul dossier que le jeu lui-même lit. Des boutons ouvrent l'un ou l'autre dossier.
+- **Mémoriser les serveurs que vous avez acceptés** — un serveur dont vous avez déjà pris des packs ne vous est plus demandé. La réponse est aussi écrite dans le propre réglage *Server Resource Packs* par serveur du jeu, à côté de Prompt, Enabled et Disabled.
+- **Conserver les packs des autres serveurs** — laissez cette option activée pour garder les packs que vous avez déjà. Désactivez-la pour démarrer chaque serveur avec uniquement les packs de ce serveur.
+- **Attendre avant de demander** — combien de temps collecter le reste d'un lot avant que l'écran apparaisse, en millisecondes ou en secondes. Les serveurs envoient tous leurs packs d'un coup, donc attendre transforme plusieurs questions en une seule.
+- **Abandonner après** et **Essais** — combien de temps un téléchargement peut prendre, et combien de fois un téléchargement échoué est réessayé. Une somme de contrôle qui ne correspond pas compte comme un échec, car c'est à cela que ressemble un transfert à moitié terminé.
+- **Tenir un registre** — chaque pack de ressources qu'un serveur envoie est consigné : quel serveur, quelle adresse, la somme de contrôle, la taille, ce qui lui est arrivé et combien de temps cela a pris. C'est un fichier sur votre propre ordinateur ; rien n'est envoyé nulle part.
+- **Packs téléchargés** — les packs que le mod a téléchargés, regroupés par serveur d'origine, indiquant si chacun est activé, désactivé ou absent du dossier. Appuyez sur l'un pour l'activer ou le désactiver ; un pack dont le fichier a disparu peut être oublié. **Tout oublier** efface ce que le mod mémorise et ne supprime jamais un fichier de pack.
+- **Ce que les serveurs ont envoyé** — le registre lui-même, du plus récent au plus ancien, avec les détails de chaque entrée.
 
 ## Mises à jour
 
@@ -34,6 +48,8 @@ Sous Windows, un fichier JAR en cours de chargement ne peut pas être supprimé,
 
 La vérification est une simple requête anonyme à l'API GitHub (aucun jeton, aucun compte), le mod n'a ni télémétrie ni serveur propre. Une version ignorée est mémorisée, et `-Dlocalpack.bypass.updateCheck=false` désactive entièrement les mises à jour.
 
+**Réserve sur la numérotation des versions :** `0.0.1.2026-alpha-build-beta-release` est lu comme `[0, 0, 1, 2026]`, ce qui se classe *en dessous* du `0.0.3-beta` antérieur (`[0, 0, 3]`). Les versions numérotées `0.0.3-beta` ou plus élevées ne se verront pas proposer celle-ci automatiquement et devront être remplacées à la main.
+
 ## Prérequis
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ La vérification est une simple requête anonyme à l'API GitHub (aucun jeton, a
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux ou un lanceur Android tel que [PojavLauncher](https://pojavlauncherteam.github.io/) : chaque fichier que touche le mod est résolu depuis le dossier de jeu du lanceur, aucun dossier n'est donc à configurer à la main
-- Facultatif : [Mod Menu](https://modrinth.com/mod/modmenu), qui affiche le nom et la description du mod dans votre langue
+- Facultatif : [Mod Menu](https://modrinth.com/mod/modmenu), qui affiche le nom et la description du mod dans votre langue et donne au mod un écran de paramètres
 
 ## Compiler soi-même
 

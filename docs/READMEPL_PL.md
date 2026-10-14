@@ -21,6 +21,20 @@
 - **Nowa lub zmieniona paczka:** jeden ekran z **Pobierz wszystkie paczki zasobów**. Paczki są zapisywane w `resourcepacks/localpack-<sha1>.zip`, weryfikowane przez SHA-1, włączane i zapisywane w twoich opcjach.
 - **Odmowa i wyjście:** zostajesz rozłączony z serwerem.
 - **Starsze paczki:** paczki pobrane wcześniej przez mod są odznaczane, gdy pojawi się nowsza wersja. Pliki pozostają na dysku, więc powrót jest natychmiastowy.
+- **Nic nie zawodzi po cichu:** nieudane pobranie, niezgodna suma kontrolna lub plik, którego gra nie chciała włączyć, są zgłaszane na ekranie lub jako powiadomienie, jeśli żaden ekran nie jest dostępny.
+
+## Ustawienia (Mod Menu)
+
+Po zainstalowaniu [Mod Menu](https://modrinth.com/mod/modmenu) mod pojawia się na liście modów z własnym ekranem ustawień. Nie dodano żadnych skrótów klawiszowych; wszystko jest na miejscu.
+
+- **Folder na pobrane paczki** — gdzie przechowywane są paczki. Zostaw go pustym, aby użyć własnego folderu gry `resourcepacks`. Każdy inny folder zadziała, w tym inny dysk lub udostępniony folder Androida; paczki są wtedy dodatkowo kopiowane do `resourcepacks` przed włączeniem, ponieważ to jedyny folder, który odczytuje sama gra. Przyciski otwierają każdy z folderów.
+- **Pamiętaj serwery, którym powiedziałeś tak** — serwer, z którego paczki już pobrano, nie jest pytany ponownie. Odpowiedź jest też zapisywana w własnym ustawieniu gry dla danego serwera *Server Resource Packs*, obok Prompt, Enabled i Disabled.
+- **Zachowaj paczki z innych serwerów** — zostaw to włączone, aby zachować paczki, które już masz. Wyłącz, aby rozpoczynać każdy serwer tylko z paczkami danego serwera.
+- **Odczekaj przed pytaniem** — jak długo zbierać resztę partii, zanim pojawi się ekran, w milisekundach lub sekundach. Serwery wysyłają wszystkie swoje paczki naraz, więc oczekiwanie zamienia kilka pytań w jedno.
+- **Poddaj się po** i **Próby** — jak długo może trwać jedno pobieranie i ile razy nieudane jest ponawiane. Niezgodna suma kontrolna liczy się jako niepowodzenie, bo tak wygląda niedokończony transfer.
+- **Prowadź zapis** — każda paczka zasobów wysłana przez serwer jest zapisywana: który serwer, który adres, suma kontrolna, rozmiar, co się z nią stało i ile to zajęło. To plik na twoim własnym komputerze; nic nie jest nigdzie wysyłane.
+- **Pobrane paczki** — paczki pobrane przez mod, pogrupowane według serwera, z którego pochodzą, pokazujące, czy każda jest włączona, wyłączona czy zniknęła z folderu. Naciśnij jedną, aby ją włączyć lub wyłączyć; paczkę, której plik zniknął, można zapomnieć. **Zapomnij wszystko** czyści to, co mod pamięta, i nigdy nie usuwa pliku paczki.
+- **Co wysłały serwery** — sam zapis, od najnowszego, ze szczegółami każdego wpisu.
 
 ## Aktualizacje
 
@@ -34,6 +48,8 @@ W systemie Windows nie można usunąć pliku JAR, który jest aktualnie załadow
 
 Sprawdzenie to zwykłe anonimowe zapytanie do API GitHuba (bez tokenu, bez konta), mod nie ma telemetrii ani własnego serwera. Pominięta wersja jest zapamiętywana, a `-Dlocalpack.bypass.updateCheck=false` całkowicie wyłącza aktualizacje.
 
+**Zastrzeżenie dotyczące numeracji wersji:** `0.0.1.2026-alpha-build-beta-release` jest odczytywane jako `[0, 0, 1, 2026]`, co sortuje się *poniżej* wcześniejszej `0.0.3-beta` (`[0, 0, 3]`). Kompilacje o numerze `0.0.3-beta` lub wyższym nie otrzymają tej automatycznie i trzeba je zastąpić ręcznie.
+
 ## Wymagania
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Sprawdzenie to zwykłe anonimowe zapytanie do API GitHuba (bez tokenu, bez konta
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux lub launcher na Androida taki jak [PojavLauncher](https://pojavlauncherteam.github.io/): każdy plik, którego dotyka mod, jest ustalany na podstawie katalogu gry launchera, więc żadnego folderu nie trzeba ustawiać ręcznie
-- Opcjonalnie: [Mod Menu](https://modrinth.com/mod/modmenu), które pokazuje nazwę i opis moda w twoim języku
+- Opcjonalnie: [Mod Menu](https://modrinth.com/mod/modmenu), które pokazuje nazwę i opis moda w twoim języku oraz daje modowi ekran ustawień
 
 ## Zbuduj samodzielnie
 

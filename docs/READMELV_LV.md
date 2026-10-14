@@ -21,6 +21,20 @@
 - **Jauna vai mainīta paka:** ekrāns ar pogu **Lejupielādēt visas resursu pakas**. Pakas tiek saglabātas kā `resourcepacks/localpack-<sha1>.zip`, pārbaudītas pēc SHA-1, iespējotas un saglabātas tavos iestatījumos.
 - **Atteikšanās un aiziešana:** tu tiksi atvienots no servera.
 - **Vecākas pakas:** iepriekš ar modu lejupielādētās pakas tiek atzīmētas kā neaktīvas, kad pienāk jaunāka versija. Faili paliek diskā, tāpēc atgriezties var uzreiz.
+- **Nekas neizdodas klusējot:** lejupielāde, kas neizdevās, kontrolsumma, kas nesakrita, vai fails, ko spēle nevarēja ieslēgt, tiek ziņots ekrānā vai kā paziņojums, ja ekrāns nav pieejams.
+
+## Iestatījumi (Mod Menu)
+
+Ja ir instalēts [Mod Menu](https://modrinth.com/mod/modmenu), mods parādās modu sarakstā ar savu iestatījumu ekrānu. Nekādas karstās taustiņas netika pievienotas; viss ir tur.
+
+- **Mape lejupielādētajām pakām** — kur tiek glabātas pakas. Atstāj to tukšu, lai izmantotu spēles pašas mapi `resourcepacks`. Der arī jebkura cita mape, tostarp cits disks vai Android koplietotā mape; tad pakas pirms ieslēgšanas tiek arī nokopētas uz `resourcepacks`, jo tā ir vienīgā mape, ko pati spēle nolasa. Pogas atver vienu vai otru mapi.
+- **Atcerēties serverus, kuriem piekriti** — serverim, no kura jau esi ņēmis pakas, vairs nejautā. Atbilde tiek ierakstīta arī spēles pašā katra servera iestatījumā *Server Resource Packs*, blakus Prompt, Enabled un Disabled.
+- **Paturēt pakas no citiem serveriem** — atstāj to ieslēgtu, lai paturētu pakas, kas tev jau ir. Izslēdz to, lai katru serveri sāktu tikai ar šī servera pakām.
+- **Gaidīt pirms jautāšanas** — cik ilgi vākt pārējo partiju pirms ekrāna parādīšanās, milisekundēs vai sekundēs. Serveri sūta visas savas pakas uzreiz, tāpēc gaidīšana vairākus jautājumus pārvērš vienā.
+- **Atteikties pēc** un **Mēģinājumi** — cik ilgi viena lejupielāde var ilgt un cik reizes neizdevusies tiek mēģināta atkārtoti. Kontrolsumma, kas nesakrīt, tiek uzskatīta par neveiksmi, jo tā izskatās puspabeigta pārsūtīšana.
+- **Saglabāt ierakstu** — tiek pierakstīta katra resursu paka, ko serveris nosūta: kurš serveris, kura adrese, kontrolsumma, izmērs, kas ar to notika un cik ilgi tas aizņēma. Tas ir fails tavā paša datorā; nekas netiek nekur nosūtīts.
+- **Lejupielādētās pakas** — pakas, ko mods ir lejupielādējis, sagrupētas pēc servera, no kura tās nākušas, parādot, vai katra ir ieslēgta, izslēgta vai pazudusi no mapes. Nospied uz kādas, lai to ieslēgtu vai izslēgtu; paku, kuras fails ir pazudis, var aizmirst. **Aizmirst visu** notīra to, ko mods atceras, un nekad neizdzēš pakas failu.
+- **Ko serveri nosūtīja** — pats ieraksts, jaunākais vispirms, ar katras vienības detaļām.
 
 ## Atjauninājumi
 
@@ -34,6 +48,8 @@ Operētājsistēmā Windows šobrīd ielādētu JAR failu nevar izdzēst, tāpē
 
 Vaicājums ir parasts anonīms GitHub API pieprasījums (bez marķiera, bez konta); modam nav telemetrijas un nav sava servera. Izlaistā versija tiek iegaumēta, un `-Dlocalpack.bypass.updateCheck=false` pilnībā izslēdz atjauninājumus.
 
+**Versiju numurēšanas piezīme:** `0.0.1.2026-alpha-build-beta-release` tiek nolasīts kā `[0, 0, 1, 2026]`, kas sarindojas *zem* iepriekšējās `0.0.3-beta` (`[0, 0, 3]`). Būvējumi ar numuru `0.0.3-beta` vai augstāku šo nesaņems automātiski un būs jāaizstāj ar roku.
+
 ## Priekšnosacījumi
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Vaicājums ir parasts anonīms GitHub API pieprasījums (bez marķiera, bez kont
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux vai Android palaidējs, piemēram, [PojavLauncher](https://pojavlauncherteam.github.io/): katrs fails, ko mods aizskar, tiek noteikts no palaidēja spēles direktorijas, tāpēc neviena mape nav jāiestata manuāli
-- Neobligāti: [Mod Menu](https://modrinth.com/mod/modmenu), kas rāda moda nosaukumu un aprakstu tavā valodā
+- Neobligāti: [Mod Menu](https://modrinth.com/mod/modmenu), kas rāda moda nosaukumu un aprakstu tavā valodā un piešķir modam iestatījumu ekrānu
 
 ## Kā uzbūvēt pašam
 

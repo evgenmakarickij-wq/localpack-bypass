@@ -21,6 +21,20 @@
 - **Nový alebo zmenený balíček:** obrazovka s **Stiahnuť všetky balíčky zdrojov**. Balíčky sa ukladajú do `resourcepacks/localpack-<sha1>.zip`, overia sa pomocou SHA-1, zapnú sa a uložia do tvojich nastavení.
 - **Odmietnuť a odísť:** budeš odpojený od servera.
 - **Staršie balíčky:** skôr modom stiahnuté balíčky sa odznačia, keď dorazí novšia verzia. Súbory zostávajú na disku, takže návrat je okamžitý.
+- **Nič nezlyháva ticho:** sťahovanie, ktoré nefungovalo, kontrolný súčet, ktorý nesedel, alebo súbor, ktorý hra nezapne, sa nahlási na obrazovke, alebo ako oznámenie, ak nie je k dispozícii žiadna obrazovka.
+
+## Nastavenia (Mod Menu)
+
+S nainštalovaným [Mod Menu](https://modrinth.com/mod/modmenu) sa mod objaví v zozname modov s vlastnou obrazovkou nastavení. Nepridali sa žiadne klávesové skratky; všetko je tam.
+
+- **Priečinok pre stiahnuté balíčky** — kde sa balíčky uchovávajú. Nechaj ho prázdny pre vlastný priečinok hry `resourcepacks`. Funguje akýkoľvek iný priečinok, vrátane iného disku alebo zdieľaného priečinka v Androide; balíčky sa potom pred zapnutím skopírujú aj do `resourcepacks`, pretože to je jediný priečinok, ktorý hra sama číta. Tlačidlá otvoria jeden alebo druhý priečinok.
+- **Pamätať si servery, ktorým si povedal áno** — server, od ktorého si už balíčky bral, sa už znova nepýta. Odpoveď sa zapíše aj do vlastného nastavenia hry pre daný server, *balíčky zdrojov servera*, vedľa možností Opýtať sa, Zapnuté a Vypnuté.
+- **Ponechať balíčky z iných serverov** — nechaj to zapnuté, aby si ponechal balíčky, ktoré už máš. Vypni to, aby každý server začínal len so svojimi balíčkami.
+- **Čakať pred otázkou** — ako dlho zbierať zvyšok dávky, kým sa objaví obrazovka, v milisekundách alebo sekundách. Servery posielajú všetky svoje balíčky naraz, takže čakanie zmení niekoľko otázok na jednu.
+- **Vzdať to po** a **Pokusy** — ako dlho môže trvať jedno sťahovanie a koľkokrát sa neúspešné zopakuje. Kontrolný súčet, ktorý nesedí, sa počíta ako zlyhanie, pretože tak vyzerá napoly dokončený prenos.
+- **Viesť záznam** — každý balíček zdrojov, ktorý server pošle, sa zapíše: ktorý server, ktorá adresa, kontrolný súčet, veľkosť, čo sa s ním stalo a ako dlho to trvalo. Je to súbor na tvojom počítači; nič sa nikam neposiela.
+- **Stiahnuté balíčky** — balíčky, ktoré mod stiahol, zoskupené podľa servera, z ktorého prišli, s tým, či je každý zapnutý, vypnutý alebo zmizol z priečinka. Kliknutím naň ho zapneš alebo vypneš; balíček, ktorého súbor zmizol, možno zabudnúť. **Zabudnúť všetko** vymaže, čo si mod pamätá, a nikdy nezmaže súbor balíčka.
+- **Čo servery poslali** — samotný záznam, najnovšie prvé, s podrobnosťami každého záznamu.
 
 ## Aktualizácie
 
@@ -34,6 +48,8 @@ Vo Windows sa nedá vymazať súbor JAR, ktorý je práve načítaný, preto kr�
 
 Dopyt je obyčajná anonymná požiadavka na API GitHubu (žiadny token, žiadny účet), mod nemá žiadnu telemetriu ani vlastný server. Preskočená verzia sa zapamätá a `-Dlocalpack.bypass.updateCheck=false` aktualizácie úplne vypne.
 
+**Upozornenie k číslovaniu verzií:** `0.0.1.2026-alpha-build-beta-release` sa číta ako `[0, 0, 1, 2026]`, čo sa zaraďuje *pod* skoršiu `0.0.3-beta` (`[0, 0, 3]`). Verzie s číslom `0.0.3-beta` alebo vyšším nedostanú túto automaticky a musia sa nahradiť ručne.
+
 ## Požiadavky
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Dopyt je obyčajná anonymná požiadavka na API GitHubu (žiadny token, žiadny
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux alebo androidový launcher ako [PojavLauncher](https://pojavlauncherteam.github.io/): každý súbor, ktorého sa mod dotkne, sa zistí z adresára hry launcheru, takže netreba ručne nastavovať žiadny priečinok
-- Voliteľné: [Mod Menu](https://modrinth.com/mod/modmenu), ktoré zobrazuje názov a popis modu v tvojom jazyku
+- Voliteľné: [Mod Menu](https://modrinth.com/mod/modmenu), ktoré zobrazuje názov a popis modu v tvojom jazyku a dáva modu obrazovku nastavení
 
 ## Zostavenie vlastnými silami
 

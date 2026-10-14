@@ -21,6 +21,20 @@
 - **Yeni veya değiştirilmiş paket:** **Tüm kaynak paketlerini indir** bulunan bir ekran. Paketler `resourcepacks/localpack-<sha1>.zip` altına kaydedilir, SHA-1 ile doğrulanır, etkinleştirilir ve ayarlarına kaydedilir.
 - **Reddet ve çık:** sunucudan bağlantın kesilir.
 - **Eski paketler:** modun daha önce indirdiği paketler, daha yeni bir sürüm geldiğinde seçimden çıkarılır. Dosyalar diskte kalır, bu yüzden geri dönmek anında mümkündür.
+- **Hiçbir şey sessizce başarısız olmaz:** çalışmayan bir indirme, eşleşmeyen bir sağlama toplamı veya oyunun açmadığı bir dosya ekranda bildirilir; ekran yoksa bildirim olarak gösterilir.
+
+## Ayarlar (Mod Menu)
+
+[Mod Menu](https://modrinth.com/mod/modmenu) yüklüyse mod, mod listesinde kendine ait bir ayar ekranıyla görünür. Hiç kısayol tuşu eklenmedi; her şey orada.
+
+- **İndirilen paketler için klasör** — paketlerin tutulduğu yer. Oyunun kendi `resourcepacks` klasörü için boş bırak. Başka herhangi bir klasör çalışır; farklı bir sürücü veya bir Android paylaşımlı klasörü de dahil. Paketler o zaman açılmadan önce `resourcepacks` içine de kopyalanır, çünkü oyunun kendisinin okuduğu tek klasör orasıdır. Düğmeler iki klasörden birini açar.
+- **Evet dediğin sunucuları hatırla** — daha önce paket aldığın bir sunucu bir daha sorulmaz. Cevap, oyunun kendi sunucu başına *Server Resource Packs* ayarına da yazılır; Prompt, Enabled ve Disabled'ın yanına.
+- **Diğer sunucuların paketlerini koru** — zaten sahip olduğun paketleri korumak için bunu açık bırak. Her sunucuya yalnızca o sunucunun paketleriyle başlamak için kapat.
+- **Sormadan önce bekle** — ekran görünmeden önce bir grubun geri kalanının toplanması için geçen süre; milisaniye veya saniye cinsinden. Sunucular tüm paketlerini bir kerede gönderir, bu yüzden beklemek birkaç soruyu tek soruya dönüştürür.
+- **Sonra vazgeç** ve **Deneme sayısı** — bir indirmenin en fazla ne kadar sürebileceği ve başarısız olanın kaç kez yeniden deneneceği. Eşleşmeyen bir sağlama toplamı başarısızlık sayılır, çünkü yarım kalmış bir aktarım böyle görünür.
+- **Kayıt tut** — bir sunucunun gönderdiği her kaynak paketi kaydedilir: hangi sunucu, hangi adres, sağlama toplamı, boyut, ona ne olduğu ve ne kadar sürdüğü. Bu senin kendi bilgisayarındaki bir dosyadır; hiçbir yere gönderilmez.
+- **İndirilen paketler** — modun indirdiği paketler, geldikleri sunucuya göre gruplanmış olarak; her birinin açık, kapalı veya klasörden kaybolmuş olup olmadığını gösterir. Açıp kapatmak için birine bas; dosyası kaybolan bir paket unutulabilir. **Her şeyi unut**, modun hatırladıklarını temizler ve hiçbir zaman bir paket dosyasını silmez.
+- **Sunucuların gönderdikleri** — kaydın kendisi, en yeniden eskiye, her girdinin ayrıntılarıyla.
 
 ## Güncellemeler
 
@@ -34,6 +48,8 @@ Windows'ta o anda yüklü olan bir JAR dosyası silinemez, bu yüzden kısa bir 
 
 Sorgu, GitHub API'sine yapılan sıradan anonim bir istektir (jeton yok, hesap yok); modun telemetrisi ve kendi sunucusu yoktur. Atlanan bir sürüm hatırlanır ve `-Dlocalpack.bypass.updateCheck=false` güncellemeleri tamamen kapatır.
 
+**Sürüm numaralandırma uyarısı:** `0.0.1.2026-alpha-build-beta-release` sürümü `[0, 0, 1, 2026]` olarak okunur ve bu, önceki `0.0.3-beta` (`[0, 0, 3]`) sürümünün *altında* sıralanır. `0.0.3-beta` veya üzeri numaralı yapılara bu sürüm otomatik olarak sunulmaz ve elle değiştirilmeleri gerekir.
+
 ## Gereksinimler
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Sorgu, GitHub API'sine yapılan sıradan anonim bir istektir (jeton yok, hesap y
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux veya [PojavLauncher](https://pojavlauncherteam.github.io/) gibi bir Android başlatıcısı: modun dokunduğu her dosya, başlatıcının oyun dizininden belirlenir, bu yüzden elle klasör ayarlamak gerekmez
-- İsteğe bağlı: mod adını ve açıklamasını kendi dilinde gösteren [Mod Menu](https://modrinth.com/mod/modmenu)
+- İsteğe bağlı: mod adını ve açıklamasını kendi dilinde gösteren ve moda bir ayar ekranı kazandıran [Mod Menu](https://modrinth.com/mod/modmenu)
 
 ## Kendin derle
 

@@ -21,6 +21,20 @@
 - **Pacote novo ou alterado:** uma tela com **Baixar todos os pacotes de recursos**. Os pacotes são salvos em `resourcepacks/localpack-<sha1>.zip`, verificados por SHA-1, ativados e salvos nas suas opções.
 - **Recusar e sair:** você é desconectado do servidor.
 - **Pacotes antigos:** os pacotes baixados anteriormente pelo mod são desmarcados quando chega uma versão mais nova. Os arquivos permanecem no disco, então voltar atrás é instantâneo.
+- **Nada falha em silêncio:** um download que não funcionou, uma soma de verificação que não bateu ou um arquivo que o jogo não quis ativar são informados na tela, ou como uma notificação se não houver tela disponível.
+
+## Configurações (Mod Menu)
+
+Com o [Mod Menu](https://modrinth.com/mod/modmenu) instalado, o mod aparece na lista de mods com uma tela de configurações própria. Nenhuma tecla de atalho foi adicionada; tudo está lá.
+
+- **Pasta dos pacotes baixados** — onde os pacotes são guardados. Deixe-a vazia para usar a própria pasta `resourcepacks` do jogo. Qualquer outra pasta funciona, inclusive outro disco ou uma pasta compartilhada do Android; os pacotes passam então a ser copiados também para `resourcepacks` antes de serem ativados, porque essa é a única pasta que o próprio jogo lê. Os botões abrem uma ou outra pasta.
+- **Lembrar servidores em que você disse sim** — um servidor de onde você já pegou pacotes não é perguntado de novo. A resposta também é gravada na própria configuração por servidor do jogo, *Server Resource Packs*, ao lado de Prompt, Enabled e Disabled.
+- **Manter pacotes de outros servidores** — deixe ligado para manter os pacotes que você já tem. Desligue para começar cada servidor apenas com os pacotes daquele servidor.
+- **Esperar antes de perguntar** — por quanto tempo coletar o resto de um lote antes que a tela apareça, em milissegundos ou segundos. Os servidores enviam todos os seus pacotes de uma vez, então esperar transforma várias perguntas em uma.
+- **Desistir depois de** e **Tentativas** — quanto tempo um download pode levar e quantas vezes um que falhou é tentado de novo. Uma soma de verificação que não bate conta como falha, porque é assim que se parece uma transferência pela metade.
+- **Manter um registro** — cada pacote de recursos que um servidor envia é registrado: qual servidor, qual endereço, a soma de verificação, o tamanho, o que aconteceu com ele e quanto tempo levou. É um arquivo no seu próprio computador; nada é enviado a lugar nenhum.
+- **Pacotes baixados** — os pacotes que o mod baixou, agrupados pelo servidor de onde vieram, mostrando se cada um está ligado, desligado ou sumiu da pasta. Pressione um para ligá-lo ou desligá-lo; um pacote cujo arquivo desapareceu pode ser esquecido. **Esquecer tudo** limpa o que o mod lembra e nunca apaga um arquivo de pacote.
+- **O que os servidores enviaram** — o próprio registro, do mais recente para o mais antigo, com os detalhes de cada entrada.
 
 ## Atualizações
 
@@ -34,6 +48,8 @@ No Windows não é possível excluir um arquivo JAR que está carregado no momen
 
 A verificação é uma solicitação anônima comum à API do GitHub (sem token, sem conta); o mod não tem telemetria nem servidor próprio. Uma versão ignorada é lembrada, e `-Dlocalpack.bypass.updateCheck=false` desativa as atualizações por completo.
 
+**Ressalva sobre a numeração de versões:** `0.0.1.2026-alpha-build-beta-release` é lido como `[0, 0, 1, 2026]`, que se ordena *abaixo* da anterior `0.0.3-beta` (`[0, 0, 3]`). Builds numeradas `0.0.3-beta` ou superiores não receberão esta automaticamente e terão de ser substituídas à mão.
+
 ## Requisitos
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ A verificação é uma solicitação anônima comum à API do GitHub (sem token,
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux ou um launcher de Android como o [PojavLauncher](https://pojavlauncherteam.github.io/): cada arquivo que o mod toca é obtido do diretório de jogo do launcher, então não é preciso configurar nenhuma pasta à mão
-- Opcional: [Mod Menu](https://modrinth.com/mod/modmenu), que mostra o nome e a descrição do mod no seu idioma
+- Opcional: [Mod Menu](https://modrinth.com/mod/modmenu), que mostra o nome e a descrição do mod no seu idioma e dá ao mod uma tela de configurações
 
 ## Compilar você mesmo
 

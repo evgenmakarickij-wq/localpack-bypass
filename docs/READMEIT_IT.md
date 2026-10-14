@@ -21,6 +21,20 @@
 - **Pacchetto nuovo o modificato:** una schermata con **Scarica tutti i pacchetti di risorse**. I pacchetti vengono salvati in `resourcepacks/localpack-<sha1>.zip`, verificati tramite SHA-1, attivati e salvati nelle tue opzioni.
 - **Rifiuta ed esci:** vieni disconnesso dal server.
 - **Pacchetti più vecchi:** i pacchetti scaricati in precedenza dalla mod vengono deselezionati quando arriva una versione più recente. I file restano sul disco, quindi tornare indietro è immediato.
+- **Nulla fallisce in silenzio:** un download che non ha funzionato, un checksum che non corrispondeva, o un file che il gioco non ha voluto attivare viene segnalato sullo schermo, oppure come notifica se non è disponibile alcuno schermo.
+
+## Impostazioni (Mod Menu)
+
+Con [Mod Menu](https://modrinth.com/mod/modmenu) installato, la mod compare nell'elenco delle mod con una schermata di impostazioni propria. Non sono state aggiunte scorciatoie da tastiera; c'è tutto lì.
+
+- **Cartella per i pacchetti scaricati** — dove vengono conservati i pacchetti. Lasciala vuota per usare la cartella `resourcepacks` del gioco. Va bene qualsiasi altra cartella, anche su un altro disco o una cartella condivisa di Android; i pacchetti vengono allora anche copiati in `resourcepacks` prima di essere attivati, perché è l'unica cartella che il gioco stesso legge. I pulsanti aprono l'una o l'altra cartella.
+- **Ricorda i server a cui hai detto sì** — a un server da cui hai già preso pacchetti non viene più chiesto. La risposta viene scritta anche nell'impostazione *Pacchetti di risorse del server* per server del gioco, accanto a Chiedi, Attivato e Disattivato.
+- **Mantieni i pacchetti degli altri server** — lascialo attivo per conservare i pacchetti che hai già. Disattivalo per iniziare ogni server con soli i pacchetti di quel server.
+- **Attendi prima di chiedere** — quanto tempo raccogliere il resto di un lotto prima che compaia la schermata, in millisecondi o secondi. I server inviano tutti i loro pacchetti in una volta, quindi attendere trasforma diverse domande in una sola.
+- **Rinuncia dopo** e **Tentativi** — quanto può durare un download e quante volte uno fallito viene ritentato. Un checksum che non corrisponde conta come un fallimento, perché è l'aspetto di un trasferimento a metà.
+- **Tieni un registro** — ogni pacchetto di risorse che un server invia viene annotato: quale server, quale indirizzo, il checksum, la dimensione, cosa gli è successo e quanto ha richiesto. È un file sul tuo computer; nulla viene inviato da nessuna parte.
+- **Pacchetti scaricati** — i pacchetti che la mod ha scaricato, raggruppati per il server da cui provengono, e che mostrano se ciascuno è attivo, disattivo o sparito dalla cartella. Premine uno per attivarlo o disattivarlo; un pacchetto il cui file è sparito può essere dimenticato. **Dimentica tutto** cancella ciò che la mod ricorda e non elimina mai un file di pacchetto.
+- **Ciò che i server hanno inviato** — il registro stesso, dal più recente, con i dettagli di ogni voce.
 
 ## Aggiornamenti
 
@@ -34,6 +48,8 @@ Su Windows un file JAR attualmente caricato non può essere eliminato, perciò u
 
 Il controllo è una normale richiesta anonima all'API di GitHub (nessun token, nessun account), la mod non ha telemetria né un server proprio. Una versione saltata viene ricordata, e `-Dlocalpack.bypass.updateCheck=false` disattiva del tutto gli aggiornamenti.
 
+**Avvertenza sulla numerazione delle versioni:** `0.0.1.2026-alpha-build-beta-release` viene letto come `[0, 0, 1, 2026]`, che si ordina *sotto* la precedente `0.0.3-beta` (`[0, 0, 3]`). Le build numerate `0.0.3-beta` o superiori non riceveranno questa automaticamente e dovranno essere sostituite a mano.
+
 ## Requisiti
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Il controllo è una normale richiesta anonima all'API di GitHub (nessun token, n
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux o un launcher Android come [PojavLauncher](https://pojavlauncherteam.github.io/): ogni file che la mod tocca viene ricavato dalla cartella di gioco del launcher, quindi non serve configurare nessuna cartella a mano
-- Facoltativo: [Mod Menu](https://modrinth.com/mod/modmenu), che mostra il nome e la descrizione della mod nella tua lingua
+- Facoltativo: [Mod Menu](https://modrinth.com/mod/modmenu), che mostra il nome e la descrizione della mod nella tua lingua e dà alla mod una schermata di impostazioni
 
 ## Compilarlo da soli
 

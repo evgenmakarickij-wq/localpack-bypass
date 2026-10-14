@@ -21,6 +21,20 @@
 - **Uus või muutunud pakk:** üks ekraan, kus on **Laadi alla kõik ressursipakid**. Pakid salvestatakse asukohta `resourcepacks/localpack-<sha1>.zip`, kontrollitakse SHA-1-teisendiga, aktiveeritakse ja salvestatakse teie seadetesse.
 - **Keeldu ja lahku:** teie ühendus serveriga katkestatakse.
 - **Vanemad pakid:** modi varem alla laaditud pakid eemaldatakse valikust, kui saabub uuem versioon. Failid jäävad kettale, nii et saate kohe tagasi lülituda.
+- **Miski ei ebaõnnestu vaikselt:** allalaadimine, mis ei õnnestunud, kontrollsumma, mis ei klappinud, või fail, mida mäng ei tahtnud sisse lülitada, teatatakse ekraanil või märguandena, kui ekraani pole saadaval.
+
+## Seaded (Mod Menu)
+
+Kui [Mod Menu](https://modrinth.com/mod/modmenu) on installitud, ilmub mod modide loendisse oma seadeteekraaniga. Ühtegi kiirklahvi ei lisatud; kõik on seal olemas.
+
+- **Allalaaditud pakkide kaust** — kus pakke hoitakse. Jätke see tühjaks mängu enda `resourcepacks`-kausta jaoks. Sobib iga muu kaust, sealhulgas teine ketas või Androidi jagatud kaust; sel juhul kopeeritakse pakid enne sisselülitamist ka `resourcepacks`-kausta, sest see on ainus kaust, mida mäng ise loeb. Nupud avavad kummagi kausta.
+- **Jäta meelde serverid, millega nõustusid** — serverilt, millelt olete juba pakke võtnud, ei küsita uuesti. Vastus kirjutatakse ka mängu enda serveripõhisesse *Serveri ressursipakid* seadesse, valikute Küsi, Lubatud ja Keelatud kõrvale.
+- **Hoia alles teiste serverite pakid** — jätke see sisse, et alles hoida pakid, mis teil juba on. Lülitage see välja, et alustada iga serverit ainult selle serveri pakkidega.
+- **Oota enne küsimist** — kui kaua kogutakse ülejäänud partii enne, kui ekraan ilmub, millisekundites või sekundites. Serverid saadavad kõik oma pakid korraga, nii et ootamine muudab mitu küsimust üheks.
+- **Loobu pärast** ja **Katseid** — kui kaua võib üks allalaadimine kesta ja mitu korda ebaõnnestunud katset korratakse. Kontrollsumma, mis ei klapi, loetakse ebaõnnestumiseks, sest nii näeb välja pooleliolev ülekanne.
+- **Pea arvestust** — iga ressurssipakki, mille server saadab, pannakse kirja: milline server, milline aadress, kontrollsumma, suurus, mis sellega juhtus ja kui kaua see võttis. See on fail teie enda arvutis; midagi ei saadeta kuhugi.
+- **Allalaaditud pakid** — pakid, mille mod on alla laadinud, rühmitatud serveri järgi, millelt need pärinevad, näidates, kas igaüks on sisse lülitatud, välja lülitatud või kaustast kadunud. Vajutage ühele, et see sisse või välja lülitada; pakki, mille fail on kadunud, saab unustada. **Unusta kõik** kustutab selle, mida mod mäletab, ega kustuta kunagi pakifaili.
+- **Mida serverid saatsid** — kirje ise, uusimad enne, iga kande üksikasjadega.
 
 ## Uuendused
 
@@ -34,6 +48,8 @@ Windowsis ei saa laaditud JAR-faili kustutada, seega väike loodud skript ootab 
 
 Päring on tavaline anonüümne taotlus GitHubi API-le (ilma tokenita, ilma kontota); modil pole telemeetriat ega oma serverit. Vahelejäetud versioon jäetakse meelde ja `-Dlocalpack.bypass.updateCheck=false` lülitab uuendused täielikult välja.
 
+**Märkus versiooninumbrite kohta:** `0.0.1.2026-alpha-build-beta-release` loetakse kui `[0, 0, 1, 2026]`, mis sorteerub *alla* varasema `0.0.3-beta` (`[0, 0, 3]`). Builde numbriga `0.0.3-beta` või kõrgemad ei pakuta seda automaatselt ja need tuleb käsitsi asendada.
+
 ## Nõuded
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Päring on tavaline anonüümne taotlus GitHubi API-le (ilma tokenita, ilma kont
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux või Androidi käivitaja nagu [PojavLauncher](https://pojavlauncherteam.github.io/): iga fail, mida mod puudutab, määratakse käivitaja mängukausta järgi, nii et ühtegi kausta pole vaja käsitsi seadistada
-- Valikuline: [Mod Menu](https://modrinth.com/mod/modmenu), mis näitab modi nime ja kirjeldust teie keeles
+- Valikuline: [Mod Menu](https://modrinth.com/mod/modmenu), mis näitab modi nime ja kirjeldust teie keeles ja annab modile seadeteekraani
 
 ## Ehita see ise
 

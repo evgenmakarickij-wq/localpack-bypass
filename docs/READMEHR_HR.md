@@ -21,6 +21,20 @@
 - **Novi ili izmijenjeni paket:** zaslon s **Preuzmi sve pakete resursa**. Paketi se spremaju u `resourcepacks/localpack-<sha1>.zip`, provjeravaju se putem SHA-1, aktiviraju i spremaju u tvoje postavke.
 - **Odbij i izađi:** odspojen si s poslužitelja.
 - **Stariji paketi:** paketi koje je mod prethodno preuzeo odznačuju se kada stigne novija verzija. Datoteke ostaju na disku, pa je povratak na staro trenutan.
+- **Ništa ne propada tiho:** preuzimanje koje nije uspjelo, kontrolni zbroj koji se nije podudarao ili datoteka koju igra nije htjela aktivirati prijavljuju se na zaslonu ili kao obavijest ako zaslon nije dostupan.
+
+## Postavke (Mod Menu)
+
+Kada je [Mod Menu](https://modrinth.com/mod/modmenu) instaliran, mod se pojavljuje na popisu modova s vlastitim zaslonom postavki. Nisu dodane nikakve tipkovničke prečice; sve je tamo.
+
+- **Mapa za preuzete pakete** — gdje se paketi čuvaju. Ostavi je praznom za igrinu vlastitu mapu `resourcepacks`. Bilo koja druga mapa radi, uključujući drugi disk ili Android dijeljenu mapu; paketi se tada također kopiraju u `resourcepacks` prije nego što se aktiviraju, jer je to jedina mapa koju sama igra čita. Gumbi otvaraju jednu ili drugu mapu.
+- **Zapamti poslužitelje koje si prihvatio** — poslužitelj od kojeg si već preuzeo pakete ne pita se ponovno. Odgovor se također upisuje u igrinu vlastitu postavku *Server Resource Packs* po poslužitelju, uz Prompt, Enabled i Disabled.
+- **Zadrži pakete s drugih poslužitelja** — ostavi ovo uključeno da zadržiš pakete koje već imaš. Isključi to da svaki poslužitelj započneš samo s paketima tog poslužitelja.
+- **Čekaj prije pitanja** — koliko dugo skupljati ostatak serije prije nego što se pojavi zaslon, u milisekundama ili sekundama. Poslužitelji šalju sve svoje pakete odjednom, pa čekanje pretvara nekoliko pitanja u jedno.
+- **Odustani nakon** i **Pokušaji** — koliko dugo jedno preuzimanje može trajati i koliko se puta neuspjelo preuzimanje ponovno pokušava. Kontrolni zbroj koji se ne podudara računa se kao neuspjeh, jer tako izgleda napola dovršen prijenos.
+- **Vodi evidenciju** — svaki paket resursa koji poslužitelj pošalje zapisuje se: koji poslužitelj, koja adresa, kontrolni zbroj, veličina, što se s njim dogodilo i koliko je trajalo. To je datoteka na tvom vlastitom računalu; ništa se nikamo ne šalje.
+- **Preuzeti paketi** — paketi koje je mod preuzeo, grupirani prema poslužitelju s kojeg su došli, pokazujući je li svaki uključen, isključen ili nestao iz mape. Pritisni jedan da ga uključiš ili isključiš; paket čija je datoteka nestala može se zaboraviti. **Zaboravi sve** briše ono što mod pamti i nikada ne briše datoteku paketa.
+- **Što su poslužitelji poslali** — sama evidencija, najnovije prvo, s pojedinostima svakog unosa.
 
 ## Ažuriranja
 
@@ -34,6 +48,8 @@ Na Windowsu se JAR datoteka koja je upravo učitana ne može izbrisati, pa kratk
 
 Upit je običan anoniman zahtjev GitHub API-ju (bez tokena, bez računa), mod nema telemetriju ni vlastiti poslužitelj. Preskočena verzija se pamti, a `-Dlocalpack.bypass.updateCheck=false` potpuno isključuje ažuriranja.
 
+**Napomena o numeriranju verzija:** `0.0.1.2026-alpha-build-beta-release` čita se kao `[0, 0, 1, 2026]`, što se svrstava *ispod* ranije verzije `0.0.3-beta` (`[0, 0, 3]`). Verzije označene `0.0.3-beta` ili novije neće automatski dobiti ponudu ove i moraju se zamijeniti ručno.
+
 ## Preduvjeti
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Upit je običan anoniman zahtjev GitHub API-ju (bez tokena, bez računa), mod ne
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux ili Android pokretač poput [PojavLauncher](https://pojavlauncherteam.github.io/): svaka datoteka koju mod dira određuje se iz igrinog direktorija pokretača, pa nije potrebno ručno postavljati mapu
-- Neobavezno: [Mod Menu](https://modrinth.com/mod/modmenu), koji prikazuje naziv i opis moda na tvom jeziku
+- Neobavezno: [Mod Menu](https://modrinth.com/mod/modmenu), koji prikazuje naziv i opis moda na tvom jeziku i daje modu zaslon postavki
 
 ## Izgradnja samostalno
 

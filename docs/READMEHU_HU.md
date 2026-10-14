@@ -21,6 +21,20 @@
 - **Új vagy módosított csomag:** egy képernyő az **Az összes erőforráscsomag letöltése** lehetőséggel. A csomagok a `resourcepacks/localpack-<sha1>.zip` helyre kerülnek, SHA-1-gyel ellenőrződnek, aktiválódnak, és elmentődnek a beállításaidba.
 - **Elutasítás és kilépés:** lecsatlakozol a szerverről.
 - **Régebbi csomagok:** a mod által korábban letöltött csomagok kijelölése megszűnik, amikor újabb verzió érkezik. A fájlok a lemezen maradnak, így a visszaváltás azonnal lehetséges.
+- **Semmi sem hibázik csendben:** egy letöltés, amely nem működött, egy ellenőrzőösszeg, amely nem egyezett, vagy egy fájl, amelyet a játék nem volt hajlandó aktiválni, a képernyőn jelenik meg, vagy értesítésként, ha nincs elérhető képernyő.
+
+## Beállítások (Mod Menu)
+
+Ha a [Mod Menu](https://modrinth.com/mod/modmenu) telepítve van, a mod megjelenik a modlistán a saját beállításképernyőjével. Billentyűparancsokat nem adtunk hozzá; minden ott van.
+
+- **Letöltött csomagok mappája** — hol tárolódnak a csomagok. Hagyd üresen a játék saját `resourcepacks` mappájához. Bármely más mappa működik, beleértve egy másik meghajtót vagy egy Android megosztott mappát; a csomagok ilyenkor a `resourcepacks` mappába is átmásolódnak, mielőtt aktiválnák őket, mert ez az egyetlen mappa, amelyet maga a játék olvas. A gombok bármelyik mappát megnyitják.
+- **Jegyezd meg az elfogadott szervereket** — egy szervert, amelyről már vettél csomagokat, nem kérdez meg újra. A válasz a játék saját, szerverenkénti *Server Resource Packs* beállításába is beíródik, a Prompt, Enabled és Disabled mellett.
+- **Tartsd meg a más szerverekről származó csomagokat** — hagyd bekapcsolva, hogy megtartsd a már meglévő csomagjaidat. Kapcsold ki, hogy minden szervert csak az adott szerver csomagjaival kezdj.
+- **Várj a kérdezés előtt** — mennyi ideig gyűjtse egy köteg többi részét, mielőtt a képernyő megjelenik, ezredmásodpercben vagy másodpercben. A szerverek egyszerre küldik az összes csomagjukat, így a várakozás több kérdést egyetlen kérdéssé alakít.
+- **Add fel ennyi után** és **Próbálkozások** — mennyi ideig tarthat egy letöltés, és egy sikertelen hányszor próbálódik újra. A nem egyező ellenőrzőösszeg kudarcnak számít, mert a félig kész átvitel így néz ki.
+- **Vezess nyilvántartást** — minden erőforráscsomag, amelyet egy szerver küld, feljegyzésre kerül: melyik szerver, melyik cím, az ellenőrzőösszeg, a méret, mi történt vele és mennyi ideig tartott. Ez egy fájl a saját számítógépeden; semmi sem kerül elküldésre sehova.
+- **Letöltött csomagok** — a mod által letöltött csomagok, a származási szerverük szerint csoportosítva, jelezve, hogy az egyes csomagok be vannak-e kapcsolva, ki vannak-e kapcsolva, vagy eltűntek-e a mappából. Nyomj meg egyet a be- vagy kikapcsolásához; egy csomag, amelynek a fájlja eltűnt, elfelejthető. **Minden elfelejtése** törli, amire a mod emlékszik, és soha nem törli a csomagfájlt.
+- **Mit küldtek a szerverek** — maga a nyilvántartás, a legújabbak elöl, minden bejegyzés részleteivel.
 
 ## Frissítések
 
@@ -34,6 +48,8 @@ Windows alatt egy éppen betöltött JAR-fájl nem törölhető, ezért egy röv
 
 A lekérdezés egy szokásos névtelen kérés a GitHub API felé (nincs token, nincs fiók), a modnak nincs telemetriája és saját szervere. A kihagyott verzió megjegyződik, és a `-Dlocalpack.bypass.updateCheck=false` teljesen kikapcsolja a frissítéseket.
 
+**Figyelmeztetés a verziószámozásra:** a `0.0.1.2026-alpha-build-beta-release` `[0, 0, 1, 2026]`-ként olvasandó, ami a korábbi `0.0.3-beta` (`[0, 0, 3]`) *alá* sorolódik. A `0.0.3-beta` vagy magasabb számmal jelölt verziók nem kapják meg ezt automatikusan, és kézzel kell lecserélni őket.
+
 ## Követelmények
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ A lekérdezés egy szokásos névtelen kérés a GitHub API felé (nincs token, 
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux vagy egy Android-indító, például a [PojavLauncher](https://pojavlauncherteam.github.io/): minden fájl, amihez a mod hozzányúl, az indító játékkönyvtárából határozódik meg, így nem kell kézzel mappát beállítani
-- Nem kötelező: [Mod Menu](https://modrinth.com/mod/modmenu), amely a mod nevét és leírását a te nyelveden jeleníti meg
+- Nem kötelező: [Mod Menu](https://modrinth.com/mod/modmenu), amely a mod nevét és leírását a te nyelveden jeleníti meg, és beállításképernyőt ad a modnak
 
 ## Építés saját kezűleg
 

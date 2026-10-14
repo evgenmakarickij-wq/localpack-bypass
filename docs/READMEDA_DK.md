@@ -21,6 +21,20 @@
 - **Ny eller ændret pakke:** en skærm med **Download alle ressourcepakker**. Pakkerne gemmes under `resourcepacks/localpack-<sha1>.zip`, verificeres med SHA-1, aktiveres og gemmes i dine indstillinger.
 - **Afvis og forlad:** du afbrydes fra serveren.
 - **Ældre pakker:** pakker, som moddet tidligere har downloadet, fravælges, når en nyere version ankommer. Filerne bliver på disken, så du kan skifte tilbage med det samme.
+- **Intet fejler i stilhed:** en download, der ikke virkede, en kontrolsum, der ikke stemte, eller en fil, som spillet ikke ville aktivere, rapporteres på skærmen eller som en notifikation, hvis ingen skærm er tilgængelig.
+
+## Indstillinger (Mod Menu)
+
+Med [Mod Menu](https://modrinth.com/mod/modmenu) installeret vises moddet i modlisten med sin egen indstillingsskærm. Der blev ikke tilføjet nogen genvejstaster; alt er der.
+
+- **Mappe til downloadede pakker** — hvor pakkerne opbevares. Lad den stå tom for spillets egen mappe `resourcepacks`. Enhver anden mappe fungerer, også et andet drev eller en delt Android-mappe; pakkerne kopieres derefter også ind i `resourcepacks`, før de aktiveres, fordi det er den eneste mappe, spillet selv læser. Knapper åbner begge mapper.
+- **Husk servere, du har sagt ja til** — en server, du allerede har hentet pakker fra, bliver ikke spurgt om igen. Svaret skrives også ind i spillets egen *Serverresourcepakker*-indstilling pr. server, ved siden af Spørg, Aktiveret og Deaktiveret.
+- **Behold pakker fra andre servere** — lad denne være slået til for at beholde de pakker, du allerede har. Slå den fra for at starte hver server med kun den servers pakker.
+- **Vent, før der spørges** — hvor længe der samles resten af en bunke, før skærmen vises, i millisekunder eller sekunder. Servere sender alle deres pakker på én gang, så ventetiden gør flere spørgsmål til ét.
+- **Giv op efter** og **Forsøg** — hvor lang tid én download må tage, og hvor mange gange en mislykket en forsøges igen. En kontrolsum, der ikke stemmer, tæller som en fejl, fordi det er sådan en halvfærdig overførsel ser ud.
+- **Før regnskab** — hver ressourcepakke, en server sender, skrives ned: hvilken server, hvilken adresse, kontrolsummen, størrelsen, hvad der skete med den, og hvor lang tid det tog. Det er en fil på din egen computer; intet sendes nogen steder hen.
+- **Downloadede pakker** — de pakker, moddet har downloadet, grupperet efter den server, de kom fra, og viser, om hver enkelt er tændt, slukket eller væk fra mappen. Tryk på en for at slå den til eller fra; en pakke, hvis fil er forsvundet, kan glemmes. **Glem alt** rydder det, moddet husker, og sletter aldrig en pakkefil.
+- **Hvad servere sendte** — selve fortegnelsen, nyeste først, med detaljerne for hver post.
 
 ## Opdateringer
 
@@ -34,6 +48,8 @@ Under Windows kan en JAR-fil, der er i brug, ikke slettes, så et lille generere
 
 Forespørgslen er en almindelig anonym anmodning til GitHub-API'en (ingen token, ingen konto), og moddet har ingen telemetri og ingen egen server. En sprunget version huskes, og `-Dlocalpack.bypass.updateCheck=false` slår opdateringer helt fra.
 
+**Forbehold om versionsnummerering:** `0.0.1.2026-alpha-build-beta-release` læses som `[0, 0, 1, 2026]`, hvilket sorterer *under* den tidligere `0.0.3-beta` (`[0, 0, 3]`). Builds nummereret `0.0.3-beta` eller højere får ikke automatisk tilbudt denne og skal udskiftes manuelt.
+
 ## Krav
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Forespørgslen er en almindelig anonym anmodning til GitHub-API'en (ingen token,
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux eller en Android-launcher som [PojavLauncher](https://pojavlauncherteam.github.io/): hver fil, som moddet rører ved, findes ud fra launcherens spilmappe, så ingen mappe skal opsættes manuelt
-- Valgfrit: [Mod Menu](https://modrinth.com/mod/modmenu), som viser moddets navn og beskrivelse på dit sprog
+- Valgfrit: [Mod Menu](https://modrinth.com/mod/modmenu), som viser moddets navn og beskrivelse på dit sprog og giver moddet en indstillingsskærm
 
 ## Byg det selv
 

@@ -21,6 +21,20 @@
 - **Uusi tai muuttunut paketti:** yksi näyttö, jossa **Lataa kaikki resurssipaketit**. Paketit tallennetaan polkuun `resourcepacks/localpack-<sha1>.zip`, tarkistetaan SHA-1-tiivisteellä, aktivoidaan ja tallennetaan asetuksiisi.
 - **Hylkää ja poistu:** yhteytesi palvelimeen katkaistaan.
 - **Vanhemmat paketit:** modin aiemmin lataamat paketit poistetaan valinnasta, kun uudempi versio saapuu. Tiedostot jäävät levylle, joten voit vaihtaa takaisin heti.
+- **Mikään ei epäonnistu hiljaisesti:** lataus, joka ei onnistunut, tiiviste, joka ei täsmännyt, tai tiedosto, jota peli ei suostunut aktivoimaan, ilmoitetaan näytöllä tai ilmoituksena, jos näyttöä ei ole saatavilla.
+
+## Asetukset (Mod Menu)
+
+Kun [Mod Menu](https://modrinth.com/mod/modmenu) on asennettu, modi ilmestyy modiluetteloon omalla asetusnäytöllään. Pikanäppäimiä ei lisätty; kaikki on siellä.
+
+- **Kansio ladatuille paketeille** — mihin paketit tallennetaan. Jätä se tyhjäksi pelin omalle `resourcepacks`-kansiolle. Mikä tahansa muu kansio käy, myös eri asema tai Androidin jaettu kansio; paketit kopioidaan silloin myös `resourcepacks`-kansioon ennen kuin ne aktivoidaan, koska se on ainoa kansio, jota peli itse lukee. Painikkeet avaavat jommankumman kansion.
+- **Muista palvelimet, joille sanoit kyllä** — palvelimelta, josta olet jo ottanut paketteja, ei kysytä uudelleen. Vastaus kirjoitetaan myös pelin omaan palvelinkohtaiseen *Server Resource Packs* -asetukseen, Prompt-, Enabled- ja Disabled-vaihtoehtojen viereen.
+- **Säilytä muiden palvelinten paketit** — jätä tämä päälle, jos haluat pitää sinulla jo olevat paketit. Kytke se pois, jotta jokainen palvelin alkaa vain kyseisen palvelimen paketeilla.
+- **Odota ennen kysymistä** — kuinka kauan erän loppuosaa kerätään ennen kuin näyttö ilmestyy, millisekunteina tai sekunteina. Palvelimet lähettävät kaikki pakettinsa kerralla, joten odottaminen muuttaa useat kysymykset yhdeksi.
+- **Luovuta, kun** ja **Yritykset** — kuinka kauan yksi lataus saa kestää ja kuinka monta kertaa epäonnistunut lataus yritetään uudelleen. Täsmäämätön tiiviste lasketaan epäonnistumiseksi, koska kesken jäänyt siirto näyttää juuri sellaiselta.
+- **Pidä kirjaa** — jokainen palvelimen lähettämä resurssipaketti kirjataan ylös: mikä palvelin, mikä osoite, tiiviste, koko, mitä sille tapahtui ja kuinka kauan se kesti. Se on tiedosto omalla tietokoneellasi; mitään ei lähetetä minnekään.
+- **Ladatut paketit** — paketit, jotka modi on ladannut, ryhmiteltyinä palvelimen mukaan, josta ne tulivat, ja näyttää, onko kukin päällä, pois päältä vai kadonnut kansiosta. Paina yhtä kytkeäksesi sen päälle tai pois; paketti, jonka tiedosto on kadonnut, voidaan unohtaa. **Unohda kaikki** tyhjentää sen, mitä modi muistaa, eikä koskaan poista pakettitiedostoa.
+- **Mitä palvelimet lähettivät** — itse kirja, uusin ensin, ja jokaisen merkinnän tiedot.
 
 ## Päivitykset
 
@@ -34,6 +48,8 @@ Windowsissa ladattua JAR-tiedostoa ei voi poistaa, joten pieni luotu komentosarj
 
 Kysely on tavallinen nimetön pyyntö GitHub-rajapintaan (ei tokenia, ei tiliä), eikä modissa ole telemetriaa eikä omaa palvelinta. Ohitettu versio muistetaan, ja `-Dlocalpack.bypass.updateCheck=false` kytkee päivitykset kokonaan pois.
 
+**Versioinnin varauma:** `0.0.1.2026-alpha-build-beta-release` tulkitaan muotoon `[0, 0, 1, 2026]`, joka järjestyy *alle* aiemman version `0.0.3-beta` (`[0, 0, 3]`). Versioille `0.0.3-beta` tai uudemmille tätä ei tarjota automaattisesti, vaan ne on korvattava käsin.
+
 ## Vaatimukset
 
 - Minecraft 26.2
@@ -41,7 +57,7 @@ Kysely on tavallinen nimetön pyyntö GitHub-rajapintaan (ei tokenia, ei tiliä)
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - Java 25
 - Windows, macOS, Linux tai Android-käynnistin kuten [PojavLauncher](https://pojavlauncherteam.github.io/): jokainen tiedosto, johon modi koskee, määritetään käynnistimen pelikansiosta, joten mitään kansiota ei tarvitse määrittää käsin
-- Valinnainen: [Mod Menu](https://modrinth.com/mod/modmenu), joka näyttää modin nimen ja kuvauksen omalla kielelläsi
+- Valinnainen: [Mod Menu](https://modrinth.com/mod/modmenu), joka näyttää modin nimen ja kuvauksen omalla kielelläsi ja antaa modille asetusnäytön
 
 ## Rakenna se itse
 
