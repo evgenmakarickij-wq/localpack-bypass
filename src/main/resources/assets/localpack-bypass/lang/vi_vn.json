@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Gói tài nguyên của máy chủ",
+  "localpack-bypass.screen.message": "Máy chủ đã gửi các gói tài nguyên mới hoặc đã thay đổi: %s%s.\nNhấn nút để tải tất cả những gì cần thiết cùng một lúc. Các gói sẽ được lưu vào thư mục resourcepacks và tự động bật.\n\nNếu từ chối, bạn sẽ bị ngắt kết nối khỏi máy chủ.",
+  "localpack-bypass.screen.download": "Tải tất cả gói tài nguyên",
+  "localpack-bypass.screen.decline": "Từ chối và rời đi",
+  "localpack-bypass.disconnect": "Bạn đã từ chối tải các gói tài nguyên của máy chủ",
+  "localpack-bypass.update.title": "Cập nhật mod",
+  "localpack-bypass.update.message": "Đã có phiên bản %s của «Bộ nhớ đệm gói tài nguyên cục bộ», bạn đang dùng %s.\n\nTải về chứ? Phiên bản cũ sẽ bị thay thế và trò chơi phải được khởi động lại.",
+  "localpack-bypass.update.download": "Tải về và cài đặt",
+  "localpack-bypass.update.skip": "Bỏ qua phiên bản này",
+  "localpack-bypass.update.downloading": "Đang tải phiên bản %s…",
+  "localpack-bypass.update.installed": "Đã cài đặt phiên bản %s. Khởi động lại trò chơi để sử dụng.",
+  "localpack-bypass.update.queued": "Đã tải và xác minh phiên bản %s. Phiên bản cũ sẽ bị xóa khi trò chơi đóng lại; sau đó hãy khởi động lại.",
+  "localpack-bypass.update.queuedManual": "Đã tải và xác minh phiên bản %s, nhưng không thể tự động thay thế tệp JAR cũ. Hãy xóa nó thủ công và chuyển tệp JAR mới vào mods: %s",
+  "localpack-bypass.update.dev": "Đang chạy trong môi trường phát triển, tính năng cập nhật bị tắt.",
+  "localpack-bypass.update.failed": "Không thể cài đặt bản cập nhật: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Bộ nhớ đệm gói tài nguyên cục bộ",
+  "modmenu.descriptionTranslation.localpack-bypass": "Tải các gói tài nguyên của máy chủ chỉ bằng một nút, lưu vào resourcepacks và tự động bật. Nếu gói đã được tải, bạn vào mà không bị hỏi."
+}

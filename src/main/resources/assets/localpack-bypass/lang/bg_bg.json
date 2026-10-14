@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Сървърни пакети с ресурси",
+  "localpack-bypass.screen.message": "Сървърът изпрати нови или променени пакети с ресурси: %s%s.\nНатисни бутона, за да свалиш всичко нужно наведнъж. Пакетите се запазват в папка resourcepacks и се включват автоматично.\n\nАко откажеш, ще бъдеш прекъснат от сървъра.",
+  "localpack-bypass.screen.download": "Свали всички пакети с ресурси",
+  "localpack-bypass.screen.decline": "Откажи се и излез",
+  "localpack-bypass.disconnect": "Отказа да свалиш пакетите с ресурси на сървъра",
+  "localpack-bypass.update.title": "Обновяване на мода",
+  "localpack-bypass.update.message": "Налична е версия %s на мода «Локален кеш на пакети с ресурси», ти имаш %s.\n\nДа я сваля ли? Старата версия ще бъде заменена и играта трябва да се рестартира.",
+  "localpack-bypass.update.download": "Свали и инсталирай",
+  "localpack-bypass.update.skip": "Пропусни тази версия",
+  "localpack-bypass.update.downloading": "Сваляне на версия %s…",
+  "localpack-bypass.update.installed": "Версия %s е инсталирана. Рестартирай играта, за да я използваш.",
+  "localpack-bypass.update.queued": "Версия %s е свалена и проверена. Старата версия ще бъде премахната при затваряне на играта; след това рестартирай.",
+  "localpack-bypass.update.queuedManual": "Версия %s е свалена и проверена, но старият jar файл не можа да бъде заменен автоматично. Премахни го ръчно и премести новия jar файл в mods: %s",
+  "localpack-bypass.update.dev": "Работи в среда за разработка, обновяванията са изключени.",
+  "localpack-bypass.update.failed": "Обновяването не можа да бъде инсталирано: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Локален кеш на пакети с ресурси",
+  "modmenu.descriptionTranslation.localpack-bypass": "Сваля сървърните пакети с ресурси с един бутон, запазва ги в resourcepacks и ги включва автоматично. Ако даден пакет вече е свален, се присъединяваш без запитвания."
+}

@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "서버 리소스 팩",
+  "localpack-bypass.screen.message": "서버가 새로 추가되었거나 변경된 리소스 팩을 보냈습니다: %s%s.\n버튼을 눌러 필요한 것을 한 번에 모두 다운로드하세요. 팩은 resourcepacks 폴더에 저장되고 자동으로 활성화됩니다.\n\n거부하면 서버에서 연결이 끊깁니다.",
+  "localpack-bypass.screen.download": "모든 리소스 팩 다운로드",
+  "localpack-bypass.screen.decline": "거부하고 나가기",
+  "localpack-bypass.disconnect": "서버의 리소스 팩 다운로드를 거부했습니다",
+  "localpack-bypass.update.title": "모드 업데이트",
+  "localpack-bypass.update.message": "«로컬 리소스 팩 캐시» 버전 %s을(를) 사용할 수 있습니다. 현재 버전은 %s입니다.\n\n다운로드하시겠습니까? 이전 버전이 교체되며 게임을 다시 시작해야 합니다.",
+  "localpack-bypass.update.download": "다운로드 및 설치",
+  "localpack-bypass.update.skip": "이 버전 건너뛰기",
+  "localpack-bypass.update.downloading": "버전 %s을(를) 다운로드하는 중…",
+  "localpack-bypass.update.installed": "버전 %s을(를) 설치했습니다. 사용하려면 게임을 다시 시작하세요.",
+  "localpack-bypass.update.queued": "버전 %s을(를) 다운로드하고 검증했습니다. 이전 버전은 게임을 닫을 때 제거됩니다. 그런 다음 다시 시작하세요.",
+  "localpack-bypass.update.queuedManual": "버전 %s을(를) 다운로드하고 검증했지만 이전 JAR을 자동으로 교체하지 못했습니다. 직접 삭제하고 새 JAR을 mods로 옮기세요: %s",
+  "localpack-bypass.update.dev": "개발 환경에서 실행 중이므로 업데이트가 비활성화됩니다.",
+  "localpack-bypass.update.failed": "업데이트를 설치하지 못했습니다: %s",
+  "localpack-bypass.update.ok": "확인",
+  "modmenu.nameTranslation.localpack-bypass": "로컬 리소스 팩 캐시",
+  "modmenu.descriptionTranslation.localpack-bypass": "서버 리소스 팩을 버튼 하나로 다운로드해 resourcepacks에 저장하고 자동으로 활성화합니다. 팩을 이미 다운로드했다면 확인 없이 접속할 수 있습니다."
+}

@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Paket Sumber Daya Server",
+  "localpack-bypass.screen.message": "Server mengirim paket sumber daya yang baru atau berubah: %s%s.\nTekan tombol untuk mengunduh semua yang dibutuhkan sekaligus. Paket akan disimpan ke folder resourcepacks dan diaktifkan secara otomatis.\n\nJika menolak, Anda akan diputuskan dari server.",
+  "localpack-bypass.screen.download": "Unduh semua paket sumber daya",
+  "localpack-bypass.screen.decline": "Menolak dan keluar",
+  "localpack-bypass.disconnect": "Anda menolak mengunduh paket sumber daya server",
+  "localpack-bypass.update.title": "Pembaruan mod",
+  "localpack-bypass.update.message": "Versi %s dari «Cache Paket Sumber Daya Lokal» tersedia, Anda memakai %s.\n\nUnduh? Versi lama akan diganti dan permainan harus dimulai ulang.",
+  "localpack-bypass.update.download": "Unduh dan pasang",
+  "localpack-bypass.update.skip": "Lewati versi ini",
+  "localpack-bypass.update.downloading": "Mengunduh versi %s…",
+  "localpack-bypass.update.installed": "Versi %s telah dipasang. Mulai ulang permainan untuk menggunakannya.",
+  "localpack-bypass.update.queued": "Versi %s telah diunduh dan diverifikasi. Versi lama akan dihapus saat permainan ditutup; setelah itu mulai ulang.",
+  "localpack-bypass.update.queuedManual": "Versi %s telah diunduh dan diverifikasi, tetapi JAR lama tidak dapat diganti secara otomatis. Hapus secara manual dan pindahkan JAR baru ke mods: %s",
+  "localpack-bypass.update.dev": "Berjalan di lingkungan pengembangan, pembaruan dinonaktifkan.",
+  "localpack-bypass.update.failed": "Gagal memasang pembaruan: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Cache Paket Sumber Daya Lokal",
+  "modmenu.descriptionTranslation.localpack-bypass": "Mengunduh paket sumber daya server dengan satu tombol, menyimpannya ke resourcepacks, dan mengaktifkannya secara otomatis. Jika paket sudah diunduh, Anda bergabung tanpa diminta."
+}

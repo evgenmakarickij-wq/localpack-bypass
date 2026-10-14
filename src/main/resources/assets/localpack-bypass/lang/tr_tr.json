@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Sunucu kaynak paketleri",
+  "localpack-bypass.screen.message": "Sunucu yeni veya değiştirilmiş kaynak paketleri gönderdi: %s%s.\nGerekli her şeyi tek seferde indirmek için düğmeye bas. Paketler resourcepacks klasörüne kaydedilir ve otomatik olarak etkinleştirilir.\n\nReddedersen sunucudan bağlantın kesilir.",
+  "localpack-bypass.screen.download": "Tüm kaynak paketlerini indir",
+  "localpack-bypass.screen.decline": "Reddet ve çık",
+  "localpack-bypass.disconnect": "Sunucunun kaynak paketlerini indirmeyi reddettin",
+  "localpack-bypass.update.title": "Mod güncellemesi",
+  "localpack-bypass.update.message": "%s sürümü «Yerel Kaynak Paketi Önbelleği» modu için hazır, sende %s var.\n\nİndirilsin mi? Eski sürüm değiştirilecek ve oyunun yeniden başlatılması gerekecek.",
+  "localpack-bypass.update.download": "İndir ve kur",
+  "localpack-bypass.update.skip": "Bu sürümü atla",
+  "localpack-bypass.update.downloading": "%s sürümü indiriliyor …",
+  "localpack-bypass.update.installed": "%s sürümü kuruldu. Kullanmak için oyunu yeniden başlat.",
+  "localpack-bypass.update.queued": "%s sürümü indirildi ve doğrulandı. Eski sürüm oyun kapanınca kaldırılacak; ardından yeniden başlat.",
+  "localpack-bypass.update.queuedManual": "%s sürümü indirildi ve doğrulandı, ancak eski JAR dosyası otomatik olarak değiştirilemedi. Onu elle kaldır ve yeni JAR dosyasını mods klasörüne taşı: %s",
+  "localpack-bypass.update.dev": "Geliştirme ortamında çalışıyor, güncellemeler devre dışı.",
+  "localpack-bypass.update.failed": "Güncelleme kurulamadı: %s",
+  "localpack-bypass.update.ok": "Tamam",
+  "modmenu.nameTranslation.localpack-bypass": "Yerel Kaynak Paketi Önbelleği",
+  "modmenu.descriptionTranslation.localpack-bypass": "Sunucu kaynak paketlerini tek düğmeyle indirir, resourcepacks klasörüne kaydeder ve otomatik olarak etkinleştirir. Bir paket zaten indirilmişse soru sorulmadan bağlanırsın."
+}

@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Серверски пакети ресурса",
+  "localpack-bypass.screen.message": "Сервер је послао нове или измењене пакете ресурса: %s%s.\nПритисни дугме да преузмеш све потребно одједном. Пакети се чувају у фасцикли resourcepacks и укључују се аутоматски.\n\nАко одбијеш, бићеш искључен са сервера.",
+  "localpack-bypass.screen.download": "Преузми све пакете ресурса",
+  "localpack-bypass.screen.decline": "Одбиј и изађи",
+  "localpack-bypass.disconnect": "Одбио си да преузмеш серверске пакете ресурса",
+  "localpack-bypass.update.title": "Ажурирање мода",
+  "localpack-bypass.update.message": "Доступна је верзија %s мода «Локални кеш пакета ресурса», ти имаш %s.\n\nДа је преузмем? Стара верзија ће бити замењена и игра мора да се поново покрене.",
+  "localpack-bypass.update.download": "Преузми и инсталирај",
+  "localpack-bypass.update.skip": "Прескочи ову верзију",
+  "localpack-bypass.update.downloading": "Преузимање верзије %s…",
+  "localpack-bypass.update.installed": "Верзија %s је инсталирана. Поново покрени игру да би је користио.",
+  "localpack-bypass.update.queued": "Верзија %s је преузета и проверена. Стара верзија ће бити уклоњена када затвориш игру; затим поново покрени.",
+  "localpack-bypass.update.queuedManual": "Верзија %s је преузета и проверена, али стари jar фајл није могао да се аутоматски замени. Уклони га ручно и премести нови jar фајл у mods: %s",
+  "localpack-bypass.update.dev": "Ради из развојног окружења, ажурирања су искључена.",
+  "localpack-bypass.update.failed": "Ажурирање није могло да се инсталира: %s",
+  "localpack-bypass.update.ok": "У реду",
+  "modmenu.nameTranslation.localpack-bypass": "Локални кеш пакета ресурса",
+  "modmenu.descriptionTranslation.localpack-bypass": "Преузима серверске пакете ресурса једним дугметом, чува их у resourcepacks и укључује их аутоматски. Ако је пакет већ преузет, придружујеш се без питања."
+}

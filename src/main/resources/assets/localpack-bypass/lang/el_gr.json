@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Πακέτα πόρων διακομιστή",
+  "localpack-bypass.screen.message": "Ο διακομιστής έστειλε νέα ή τροποποιημένα πακέτα πόρων: %s%s.\nΠάτησε το κουμπί για να κατεβάσεις όλα τα απαραίτητα με μία φορά. Τα πακέτα αποθηκεύονται στον φάκελο resourcepacks και ενεργοποιούνται αυτόματα.\n\nΑν αρνηθείς, θα αποσυνδεθείς από τον διακομιστή.",
+  "localpack-bypass.screen.download": "Λήψη όλων των πακέτων πόρων",
+  "localpack-bypass.screen.decline": "Άρνηση και αποχώρηση",
+  "localpack-bypass.disconnect": "Αρνήθηκες τη λήψη των πακέτων πόρων του διακομιστή",
+  "localpack-bypass.update.title": "Ενημέρωση mod",
+  "localpack-bypass.update.message": "Είναι διαθέσιμη η έκδοση %s του mod «Τοπική προσωρινή μνήμη πακέτων πόρων», εσύ έχεις %s.\n\nΝα γίνει λήψη; Η παλιά έκδοση θα αντικατασταθεί και το παιχνίδι πρέπει να επανεκκινηθεί.",
+  "localpack-bypass.update.download": "Λήψη και εγκατάσταση",
+  "localpack-bypass.update.skip": "Παράλειψη αυτής της έκδοσης",
+  "localpack-bypass.update.downloading": "Γίνεται λήψη της έκδοσης %s …",
+  "localpack-bypass.update.installed": "Η έκδοση %s εγκαταστάθηκε. Επανεκκίνησε το παιχνίδι για να τη χρησιμοποιήσεις.",
+  "localpack-bypass.update.queued": "Η έκδοση %s κατέβηκε και επαληθεύτηκε. Η παλιά έκδοση θα αφαιρεθεί όταν κλείσει το παιχνίδι· μετά κάνε επανεκκίνηση.",
+  "localpack-bypass.update.queuedManual": "Η έκδοση %s κατέβηκε και επαληθεύτηκε, αλλά το παλιό αρχείο JAR δεν μπόρεσε να αντικατασταθεί αυτόματα. Αφαίρεσέ το χειροκίνητα και μετακίνησε το νέο αρχείο JAR στο mods: %s",
+  "localpack-bypass.update.dev": "Εκτελείται σε περιβάλλον ανάπτυξης, οι ενημερώσεις είναι απενεργοποιημένες.",
+  "localpack-bypass.update.failed": "Δεν ήταν δυνατή η εγκατάσταση της ενημέρωσης: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Τοπική προσωρινή μνήμη πακέτων πόρων",
+  "modmenu.descriptionTranslation.localpack-bypass": "Κατεβάζει τα πακέτα πόρων του διακομιστή με ένα κουμπί, τα αποθηκεύει στο resourcepacks και τα ενεργοποιεί αυτόματα. Αν ένα πακέτο έχει ήδη κατέβει, συνδέεσαι χωρίς ερωτήσεις."
+}

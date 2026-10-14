@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Bronpakketten van de server",
+  "localpack-bypass.screen.message": "De server heeft nieuwe of gewijzigde bronpakketten gestuurd: %s%s.\nDruk op de knop om alles wat nodig is in één keer te downloaden. De pakketten worden opgeslagen in de map resourcepacks en automatisch geactiveerd.\n\nAls je weigert, word je van de server losgekoppeld.",
+  "localpack-bypass.screen.download": "Alle bronpakketten downloaden",
+  "localpack-bypass.screen.decline": "Weigeren en verlaten",
+  "localpack-bypass.disconnect": "Je hebt geweigerd de bronpakketten van de server te downloaden",
+  "localpack-bypass.update.title": "Mod-update",
+  "localpack-bypass.update.message": "Versie %s van «Lokale cache voor bronpakketten» is beschikbaar, jij hebt %s.\n\nWil je die downloaden? De oude versie wordt vervangen en het spel moet opnieuw worden opgestart.",
+  "localpack-bypass.update.download": "Downloaden en installeren",
+  "localpack-bypass.update.skip": "Deze versie overslaan",
+  "localpack-bypass.update.downloading": "Versie %s wordt gedownload…",
+  "localpack-bypass.update.installed": "Versie %s is geïnstalleerd. Start het spel opnieuw op om die te gebruiken.",
+  "localpack-bypass.update.queued": "Versie %s is gedownload en gecontroleerd. De oude versie wordt verwijderd wanneer het spel wordt afgesloten; start het daarna opnieuw op.",
+  "localpack-bypass.update.queuedManual": "Versie %s is gedownload en gecontroleerd, maar het oude JAR-bestand kon niet automatisch worden vervangen. Verwijder het handmatig en verplaats het nieuwe JAR-bestand naar mods: %s",
+  "localpack-bypass.update.dev": "Draait in een ontwikkelomgeving, updates zijn uitgeschakeld.",
+  "localpack-bypass.update.failed": "De update kon niet worden geïnstalleerd: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Lokale cache voor bronpakketten",
+  "modmenu.descriptionTranslation.localpack-bypass": "Downloadt de bronpakketten van de server met één knop, slaat ze op in de map resourcepacks en activeert ze automatisch. Als een pakket al is gedownload, doe je mee zonder vragen."
+}

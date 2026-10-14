@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Paquets de recursos del servidor",
+  "localpack-bypass.screen.message": "El servidor ha enviat paquets de recursos nous o modificats: %s%s.\nPrem el botó per descarregar-ho tot de cop. Els paquets es desaran a la carpeta resourcepacks i s'activaran automàticament.\n\nSi ho rebutges, se't desconnectarà del servidor.",
+  "localpack-bypass.screen.download": "Descarrega tots els paquets de recursos",
+  "localpack-bypass.screen.decline": "Rebutja i surt",
+  "localpack-bypass.disconnect": "Has rebutjat descarregar els paquets de recursos del servidor",
+  "localpack-bypass.update.title": "Actualització del mod",
+  "localpack-bypass.update.message": "Hi ha disponible la versió %s del mod «Memòria cau local de paquets de recursos», tu tens %s.\n\nVols descarregar-la? La versió antiga se substituirà i caldrà reiniciar el joc.",
+  "localpack-bypass.update.download": "Descarrega i instal·la",
+  "localpack-bypass.update.skip": "Omet aquesta versió",
+  "localpack-bypass.update.downloading": "S'està descarregant la versió %s…",
+  "localpack-bypass.update.installed": "La versió %s està instal·lada. Reinicia el joc per utilitzar-la.",
+  "localpack-bypass.update.queued": "La versió %s s'ha descarregat i verificat. La versió antiga se suprimirà en tancar el joc; després reinicia'l.",
+  "localpack-bypass.update.queuedManual": "La versió %s s'ha descarregat i verificat, però no s'ha pogut substituir el fitxer JAR vell automàticament. Suprimeix-lo a mà i mou el fitxer JAR nou a mods: %s",
+  "localpack-bypass.update.dev": "S'executa en un entorn de desenvolupament, les actualitzacions estan desactivades.",
+  "localpack-bypass.update.failed": "No s'ha pogut instal·lar l'actualització: %s",
+  "localpack-bypass.update.ok": "D'acord",
+  "modmenu.nameTranslation.localpack-bypass": "Memòria cau local de paquets de recursos",
+  "modmenu.descriptionTranslation.localpack-bypass": "Descarrega els paquets de recursos del servidor amb un sol botó, els desa a la carpeta resourcepacks i els activa automàticament. Si un paquet ja està descarregat, et connectes sense preguntes."
+}

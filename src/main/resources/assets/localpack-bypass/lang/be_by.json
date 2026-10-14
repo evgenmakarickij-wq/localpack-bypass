@@ -5,7 +5,7 @@
   "localpack-bypass.screen.decline": "Адмовіцца і выйсці",
   "localpack-bypass.disconnect": "Вы адмовіліся спампоўваць наборы рэсурсаў сервера",
   "localpack-bypass.update.title": "Абнаўленне мода",
-  "localpack-bypass.update.message": "Даступная версія %s мода «Local Resource Pack Cache», у вас %s.\n\nСпампаваць яе? Старая версія будзе заменена, гульню трэба перазапусціць.",
+  "localpack-bypass.update.message": "Даступная версія %s мода «Лакальны кэш набораў рэсурсаў», у вас %s.\n\nСпампаваць яе? Старая версія будзе заменена, гульню трэба перазапусціць.",
   "localpack-bypass.update.download": "Спампаваць і ўсталяваць",
   "localpack-bypass.update.skip": "Прапусціць гэтую версію",
   "localpack-bypass.update.downloading": "Спампоўванне версіі %s…",

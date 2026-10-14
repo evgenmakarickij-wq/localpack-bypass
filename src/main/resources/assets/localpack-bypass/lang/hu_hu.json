@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Szerver erőforráscsomagjai",
+  "localpack-bypass.screen.message": "A szerver új vagy módosított erőforráscsomagokat küldött: %s%s.\nNyomd meg a gombot, hogy minden szükségeset egyszerre letölts. A csomagok a resourcepacks mappába kerülnek, és automatikusan aktiválódnak.\n\nHa elutasítod, a szerver lecsatlakoztat.",
+  "localpack-bypass.screen.download": "Az összes erőforráscsomag letöltése",
+  "localpack-bypass.screen.decline": "Elutasítás és kilépés",
+  "localpack-bypass.disconnect": "Elutasítottad a szerver erőforráscsomagjainak letöltését",
+  "localpack-bypass.update.title": "Mod frissítése",
+  "localpack-bypass.update.message": "Elérhető a(z) %s verzió a(z) «Helyi erőforráscsomag-gyorsítótár» modból, neked %s van.\n\nLetöltöd? A régi verzió lecserélődik, és újra kell indítani a játékot.",
+  "localpack-bypass.update.download": "Letöltés és telepítés",
+  "localpack-bypass.update.skip": "Verzió kihagyása",
+  "localpack-bypass.update.downloading": "A(z) %s verzió letöltése …",
+  "localpack-bypass.update.installed": "A(z) %s verzió telepítve. Indítsd újra a játékot a használatához.",
+  "localpack-bypass.update.queued": "A(z) %s verzió letöltve és ellenőrizve. A régi verzió a játék bezárásakor törlődik; utána indítsd újra.",
+  "localpack-bypass.update.queuedManual": "A(z) %s verzió letöltve és ellenőrizve, de a régi JAR-fájlt nem sikerült automatikusan lecserélni. Távolítsd el kézzel, és helyezd át az új JAR-fájlt a mods mappába: %s",
+  "localpack-bypass.update.dev": "Fejlesztői környezetben fut, a frissítések le vannak tiltva.",
+  "localpack-bypass.update.failed": "A frissítést nem sikerült telepíteni: %s",
+  "localpack-bypass.update.ok": "Rendben",
+  "modmenu.nameTranslation.localpack-bypass": "Helyi erőforráscsomag-gyorsítótár",
+  "modmenu.descriptionTranslation.localpack-bypass": "Egyetlen gombbal letölti a szerver erőforráscsomagjait, a resourcepacks mappába menti, és automatikusan aktiválja őket. Ha egy csomag már le van töltve, kérdés nélkül csatlakozol."
+}

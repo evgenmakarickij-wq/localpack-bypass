@@ -5,7 +5,7 @@
   "localpack-bypass.screen.decline": "Odmów i wyjdź",
   "localpack-bypass.disconnect": "Odmówiłeś pobrania paczek zasobów serwera",
   "localpack-bypass.update.title": "Aktualizacja moda",
-  "localpack-bypass.update.message": "Dostępna jest wersja %s moda Local Resource Pack Cache, ty masz %s.\n\nPobrać ją? Stara wersja zostanie zastąpiona, a gra będzie wymagała ponownego uruchomienia.",
+  "localpack-bypass.update.message": "Dostępna jest wersja %s moda «Lokalna pamięć podręczna paczek zasobów», ty masz %s.\n\nPobrać ją? Stara wersja zostanie zastąpiona, a gra będzie wymagała ponownego uruchomienia.",
   "localpack-bypass.update.download": "Pobierz i zainstaluj",
   "localpack-bypass.update.skip": "Pomiń tę wersję",
   "localpack-bypass.update.downloading": "Pobieranie wersji %s…",

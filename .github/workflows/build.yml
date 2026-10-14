@@ -22,7 +22,7 @@ jobs:
         with:
           gradle-version: '9.5.1'
 
-      # A tag such as v0.0.2 builds exactly that version; a plain push to main keeps
+      # A tag such as v0.0.3 builds exactly that version; a plain push to main keeps
       # whatever gradle.properties currently says.
       - name: Build
         run: |

@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Palvelimen resurssipaketit",
+  "localpack-bypass.screen.message": "Palvelin lähetti uusia tai muuttuneita resurssipaketteja: %s%s.\nPaina painiketta ladataksesi kaiken tarvittavan kerralla. Paketit tallennetaan resourcepacks-kansioon ja aktivoidaan automaattisesti.\n\nJos kieltäydyt, sinut katkaistaan palvelimelta.",
+  "localpack-bypass.screen.download": "Lataa kaikki resurssipaketit",
+  "localpack-bypass.screen.decline": "Hylkää ja poistu",
+  "localpack-bypass.disconnect": "Kieltäydyit palvelimen resurssipakettien lataamisesta",
+  "localpack-bypass.update.title": "Modin päivitys",
+  "localpack-bypass.update.message": "Modista «Paikallinen resurssipakettivälimuisti» on saatavilla versio %s, sinulla on %s.\n\nLadataanko se? Vanha versio korvataan ja peli on käynnistettävä uudelleen.",
+  "localpack-bypass.update.download": "Lataa ja asenna",
+  "localpack-bypass.update.skip": "Ohita tämä versio",
+  "localpack-bypass.update.downloading": "Ladataan versiota %s …",
+  "localpack-bypass.update.installed": "Versio %s on asennettu. Käynnistä peli uudelleen käyttääksesi sitä.",
+  "localpack-bypass.update.queued": "Versio %s on ladattu ja tarkistettu. Vanha versio poistetaan, kun peli suljetaan; käynnistä sen jälkeen uudelleen.",
+  "localpack-bypass.update.queuedManual": "Versio %s on ladattu ja tarkistettu, mutta vanhaa JAR-tiedostoa ei voitu korvata automaattisesti. Poista se käsin ja siirrä uusi JAR-tiedosto kansioon mods: %s",
+  "localpack-bypass.update.dev": "Suoritetaan kehitysympäristössä, päivitykset on poistettu käytöstä.",
+  "localpack-bypass.update.failed": "Päivitystä ei voitu asentaa: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Paikallinen resurssipakettivälimuisti",
+  "modmenu.descriptionTranslation.localpack-bypass": "Lataa palvelimen resurssipaketit yhdellä painikkeella, tallentaa ne resourcepacks-kansioon ja aktivoi ne automaattisesti. Jos paketti on jo ladattu, liityt ilman kyselyitä."
+}

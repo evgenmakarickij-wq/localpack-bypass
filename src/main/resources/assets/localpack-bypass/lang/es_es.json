@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Paquetes de recursos del servidor",
+  "localpack-bypass.screen.message": "El servidor ha enviado paquetes de recursos nuevos o modificados: %s%s.\nPulsa el botón para descargar todo lo necesario de una vez. Los paquetes se guardan en la carpeta resourcepacks y se activan automáticamente.\n\nSi rechazas, se te desconectará del servidor.",
+  "localpack-bypass.screen.download": "Descargar todos los paquetes de recursos",
+  "localpack-bypass.screen.decline": "Rechazar y salir",
+  "localpack-bypass.disconnect": "Has rechazado descargar los paquetes de recursos del servidor",
+  "localpack-bypass.update.title": "Actualización del mod",
+  "localpack-bypass.update.message": "La versión %s del mod «Caché local de paquetes de recursos» está disponible, tú tienes la %s.\n\n¿Quieres descargarla? Se reemplazará la versión antigua y habrá que reiniciar el juego.",
+  "localpack-bypass.update.download": "Descargar e instalar",
+  "localpack-bypass.update.skip": "Omitir esta versión",
+  "localpack-bypass.update.downloading": "Descargando la versión %s…",
+  "localpack-bypass.update.installed": "La versión %s está instalada. Reinicia el juego para usarla.",
+  "localpack-bypass.update.queued": "La versión %s se ha descargado y verificado. La versión antigua se eliminará al cerrar el juego; después, reinícialo.",
+  "localpack-bypass.update.queuedManual": "La versión %s se ha descargado y verificado, pero no se pudo reemplazar el archivo JAR antiguo automáticamente. Elimínalo a mano y mueve el nuevo archivo JAR a mods: %s",
+  "localpack-bypass.update.dev": "Se está ejecutando desde un entorno de desarrollo, las actualizaciones están desactivadas.",
+  "localpack-bypass.update.failed": "No se pudo instalar la actualización: %s",
+  "localpack-bypass.update.ok": "Aceptar",
+  "modmenu.nameTranslation.localpack-bypass": "Caché local de paquetes de recursos",
+  "modmenu.descriptionTranslation.localpack-bypass": "Descarga los paquetes de recursos del servidor con un solo botón, los guarda en resourcepacks y los activa automáticamente. Si un paquete ya está descargado, entras sin ningún aviso."
+}

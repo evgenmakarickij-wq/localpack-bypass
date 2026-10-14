@@ -7,13 +7,13 @@
   <a href="https://fabricmc.net"><img src="https://img.shields.io/badge/mod%20loader-Fabric-beige.svg" alt="Fabric"></a>
 </p>
 
-**Мови:** [English](README.md) · **Українська** · [Русский](READMERU.md)
+**Мови:** [English](README.md) · **Українська** · [Русский](READMERU.md) · [Беларуская](READMEBE_BY.md) · [Čeština](READMECS_CZ.md) · [Deutsch](READMEDE_DE.md) · [Polski](READMEPL_PL.md) · [Slovenčina](READMESK_SK.md) · [العربية](READMEAR_SA.md) · [Български](READMEBG_BG.md) · [Català](READMECA_ES.md) · [Dansk](READMEDA_DK.md) · [Ελληνικά](READMEEL_GR.md) · [Español](READMEES_ES.md) · [Eesti](READMEET_EE.md) · [Suomi](READMEFI_FI.md) · [Français](READMEFR_FR.md) · [Hrvatski](READMEHR_HR.md) · [Magyar](READMEHU_HU.md) · [Bahasa Indonesia](READMEID_ID.md) · [Íslenska](READMEIS_IS.md) · [Italiano](READMEIT_IT.md) · [日本語](READMEJA_JP.md) · [한국어](READMEKO_KR.md) · [Lietuvių](READMELT_LT.md) · [Latviešu](READMELV_LV.md) · [Nederlands](READMENL_NL.md) · [Norsk](READMENO_NO.md) · [Português (Brasil)](READMEPT_BR.md) · [Română](READMERO_RO.md) · [Slovenščina](READMESL_SI.md) · [Shqip](READMESQ_AL.md) · [Српски](READMESR_SP.md) · [Svenska](READMESV_SE.md) · [Türkçe](READMETR_TR.md) · [Tiếng Việt](READMEVI_VN.md) · [简体中文](READMEZH_CN.md) · [繁體中文](READMEZH_TW.md)
 
 **Автори:** McChopik, Telemine3140
 
 ---
 
-**localpack-bypass** — безкоштовний клієнтський [Fabric](https://fabricmc.net)-мод із відкритим вихідним кодом для [Minecraft](https://www.minecraft.net) 26.2, який спрощує роботу із серверними ресурспаками. Замість того щоб завантажувати той самий пак щоразу при вході, він порівнює SHA-1 пака сервера з ZIP-файлами у вашій теці `resourcepacks`. Якщо відповідний пак знайдено, він вмикається без запитів, і ви заходите на сервер без очікування. Якщо пак новий або змінився, з'являється одне вікно з пропозицією завантажити всі потрібні паки одразу; після цього мод перевіряє їх, вмикає, зберігає вибір і перезавантажує ресурси лише один раз. Завантажені паки лишаються ввімкненими після виходу із сервера, як звичайні ресурспаки, а відмова відключає вас від сервера, як у ванілі. Вікно й повідомлення підлаштовуються під мову гри: English, Deutsch, Polski, Čeština, Slovenčina, Беларуская, Русский, Українська.
+**localpack-bypass** — безкоштовний клієнтський [Fabric](https://fabricmc.net)-мод із відкритим вихідним кодом для [Minecraft](https://www.minecraft.net) 26.2, який спрощує роботу із серверними ресурспаками. Замість того щоб завантажувати той самий пак щоразу при вході, він порівнює SHA-1 пака сервера з ZIP-файлами у вашій теці `resourcepacks`. Якщо відповідний пак знайдено, він вмикається без запитів, і ви заходите на сервер без очікування. Якщо пак новий або змінився, з'являється одне вікно з пропозицією завантажити всі потрібні паки одразу; після цього мод перевіряє їх, вмикає, зберігає вибір і перезавантажує ресурси лише один раз. Завантажені паки лишаються ввімкненими після виходу із сервера, як звичайні ресурспаки, а відмова відключає вас від сервера, як у ванілі. Вікно й повідомлення підлаштовуються під мову гри; мод містить переклади для 38 мов (див. список вище).
 
 ## Як це працює
 
@@ -33,7 +33,7 @@
 
 ## Збірка
 
-Мод збирає [робочий процес GitHub Actions](.github/workflows/build.yml) при кожному пуші в `main`. Jar можна завантажити з розділу **Artifacts** запуску. Пуш тега вигляду `v0.0.2` додатково публікує [реліз](https://github.com/evgenmakarickij-wq/localpack-bypass/releases) з jar і манифестом `update.json`, який читає оновлювач у грі.
+Мод збирає [робочий процес GitHub Actions](.github/workflows/build.yml) при кожному пуші в `main`. Jar можна завантажити з розділу **Artifacts** запуску. Пуш тега вигляду `v0.0.3` додатково публікує [реліз](https://github.com/evgenmakarickij-wq/localpack-bypass/releases) з jar і манифестом `update.json`, який читає оновлювач у грі.
 
 ## Оновлення
 
@@ -56,6 +56,8 @@
 - **Не пов'язаний** з Mojang, Microsoft, Fabric чи Anthropic.
 
 ## Ліцензія
+
+Текст нижче — переклад для зручності; юридичну силу має лише оригінальний англійський текст ліцензії у файлі [LICENSE](LICENSE).
 
 Це проєкт із **відкритим вихідним кодом** під ліцензією **[MIT](LICENSE)** ([короткий опис](https://opensource.org/license/mit)). Copyright (c) 2026 McChopik, Telemine3140. Його можна використовувати, копіювати, змінювати, об'єднувати, публікувати та поширювати, зокрема комерційно, за умови збереження повідомлення про авторські права й ліцензію. Програма надається «як є», без жодних гарантій.
 

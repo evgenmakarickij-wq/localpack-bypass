@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Pacotes de recursos do servidor",
+  "localpack-bypass.screen.message": "O servidor enviou pacotes de recursos novos ou alterados: %s%s.\nPressione o botão para baixar tudo o que precisa de uma vez. Os pacotes são salvos na pasta resourcepacks e ativados automaticamente.\n\nSe você recusar, será desconectado do servidor.",
+  "localpack-bypass.screen.download": "Baixar todos os pacotes de recursos",
+  "localpack-bypass.screen.decline": "Recusar e sair",
+  "localpack-bypass.disconnect": "Você recusou baixar os pacotes de recursos do servidor",
+  "localpack-bypass.update.title": "Atualização do mod",
+  "localpack-bypass.update.message": "A versão %s do mod «Cache local de pacotes de recursos» está disponível, você tem a %s.\n\nBaixar? A versão antiga será substituída e o jogo precisará ser reiniciado.",
+  "localpack-bypass.update.download": "Baixar e instalar",
+  "localpack-bypass.update.skip": "Ignorar esta versão",
+  "localpack-bypass.update.downloading": "Baixando a versão %s…",
+  "localpack-bypass.update.installed": "A versão %s está instalada. Reinicie o jogo para usá-la.",
+  "localpack-bypass.update.queued": "A versão %s foi baixada e verificada. A versão antiga será removida quando você fechar o jogo; depois, reinicie.",
+  "localpack-bypass.update.queuedManual": "A versão %s foi baixada e verificada, mas não foi possível substituir o arquivo JAR antigo automaticamente. Remova-o à mão e mova o novo arquivo JAR para mods: %s",
+  "localpack-bypass.update.dev": "Executando a partir de um ambiente de desenvolvimento, as atualizações estão desativadas.",
+  "localpack-bypass.update.failed": "Não foi possível instalar a atualização: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Cache local de pacotes de recursos",
+  "modmenu.descriptionTranslation.localpack-bypass": "Baixa os pacotes de recursos do servidor com um só botão, salva-os em resourcepacks e ativa-os automaticamente. Se um pacote já estiver baixado, você entra sem nenhum aviso."
+}

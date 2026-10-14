@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Servera resursu pakas",
+  "localpack-bypass.screen.message": "Serveris nosūtīja jaunas vai mainītas resursu pakas: %s%s.\nNospied pogu, lai uzreiz lejupielādētu visu nepieciešamo. Pakas tiks saglabātas mapē resourcepacks un iespējotas automātiski.\n\nJa atteiksies, tu tiksi atvienots no servera.",
+  "localpack-bypass.screen.download": "Lejupielādēt visas resursu pakas",
+  "localpack-bypass.screen.decline": "Attiekties un aiziet",
+  "localpack-bypass.disconnect": "Tu atteicies lejupielādēt servera resursu pakas",
+  "localpack-bypass.update.title": "Moda atjauninājums",
+  "localpack-bypass.update.message": "Ir pieejama moda «Lokālā resursu paku kešatmiņa» versija %s, tev ir %s.\n\nLejupielādēt to? Vecā versija tiks aizstāta, un spēle būs jārestartē.",
+  "localpack-bypass.update.download": "Lejupielādēt un instalēt",
+  "localpack-bypass.update.skip": "Izlaist šo versiju",
+  "localpack-bypass.update.downloading": "Lejupielādē versiju %s…",
+  "localpack-bypass.update.installed": "Versija %s ir instalēta. Restartē spēli, lai to izmantotu.",
+  "localpack-bypass.update.queued": "Versija %s ir lejupielādēta un pārbaudīta. Vecā versija tiks noņemta, aizverot spēli; pēc tam restartē to.",
+  "localpack-bypass.update.queuedManual": "Versija %s ir lejupielādēta un pārbaudīta, bet veco JAR failu neizdevās aizstāt automātiski. Noņem to manuāli un pārvieto jauno JAR failu uz mods: %s",
+  "localpack-bypass.update.dev": "Darbojas izstrādes vidē, atjauninājumi ir izslēgti.",
+  "localpack-bypass.update.failed": "Neizdevās instalēt atjauninājumu: %s",
+  "localpack-bypass.update.ok": "Labi",
+  "modmenu.nameTranslation.localpack-bypass": "Lokālā resursu paku kešatmiņa",
+  "modmenu.descriptionTranslation.localpack-bypass": "Lejupielādē servera resursu pakas ar vienu pogu, saglabā tās mapē resourcepacks un iespējo automātiski. Ja paka jau ir lejupielādēta, tu pievienojies bez jautājumiem."
+}

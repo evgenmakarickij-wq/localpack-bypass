@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Packs de ressources du serveur",
+  "localpack-bypass.screen.message": "Le serveur a envoyé des packs de ressources nouveaux ou modifiés : %s%s.\nAppuyez sur le bouton pour tout télécharger d'un coup. Les packs sont enregistrés dans le dossier resourcepacks et activés automatiquement.\n\nSi vous refusez, vous serez déconnecté du serveur.",
+  "localpack-bypass.screen.download": "Télécharger tous les packs de ressources",
+  "localpack-bypass.screen.decline": "Refuser et quitter",
+  "localpack-bypass.disconnect": "Vous avez refusé de télécharger les packs de ressources du serveur",
+  "localpack-bypass.update.title": "Mise à jour du mod",
+  "localpack-bypass.update.message": "La version %s du mod «Cache local de packs de ressources» est disponible, vous avez la %s.\n\nLa télécharger ? L'ancienne version sera remplacée et le jeu devra être redémarré.",
+  "localpack-bypass.update.download": "Télécharger et installer",
+  "localpack-bypass.update.skip": "Ignorer cette version",
+  "localpack-bypass.update.downloading": "Téléchargement de la version %s…",
+  "localpack-bypass.update.installed": "La version %s est installée. Redémarrez le jeu pour l'utiliser.",
+  "localpack-bypass.update.queued": "La version %s a été téléchargée et vérifiée. L'ancienne version sera supprimée à la fermeture du jeu ; redémarrez ensuite.",
+  "localpack-bypass.update.queuedManual": "La version %s a été téléchargée et vérifiée, mais l'ancien fichier JAR n'a pas pu être remplacé automatiquement. Supprimez-le à la main et déplacez le nouveau fichier JAR dans mods : %s",
+  "localpack-bypass.update.dev": "Exécution depuis un environnement de développement, les mises à jour sont désactivées.",
+  "localpack-bypass.update.failed": "La mise à jour n'a pas pu être installée : %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Cache local de packs de ressources",
+  "modmenu.descriptionTranslation.localpack-bypass": "Télécharge les packs de ressources du serveur en un seul bouton, les enregistre dans resourcepacks et les active automatiquement. Si un pack est déjà téléchargé, vous rejoignez sans aucune invite."
+}

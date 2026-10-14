@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Serverio resursų paketai",
+  "localpack-bypass.screen.message": "Serveris atsiuntė naujų ar pasikeitusių resursų paketų: %s%s.\nPaspauskite mygtuką, kad iš karto atsisiųstumėte viską, ko reikia. Paketai bus išsaugoti aplanke resourcepacks ir įjungti automatiškai.\n\nJei atsisakysite, būsite atjungti nuo serverio.",
+  "localpack-bypass.screen.download": "Atsisiųsti visus resursų paketus",
+  "localpack-bypass.screen.decline": "Atsisakyti ir išeiti",
+  "localpack-bypass.disconnect": "Jūs atsisakėte atsisiųsti serverio resursų paketus",
+  "localpack-bypass.update.title": "Modo atnaujinimas",
+  "localpack-bypass.update.message": "Prieinama modo «Lokali resursų paketų talpykla» versija %s, jūs turite %s.\n\nAtsisiųsti? Senoji versija bus pakeista, o žaidimą reikės paleisti iš naujo.",
+  "localpack-bypass.update.download": "Atsisiųsti ir įdiegti",
+  "localpack-bypass.update.skip": "Praleisti šią versiją",
+  "localpack-bypass.update.downloading": "Atsisiunčiama versija %s…",
+  "localpack-bypass.update.installed": "Versija %s įdiegta. Paleiskite žaidimą iš naujo, kad galėtumėte ją naudoti.",
+  "localpack-bypass.update.queued": "Versija %s atsisiųsta ir patikrinta. Senoji versija bus pašalinta uždarant žaidimą; po to paleiskite jį iš naujo.",
+  "localpack-bypass.update.queuedManual": "Versija %s atsisiųsta ir patikrinta, tačiau senojo JAR failo pakeisti automatiškai nepavyko. Pašalinkite jį rankiniu būdu ir perkelkite naują JAR failą į mods: %s",
+  "localpack-bypass.update.dev": "Veikia kūrimo aplinkoje, atnaujinimai išjungti.",
+  "localpack-bypass.update.failed": "Nepavyko įdiegti atnaujinimo: %s",
+  "localpack-bypass.update.ok": "Gerai",
+  "modmenu.nameTranslation.localpack-bypass": "Lokali resursų paketų talpykla",
+  "modmenu.descriptionTranslation.localpack-bypass": "Vienu mygtuku atsisiunčia serverio resursų paketus, išsaugo juos aplanke resourcepacks ir įjungia automatiškai. Jei paketas jau atsisiųstas, prisijungiate be jokių klausimų."
+}

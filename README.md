@@ -7,13 +7,13 @@
   <a href="https://fabricmc.net"><img src="https://img.shields.io/badge/mod%20loader-Fabric-beige.svg" alt="Fabric"></a>
 </p>
 
-**Languages:** **English** · [Українська](READMEUA.md) · [Русский](READMERU.md)
+**Languages:** **English** · [Українська](READMEUA.md) · [Русский](READMERU.md) · [Беларуская](READMEBE_BY.md) · [Čeština](READMECS_CZ.md) · [Deutsch](READMEDE_DE.md) · [Polski](READMEPL_PL.md) · [Slovenčina](READMESK_SK.md) · [العربية](READMEAR_SA.md) · [Български](READMEBG_BG.md) · [Català](READMECA_ES.md) · [Dansk](READMEDA_DK.md) · [Ελληνικά](READMEEL_GR.md) · [Español](READMEES_ES.md) · [Eesti](READMEET_EE.md) · [Suomi](READMEFI_FI.md) · [Français](READMEFR_FR.md) · [Hrvatski](READMEHR_HR.md) · [Magyar](READMEHU_HU.md) · [Bahasa Indonesia](READMEID_ID.md) · [Íslenska](READMEIS_IS.md) · [Italiano](READMEIT_IT.md) · [日本語](READMEJA_JP.md) · [한국어](READMEKO_KR.md) · [Lietuvių](READMELT_LT.md) · [Latviešu](READMELV_LV.md) · [Nederlands](READMENL_NL.md) · [Norsk](READMENO_NO.md) · [Português (Brasil)](READMEPT_BR.md) · [Română](READMERO_RO.md) · [Slovenščina](READMESL_SI.md) · [Shqip](READMESQ_AL.md) · [Српски](READMESR_SP.md) · [Svenska](READMESV_SE.md) · [Türkçe](READMETR_TR.md) · [Tiếng Việt](READMEVI_VN.md) · [简体中文](READMEZH_CN.md) · [繁體中文](READMEZH_TW.md)
 
 **Authors:** McChopik, Telemine3140
 
 ---
 
-**localpack-bypass** is a free, open-source, client-side [Fabric](https://fabricmc.net) mod for [Minecraft](https://www.minecraft.net) 26.2 that makes server resource packs painless. Instead of downloading the same pack every time you join, it compares the SHA-1 of the pack the server sends with the ZIP files already in your `resourcepacks` folder. If a matching pack is found, it is enabled silently, so you join without prompts or waiting. If a pack is new or has changed, a single screen offers to download all the needed packs at once; the mod then verifies them, enables them, saves the selection and reloads resources only once. Downloaded packs stay active after you leave the server, like normal resource packs, while declining disconnects you from the server, like in vanilla. The screen and messages follow the game language: English, Deutsch, Polski, Čeština, Slovenčina, Беларуская, Русский and Українська.
+**localpack-bypass** is a free, open-source, client-side [Fabric](https://fabricmc.net) mod for [Minecraft](https://www.minecraft.net) 26.2 that makes server resource packs painless. Instead of downloading the same pack every time you join, it compares the SHA-1 of the pack the server sends with the ZIP files already in your `resourcepacks` folder. If a matching pack is found, it is enabled silently, so you join without prompts or waiting. If a pack is new or has changed, a single screen offers to download all the needed packs at once; the mod then verifies them, enables them, saves the selection and reloads resources only once. Downloaded packs stay active after you leave the server, like normal resource packs, while declining disconnects you from the server, like in vanilla. The screen and messages follow the game language; the mod ships translations for 38 languages (see the list above).
 
 ## How it works
 
@@ -45,7 +45,7 @@ The check is a plain anonymous GitHub API request (no token, no account), the mo
 
 ## Build
 
-The mod is built by the [GitHub Actions workflow](.github/workflows/build.yml) on every push to `main`, with the jar available under the run's Artifacts. Push a tag such as `v0.0.2` to also publish a [release](https://github.com/evgenmakarickij-wq/localpack-bypass/releases) with the jar and the `update.json` manifest the in-game updater reads.
+The mod is built by the [GitHub Actions workflow](.github/workflows/build.yml) on every push to `main`, with the jar available under the run's Artifacts. Push a tag such as `v0.0.3` to also publish a [release](https://github.com/evgenmakarickij-wq/localpack-bypass/releases) with the jar and the `update.json` manifest the in-game updater reads.
 
 ## Where the code comes from
 

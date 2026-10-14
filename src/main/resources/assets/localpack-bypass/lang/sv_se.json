@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Serverresurspaket",
+  "localpack-bypass.screen.message": "Servern har skickat nya eller ändrade resurspaket: %s%s.\nTryck på knappen för att ladda ned allt som behövs på en gång. Paketen sparas i mappen resourcepacks och aktiveras automatiskt.\n\nOm du avböjer kopplas du bort från servern.",
+  "localpack-bypass.screen.download": "Ladda ned alla resurspaket",
+  "localpack-bypass.screen.decline": "Avböj och lämna",
+  "localpack-bypass.disconnect": "Du avböjde att ladda ned serverns resurspaket",
+  "localpack-bypass.update.title": "Moduppdatering",
+  "localpack-bypass.update.message": "Version %s av «Lokal resurspaketcache» är tillgänglig, du har %s.\n\nLadda ned den? Den gamla versionen ersätts och spelet måste startas om.",
+  "localpack-bypass.update.download": "Ladda ned och installera",
+  "localpack-bypass.update.skip": "Hoppa över denna version",
+  "localpack-bypass.update.downloading": "Laddar ned version %s …",
+  "localpack-bypass.update.installed": "Version %s är installerad. Starta om spelet för att använda den.",
+  "localpack-bypass.update.queued": "Version %s har laddats ned och verifierats. Den gamla versionen tas bort när spelet stängs; starta sedan om.",
+  "localpack-bypass.update.queuedManual": "Version %s har laddats ned och verifierats, men den gamla JAR-filen kunde inte ersättas automatiskt. Ta bort den manuellt och flytta den nya JAR-filen till mods: %s",
+  "localpack-bypass.update.dev": "Körs i en utvecklingsmiljö, uppdateringar är avstängda.",
+  "localpack-bypass.update.failed": "Uppdateringen kunde inte installeras: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Lokal resurspaketcache",
+  "modmenu.descriptionTranslation.localpack-bypass": "Laddar ned serverns resurspaket med en enda knapp, sparar dem i resourcepacks och aktiverar dem automatiskt. Om ett paket redan är nedladdat ansluter du utan frågor."
+}

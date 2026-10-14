@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Paketi resursa poslužitelja",
+  "localpack-bypass.screen.message": "Poslužitelj je poslao nove ili izmijenjene pakete resursa: %s%s.\nPritisni gumb da preuzmeš sve potrebno odjednom. Paketi se spremaju u mapu resourcepacks i automatski se aktiviraju.\n\nAko odbiješ, bit ćeš odspojen s poslužitelja.",
+  "localpack-bypass.screen.download": "Preuzmi sve pakete resursa",
+  "localpack-bypass.screen.decline": "Odbij i izađi",
+  "localpack-bypass.disconnect": "Odbio si preuzimanje paketa resursa poslužitelja",
+  "localpack-bypass.update.title": "Ažuriranje moda",
+  "localpack-bypass.update.message": "Dostupna je verzija %s moda «Lokalna predmemorija paketa resursa», a ti imaš %s.\n\nPreuzeti ju? Stara verzija bit će zamijenjena i igru treba ponovno pokrenuti.",
+  "localpack-bypass.update.download": "Preuzmi i instaliraj",
+  "localpack-bypass.update.skip": "Preskoči ovu verziju",
+  "localpack-bypass.update.downloading": "Preuzimanje verzije %s …",
+  "localpack-bypass.update.installed": "Verzija %s je instalirana. Ponovno pokreni igru da ju koristiš.",
+  "localpack-bypass.update.queued": "Verzija %s je preuzeta i provjerena. Stara verzija bit će uklonjena pri zatvaranju igre; nakon toga je ponovno pokreni.",
+  "localpack-bypass.update.queuedManual": "Verzija %s je preuzeta i provjerena, ali stara JAR datoteka nije mogla biti automatski zamijenjena. Ukloni ju ručno i premjesti novu JAR datoteku u mods: %s",
+  "localpack-bypass.update.dev": "Pokreće se u razvojnom okruženju, ažuriranja su onemogućena.",
+  "localpack-bypass.update.failed": "Ažuriranje nije moglo biti instalirano: %s",
+  "localpack-bypass.update.ok": "U redu",
+  "modmenu.nameTranslation.localpack-bypass": "Lokalna predmemorija paketa resursa",
+  "modmenu.descriptionTranslation.localpack-bypass": "Preuzima pakete resursa poslužitelja jednim gumbom, sprema ih u resourcepacks i automatski aktivira. Ako je paket već preuzet, pridružuješ se bez pitanja."
+}

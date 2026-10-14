@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Serverressourcepakker",
+  "localpack-bypass.screen.message": "Serveren har sendt nye eller ændrede ressourcepakker: %s%s.\nTryk på knappen for at downloade alt det nødvendige på én gang. Pakkerne gemmes i mappen resourcepacks og aktiveres automatisk.\n\nHvis du afslår, bliver du afbrudt fra serveren.",
+  "localpack-bypass.screen.download": "Download alle ressourcepakker",
+  "localpack-bypass.screen.decline": "Afvis og forlad",
+  "localpack-bypass.disconnect": "Du afslog at downloade serverens ressourcepakker",
+  "localpack-bypass.update.title": "Modopdatering",
+  "localpack-bypass.update.message": "Version %s af «Lokal ressourcepakke-cache» er tilgængelig, du har %s.\n\nDownload den? Den gamle version erstattes, og spillet skal genstartes.",
+  "localpack-bypass.update.download": "Download og installer",
+  "localpack-bypass.update.skip": "Spring denne version over",
+  "localpack-bypass.update.downloading": "Downloader version %s …",
+  "localpack-bypass.update.installed": "Version %s er installeret. Genstart spillet for at bruge den.",
+  "localpack-bypass.update.queued": "Version %s er downloadet og verificeret. Den gamle version fjernes, når spillet lukkes; genstart derefter.",
+  "localpack-bypass.update.queuedManual": "Version %s er downloadet og verificeret, men den gamle JAR-fil kunne ikke erstattes automatisk. Fjern den manuelt, og flyt den nye JAR-fil til mods: %s",
+  "localpack-bypass.update.dev": "Kører i et udviklingsmiljø, opdateringer er slået fra.",
+  "localpack-bypass.update.failed": "Opdateringen kunne ikke installeres: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Lokal ressourcepakke-cache",
+  "modmenu.descriptionTranslation.localpack-bypass": "Downloader serverens ressourcepakker med én knap, gemmer dem i resourcepacks og aktiverer dem automatisk. Hvis en pakke allerede er downloadet, forbinder du uden forespørgsler."
+}

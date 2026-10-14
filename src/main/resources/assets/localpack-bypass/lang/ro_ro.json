@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Pachete de resurse ale serverului",
+  "localpack-bypass.screen.message": "Serverul a trimis pachete de resurse noi sau modificate: %s%s.\nApasă butonul pentru a descărca tot ce e necesar deodată. Pachetele vor fi salvate în folderul resourcepacks și activate automat.\n\nDacă refuzi, vei fi deconectat de la server.",
+  "localpack-bypass.screen.download": "Descarcă toate pachetele de resurse",
+  "localpack-bypass.screen.decline": "Refuză și ieși",
+  "localpack-bypass.disconnect": "Ai refuzat să descarci pachetele de resurse ale serverului",
+  "localpack-bypass.update.title": "Actualizarea modului",
+  "localpack-bypass.update.message": "Este disponibilă versiunea %s a modului «Memorie cache locală pentru pachete de resurse», tu ai %s.\n\nO descarci? Versiunea veche va fi înlocuită, iar jocul va trebui repornit.",
+  "localpack-bypass.update.download": "Descarcă și instalează",
+  "localpack-bypass.update.skip": "Omite această versiune",
+  "localpack-bypass.update.downloading": "Se descarcă versiunea %s…",
+  "localpack-bypass.update.installed": "Versiunea %s este instalată. Repornește jocul pentru a o folosi.",
+  "localpack-bypass.update.queued": "Versiunea %s a fost descărcată și verificată. Versiunea veche va fi eliminată la închiderea jocului; apoi repornește-l.",
+  "localpack-bypass.update.queuedManual": "Versiunea %s a fost descărcată și verificată, dar vechiul fișier JAR nu a putut fi înlocuit automat. Elimină-l manual și mută noul fișier JAR în mods: %s",
+  "localpack-bypass.update.dev": "Rulează într-un mediu de dezvoltare, actualizările sunt dezactivate.",
+  "localpack-bypass.update.failed": "Actualizarea nu a putut fi instalată: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Memorie cache locală pentru pachete de resurse",
+  "modmenu.descriptionTranslation.localpack-bypass": "Descarcă pachetele de resurse ale serverului cu un singur buton, le salvează în folderul resourcepacks și le activează automat. Dacă un pachet este deja descărcat, te conectezi fără întrebări."
+}

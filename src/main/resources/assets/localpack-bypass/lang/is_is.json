@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Efnispakkar netþjónsins",
+  "localpack-bypass.screen.message": "Netþjónninn sendi nýja eða breytta efnispakka: %s%s.\nÝttu á hnappinn til að sækja allt sem þarf í einu. Pakkarnir vistast í möppunni resourcepacks og virkjast sjálfkrafa.\n\nEf þú hafnar verður tengingunni við netþjóninn slitið.",
+  "localpack-bypass.screen.download": "Sækja alla efnispakka",
+  "localpack-bypass.screen.decline": "Hafna og yfirgefa",
+  "localpack-bypass.disconnect": "Þú hafnaðir að sækja efnispakka netþjónsins",
+  "localpack-bypass.update.title": "Uppfærsla mods",
+  "localpack-bypass.update.message": "Útgáfa %s af «Staðbundið skyndiminni efnispakka» er í boði, þú ert með %s.\n\nViltu sækja hana? Gömlu útgáfunni verður skipt út og endurræsa þarf leikinn.",
+  "localpack-bypass.update.download": "Sækja og setja upp",
+  "localpack-bypass.update.skip": "Sleppa þessari útgáfu",
+  "localpack-bypass.update.downloading": "Sæki útgáfu %s …",
+  "localpack-bypass.update.installed": "Útgáfa %s er uppsett. Endurræstu leikinn til að nota hana.",
+  "localpack-bypass.update.queued": "Útgáfa %s var sótt og staðfest. Gömlu útgáfunni verður eytt þegar leiknum er lokað; endurræstu síðan.",
+  "localpack-bypass.update.queuedManual": "Útgáfa %s var sótt og staðfest, en ekki tókst að skipta sjálfkrafa út gömlu JAR-skránni. Fjarlægðu hana handvirkt og færðu nýju JAR-skrána í mods: %s",
+  "localpack-bypass.update.dev": "Keyrir í þróunarumhverfi, uppfærslur eru óvirkar.",
+  "localpack-bypass.update.failed": "Ekki tókst að setja upp uppfærsluna: %s",
+  "localpack-bypass.update.ok": "Í lagi",
+  "modmenu.nameTranslation.localpack-bypass": "Staðbundið skyndiminni efnispakka",
+  "modmenu.descriptionTranslation.localpack-bypass": "Sækir efnispakka netþjónsins með einum hnappi, vistar þá í resourcepacks og virkjar þá sjálfkrafa. Ef pakki er þegar niðurhlaðinn tengist þú án fyrirspurna."
+}

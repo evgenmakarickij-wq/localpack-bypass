@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Paketi virov strežnika",
+  "localpack-bypass.screen.message": "Strežnik je poslal nove ali spremenjene pakete virov: %s%s.\nPritisni gumb, da preneseš vse potrebno naenkrat. Paketi se shranijo v mapo resourcepacks in se samodejno omogočijo.\n\nČe zavrneš, te strežnik odklopi.",
+  "localpack-bypass.screen.download": "Prenesi vse pakete virov",
+  "localpack-bypass.screen.decline": "Zavrni in izstopi",
+  "localpack-bypass.disconnect": "Zavrnil si prenos paketov virov strežnika",
+  "localpack-bypass.update.title": "Posodobitev moda",
+  "localpack-bypass.update.message": "Na voljo je različica %s moda «Lokalni predpomnilnik paketov virov», ti imaš %s.\n\nNaj jo prenesem? Stara različica bo zamenjana, igro pa bo treba znova zagnati.",
+  "localpack-bypass.update.download": "Prenesi in namesti",
+  "localpack-bypass.update.skip": "Preskoči to različico",
+  "localpack-bypass.update.downloading": "Prenašanje različice %s …",
+  "localpack-bypass.update.installed": "Različica %s je nameščena. Znova zaženi igro, da jo uporabiš.",
+  "localpack-bypass.update.queued": "Različica %s je prenesena in preverjena. Stara različica bo odstranjena ob zaprtju igre; nato jo znova zaženi.",
+  "localpack-bypass.update.queuedManual": "Različica %s je prenesena in preverjena, vendar stare datoteke JAR ni bilo mogoče samodejno zamenjati. Odstrani jo ročno in premakni novo datoteko JAR v mods: %s",
+  "localpack-bypass.update.dev": "Teče v razvojnem okolju, posodobitve so onemogočene.",
+  "localpack-bypass.update.failed": "Posodobitve ni bilo mogoče namestiti: %s",
+  "localpack-bypass.update.ok": "V redu",
+  "modmenu.nameTranslation.localpack-bypass": "Lokalni predpomnilnik paketov virov",
+  "modmenu.descriptionTranslation.localpack-bypass": "Pakete virov strežnika prenese z enim gumbom, jih shrani v resourcepacks in samodejno omogoči. Če je paket že prenesen, se pridružiš brez vprašanj."
+}

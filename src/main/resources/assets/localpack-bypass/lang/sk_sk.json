@@ -5,7 +5,7 @@
   "localpack-bypass.screen.decline": "Odmietnuť a odísť",
   "localpack-bypass.disconnect": "Odmietol si stiahnuť balíčky zdrojov servera",
   "localpack-bypass.update.title": "Aktualizácia modu",
-  "localpack-bypass.update.message": "Je dostupná verzia %s modu Local Resource Pack Cache, ty máš %s.\n\nStiahnuť ju? Stará verzia bude nahradená a hru bude potrebné reštartovať.",
+  "localpack-bypass.update.message": "Je dostupná verzia %s modu «Lokálna medzipamäť balíčkov zdrojov», ty máš %s.\n\nStiahnuť ju? Stará verzia bude nahradená a hru bude potrebné reštartovať.",
   "localpack-bypass.update.download": "Stiahnuť a nainštalovať",
   "localpack-bypass.update.skip": "Preskočiť túto verziu",
   "localpack-bypass.update.downloading": "Sťahovanie verzie %s…",

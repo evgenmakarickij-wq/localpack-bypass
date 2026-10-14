@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Serveri ressursipakid",
+  "localpack-bypass.screen.message": "Server saatis uued või muutunud ressursipakid: %s%s.\nVajutage nuppu, et laadida kõik vajalik korraga alla. Pakid salvestatakse kausta resourcepacks ja aktiveeritakse automaatselt.\n\nKeeldumise korral katkestatakse teie ühendus serveriga.",
+  "localpack-bypass.screen.download": "Laadi alla kõik ressursipakid",
+  "localpack-bypass.screen.decline": "Keeldu ja lahku",
+  "localpack-bypass.disconnect": "Keeldusite serveri ressursipakke alla laadimast",
+  "localpack-bypass.update.title": "Modi uuendus",
+  "localpack-bypass.update.message": "Saadaval on modi «Kohalik ressursipakkide vahemälu» versioon %s, teil on %s.\n\nKas laadida see alla? Vana versioon asendatakse ja mäng tuleb taaskäivitada.",
+  "localpack-bypass.update.download": "Laadi alla ja installi",
+  "localpack-bypass.update.skip": "Jäta see versioon vahele",
+  "localpack-bypass.update.downloading": "Laadin alla versiooni %s …",
+  "localpack-bypass.update.installed": "Versioon %s on installitud. Kasutamiseks taaskäivitage mäng.",
+  "localpack-bypass.update.queued": "Versioon %s on alla laaditud ja kontrollitud. Vana versioon eemaldatakse mängu sulgemisel; seejärel taaskäivitage.",
+  "localpack-bypass.update.queuedManual": "Versioon %s on alla laaditud ja kontrollitud, kuid vana JAR-faili ei õnnestunud automaatselt asendada. Eemaldage see käsitsi ja teisaldage uus JAR-fail kausta mods: %s",
+  "localpack-bypass.update.dev": "Töötab arenduskeskkonnas, uuendused on välja lülitatud.",
+  "localpack-bypass.update.failed": "Uuendust ei õnnestunud installida: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Kohalik ressursipakkide vahemälu",
+  "modmenu.descriptionTranslation.localpack-bypass": "Laadib serveri ressursipakid alla ühe nupuga, salvestab need resourcepacks-kausta ja aktiveerib need automaatselt. Kui pakk on juba alla laaditud, liitute ilma küsimusteta."
+}

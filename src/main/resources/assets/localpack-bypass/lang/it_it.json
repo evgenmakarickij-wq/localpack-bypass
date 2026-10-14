@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Pacchetti di risorse del server",
+  "localpack-bypass.screen.message": "Il server ha inviato pacchetti di risorse nuovi o modificati: %s%s.\nPremi il pulsante per scaricare tutto il necessario in una volta. I pacchetti vengono salvati nella cartella resourcepacks e attivati automaticamente.\n\nSe rifiuti, verrai disconnesso dal server.",
+  "localpack-bypass.screen.download": "Scarica tutti i pacchetti di risorse",
+  "localpack-bypass.screen.decline": "Rifiuta ed esci",
+  "localpack-bypass.disconnect": "Hai rifiutato di scaricare i pacchetti di risorse del server",
+  "localpack-bypass.update.title": "Aggiornamento della mod",
+  "localpack-bypass.update.message": "È disponibile la versione %s del mod «Cache locale di pacchetti di risorse», tu hai la %s.\n\nVuoi scaricarla? La vecchia versione verrà sostituita e il gioco dovrà essere riavviato.",
+  "localpack-bypass.update.download": "Scarica e installa",
+  "localpack-bypass.update.skip": "Salta questa versione",
+  "localpack-bypass.update.downloading": "Download della versione %s…",
+  "localpack-bypass.update.installed": "La versione %s è installata. Riavvia il gioco per usarla.",
+  "localpack-bypass.update.queued": "La versione %s è stata scaricata e verificata. La vecchia versione verrà rimossa alla chiusura del gioco; poi riavvia.",
+  "localpack-bypass.update.queuedManual": "La versione %s è stata scaricata e verificata, ma il vecchio file JAR non è stato sostituito automaticamente. Rimuovilo a mano e sposta il nuovo file JAR in mods: %s",
+  "localpack-bypass.update.dev": "In esecuzione da un ambiente di sviluppo, gli aggiornamenti sono disattivati.",
+  "localpack-bypass.update.failed": "Impossibile installare l'aggiornamento: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Cache locale di pacchetti di risorse",
+  "modmenu.descriptionTranslation.localpack-bypass": "Scarica i pacchetti di risorse del server con un solo pulsante, li salva in resourcepacks e li attiva automaticamente. Se un pacchetto è già scaricato, entri senza alcuna richiesta."
+}

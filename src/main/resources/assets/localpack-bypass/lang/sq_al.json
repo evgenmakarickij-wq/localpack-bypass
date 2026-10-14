@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "Paketat e burimeve të serverit",
+  "localpack-bypass.screen.message": "Serveri dërgoi paketa të reja ose të ndryshuara burimesh: %s%s.\nShtyp butonin për të shkarkuar gjithçka të nevojshme menjëherë. Paketat ruhen në dosjen resourcepacks dhe aktivizohen automatikisht.\n\nNëse refuzon, do të shkëputesh nga serveri.",
+  "localpack-bypass.screen.download": "Shkarko të gjitha paketat e burimeve",
+  "localpack-bypass.screen.decline": "Refuzo dhe dil",
+  "localpack-bypass.disconnect": "Refuzove të shkarkosh paketat e burimeve të serverit",
+  "localpack-bypass.update.title": "Përditësimi i modit",
+  "localpack-bypass.update.message": "Versioni %s i modit «Memoria lokale e paketave të burimeve» është i disponueshëm, ti ke %s.\n\nTa shkarkoj? Versioni i vjetër zëvendësohet dhe loja duhet të rindizet.",
+  "localpack-bypass.update.download": "Shkarko dhe instalo",
+  "localpack-bypass.update.skip": "Anashkalo këtë version",
+  "localpack-bypass.update.downloading": "Duke shkarkuar versionin %s…",
+  "localpack-bypass.update.installed": "Versioni %s është instaluar. Rindiz lojën për ta përdorur.",
+  "localpack-bypass.update.queued": "Versioni %s është shkarkuar dhe verifikuar. Versioni i vjetër hiqet kur mbyll lojën; pastaj rindize.",
+  "localpack-bypass.update.queuedManual": "Versioni %s është shkarkuar dhe verifikuar, por skedari i vjetër jar nuk mund të zëvendësohej automatikisht. Hiqe me dorë dhe zhvendos skedarin e ri jar në mods: %s",
+  "localpack-bypass.update.dev": "Po ekzekutohet në një mjedis zhvillimi, përditësimet janë çaktivizuar.",
+  "localpack-bypass.update.failed": "Përditësimi nuk mund të instalohej: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "Memoria lokale e paketave të burimeve",
+  "modmenu.descriptionTranslation.localpack-bypass": "Shkarkon paketat e burimeve të serverit me një buton, i ruan në resourcepacks dhe i aktivizon automatikisht. Nëse një paketë është tashmë e shkarkuar, bashkohesh pa kërkesa."
+}

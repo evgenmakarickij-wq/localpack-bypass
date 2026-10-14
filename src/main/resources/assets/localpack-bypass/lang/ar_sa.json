@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "حزم موارد الخادم",
+  "localpack-bypass.screen.message": "أرسل الخادم حزم موارد جديدة أو معدَّلة: %s%s.\nاضغط الزر لتنزيل كل ما تحتاجه دفعة واحدة. تُحفظ الحزم في مجلد resourcepacks وتُفعَّل تلقائيًا.\n\nإذا رفضت، سيتم فصلك عن الخادم.",
+  "localpack-bypass.screen.download": "تنزيل كل حزم الموارد",
+  "localpack-bypass.screen.decline": "الرفض والخروج",
+  "localpack-bypass.disconnect": "رفضت تنزيل حزم موارد الخادم",
+  "localpack-bypass.update.title": "تحديث المود",
+  "localpack-bypass.update.message": "الإصدار %s من «الذاكرة المؤقتة المحلية لحزم الموارد» متاح، ولديك %s.\n\nأتنزّله؟ سيُستبدل الإصدار القديم وسيلزم إعادة تشغيل اللعبة.",
+  "localpack-bypass.update.download": "تنزيل وتثبيت",
+  "localpack-bypass.update.skip": "تخطّي هذا الإصدار",
+  "localpack-bypass.update.downloading": "جارٍ تنزيل الإصدار %s …",
+  "localpack-bypass.update.installed": "تم تثبيت الإصدار %s. أعد تشغيل اللعبة لاستخدامه.",
+  "localpack-bypass.update.queued": "تم تنزيل الإصدار %s والتحقق منه. سيُزال الإصدار القديم عند إغلاق اللعبة؛ ثم أعد التشغيل.",
+  "localpack-bypass.update.queuedManual": "تم تنزيل الإصدار %s والتحقق منه، لكن تعذّر استبدال ملف JAR القديم تلقائيًا. أزله يدويًا وانقل ملف JAR الجديد إلى mods: %s",
+  "localpack-bypass.update.dev": "يعمل في بيئة تطوير، التحديثات معطّلة.",
+  "localpack-bypass.update.failed": "تعذّر تثبيت التحديث: %s",
+  "localpack-bypass.update.ok": "حسنًا",
+  "modmenu.nameTranslation.localpack-bypass": "الذاكرة المؤقتة المحلية لحزم الموارد",
+  "modmenu.descriptionTranslation.localpack-bypass": "ينزّل حزم موارد الخادم بزر واحد، ويحفظها في resourcepacks ويفعّلها تلقائيًا. إذا كانت الحزمة منزّلة مسبقًا، تنضم دون أسئلة."
+}

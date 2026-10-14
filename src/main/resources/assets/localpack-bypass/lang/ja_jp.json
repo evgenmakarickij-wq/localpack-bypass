@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "サーバーのリソースパック",
+  "localpack-bypass.screen.message": "サーバーが新規または変更されたリソースパックを送信しました: %s%s。\nボタンを押して、必要なものをまとめてダウンロードしてください。パックは resourcepacks フォルダーに保存され、自動的に有効化されます。\n\n拒否すると、サーバーから切断されます。",
+  "localpack-bypass.screen.download": "すべてのリソースパックをダウンロード",
+  "localpack-bypass.screen.decline": "拒否して退出",
+  "localpack-bypass.disconnect": "サーバーのリソースパックのダウンロードを拒否しました",
+  "localpack-bypass.update.title": "Mod のアップデート",
+  "localpack-bypass.update.message": "«ローカルリソースパックキャッシュ» のバージョン %s が利用可能です。現在は %s です。\n\nダウンロードしますか？古いバージョンは置き換えられ、ゲームを再起動する必要があります。",
+  "localpack-bypass.update.download": "ダウンロードしてインストール",
+  "localpack-bypass.update.skip": "このバージョンをスキップ",
+  "localpack-bypass.update.downloading": "バージョン %s をダウンロードしています…",
+  "localpack-bypass.update.installed": "バージョン %s をインストールしました。使用するにはゲームを再起動してください。",
+  "localpack-bypass.update.queued": "バージョン %s をダウンロードして検証しました。古いバージョンはゲームを閉じるときに削除されます。その後で再起動してください。",
+  "localpack-bypass.update.queuedManual": "バージョン %s をダウンロードして検証しましたが、古い JAR を自動で置き換えられませんでした。手動で削除し、新しい JAR を mods に移動してください: %s",
+  "localpack-bypass.update.dev": "開発環境で実行されているため、アップデートは無効です。",
+  "localpack-bypass.update.failed": "アップデートをインストールできませんでした: %s",
+  "localpack-bypass.update.ok": "OK",
+  "modmenu.nameTranslation.localpack-bypass": "ローカルリソースパックキャッシュ",
+  "modmenu.descriptionTranslation.localpack-bypass": "サーバーのリソースパックを 1 つのボタンでダウンロードし、resourcepacks に保存して自動的に有効化します。パックがすでにダウンロード済みなら、確認なしで参加できます。"
+}

@@ -1,0 +1,20 @@
+{
+  "localpack-bypass.screen.title": "伺服器資源包",
+  "localpack-bypass.screen.message": "伺服器傳送了新的或已變更的資源包：%s%s。\n按下按鈕即可一次下載所有需要的資源包。資源包會儲存到 resourcepacks 資料夾並自動啟用。\n\n如果拒絕，你將與伺服器中斷連線。",
+  "localpack-bypass.screen.download": "下載所有資源包",
+  "localpack-bypass.screen.decline": "拒絕並離開",
+  "localpack-bypass.disconnect": "你拒絕下載伺服器的資源包",
+  "localpack-bypass.update.title": "模組更新",
+  "localpack-bypass.update.message": "«本機資源包快取» 版本 %s 已可用，你目前為 %s。\n\n要下載嗎？舊版本將被取代，遊戲需要重新啟動。",
+  "localpack-bypass.update.download": "下載並安裝",
+  "localpack-bypass.update.skip": "略過此版本",
+  "localpack-bypass.update.downloading": "正在下載版本 %s……",
+  "localpack-bypass.update.installed": "版本 %s 已安裝。重新啟動遊戲即可使用。",
+  "localpack-bypass.update.queued": "版本 %s 已下載並驗證。舊版本會在遊戲關閉時被刪除；之後請重新啟動。",
+  "localpack-bypass.update.queuedManual": "版本 %s 已下載並驗證，但無法自動取代舊的 JAR。請手動刪除它，並將新的 JAR 移入 mods：%s",
+  "localpack-bypass.update.dev": "正在開發環境中執行，更新已停用。",
+  "localpack-bypass.update.failed": "無法安裝更新：%s",
+  "localpack-bypass.update.ok": "確定",
+  "modmenu.nameTranslation.localpack-bypass": "本機資源包快取",
+  "modmenu.descriptionTranslation.localpack-bypass": "用單一按鈕下載伺服器資源包，儲存到 resourcepacks 並自動啟用。如果資源包已下載，你將無須確認即可加入。"
+}
