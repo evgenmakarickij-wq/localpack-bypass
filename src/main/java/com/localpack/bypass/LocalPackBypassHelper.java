@@ -257,7 +257,7 @@ public final class LocalPackBypassHelper {
         }
     }
 
-    private static URI parseHttpUri(String url) {
+    private static URI parseHttpUri(String url) throws IOException {
         URI uri;
         try {
             uri = URI.create(url);
