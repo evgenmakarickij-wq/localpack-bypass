@@ -5,9 +5,14 @@
   "name": "Local Resource Pack Cache",
   "description": "Downloads server resource packs with one button, saves them to resourcepacks and enables them automatically. If a pack is already downloaded, you join without any prompts.",
   "authors": [
-    "Pidaras"
+    "McChopik",
+    "Telemine3140"
   ],
-  "contact": {},
+  "contact": {
+    "homepage": "https://github.com/evgenmakarickij-wq/localpack-bypass",
+    "issues": "https://github.com/evgenmakarickij-wq/localpack-bypass/issues",
+    "sources": "https://github.com/evgenmakarickij-wq/localpack-bypass"
+  },
   "license": "MIT",
   "environment": "client",
   "entrypoints": {

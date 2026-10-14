@@ -4,6 +4,17 @@
   "localpack-bypass.screen.download": "Завантажити всі ресурспаки",
   "localpack-bypass.screen.decline": "Відмовитись і вийти",
   "localpack-bypass.disconnect": "Ви відмовилися завантажувати ресурспаки сервера",
+  "localpack-bypass.update.title": "Оновлення мода",
+  "localpack-bypass.update.message": "Доступна версія %s мода «Локальний кеш ресурспаків», у вас %s.\n\nЗавантажити її? Стару версію буде замінено, гру треба перезапустити.",
+  "localpack-bypass.update.download": "Завантажити й встановити",
+  "localpack-bypass.update.skip": "Пропустити цю версію",
+  "localpack-bypass.update.downloading": "Завантаження версії %s...",
+  "localpack-bypass.update.installed": "Версію %s встановлено. Перезапустіть гру, щоб її увімкнути.",
+  "localpack-bypass.update.queued": "Версію %s завантажено й перевірено. Стару версію буде видалено після закриття гри, потім перезапустіть її.",
+  "localpack-bypass.update.queuedManual": "Версію %s завантажено й перевірено, але замінити старий jar автоматично не вдалося. Видаліть його вручну й перенесіть новий jar у mods: %s",
+  "localpack-bypass.update.dev": "Мод запущено із середовища розробки, оновлення вимкнено.",
+  "localpack-bypass.update.failed": "Не вдалося встановити оновлення: %s",
+  "localpack-bypass.update.ok": "Гаразд",
   "modmenu.nameTranslation.localpack-bypass": "Локальний кеш ресурспаків",
   "modmenu.descriptionTranslation.localpack-bypass": "Завантажує ресурспаки сервера однією кнопкою, зберігає їх у resourcepacks і вмикає автоматично. Якщо пак уже завантажено, ви заходите без запитів."
 }

@@ -4,6 +4,17 @@
   "localpack-bypass.screen.download": "Download all resource packs",
   "localpack-bypass.screen.decline": "Decline and leave",
   "localpack-bypass.disconnect": "You declined to download the server's resource packs",
+  "localpack-bypass.update.title": "Mod update",
+  "localpack-bypass.update.message": "Version %s of Local Resource Pack Cache is available, you have %s.\n\nDownload it? The old version is replaced and the game has to be restarted.",
+  "localpack-bypass.update.download": "Download and install",
+  "localpack-bypass.update.skip": "Skip this version",
+  "localpack-bypass.update.downloading": "Downloading version %s...",
+  "localpack-bypass.update.installed": "Version %s is installed. Restart the game to use it.",
+  "localpack-bypass.update.queued": "Version %s is downloaded and verified. The old version is removed when you close the game, then restart.",
+  "localpack-bypass.update.queuedManual": "Version %s is downloaded and verified, but the old jar could not be replaced automatically. Remove it by hand and move the new jar into mods: %s",
+  "localpack-bypass.update.dev": "Running from a development environment, updates are disabled.",
+  "localpack-bypass.update.failed": "The update could not be installed: %s",
+  "localpack-bypass.update.ok": "OK",
   "modmenu.nameTranslation.localpack-bypass": "Local Resource Pack Cache",
   "modmenu.descriptionTranslation.localpack-bypass": "Downloads server resource packs with one button, saves them to resourcepacks and enables them automatically. If a pack is already downloaded, you join without any prompts."
 }

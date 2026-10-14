@@ -3,7 +3,11 @@ name: Build mod
 on:
   push:
     branches: [ main ]
+    tags: [ 'v*' ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -17,8 +21,44 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.5.1'
-      - run: gradle build --no-daemon
+
+      # A tag such as v0.0.2 builds exactly that version; a plain push to main keeps
+      # whatever gradle.properties currently says.
+      - name: Build
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            gradle build --no-daemon -Pmod_version="${GITHUB_REF_NAME#v}"
+          else
+            gradle build --no-daemon
+          fi
+
       - uses: actions/upload-artifact@v4
         with:
           name: localpack-bypass-jar
           path: build/libs/*.jar
+
+      # In-game updates read update.json from the newest release: it names the jar to fetch
+      # and the SHA-256 the mod verifies it against.
+      - name: Publish release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          jar="build/libs/localpack-bypass-${version}.jar"
+
+          if [ ! -f "${jar}" ]; then
+            echo "::error::Expected ${jar}, but build/libs contains:"
+            ls -1 build/libs
+            exit 1
+          fi
+
+          sha="$(sha256sum "${jar}" | cut -d' ' -f1)"
+          printf '{\n  "version": "%s",\n  "file": "localpack-bypass-%s.jar",\n  "sha256": "%s"\n}\n' \
+            "${version}" "${version}" "${sha}" > update.json
+          cat update.json
+
+          gh release create "${GITHUB_REF_NAME}" "${jar}" update.json \
+            --title "localpack-bypass ${version}" \
+            --generate-notes

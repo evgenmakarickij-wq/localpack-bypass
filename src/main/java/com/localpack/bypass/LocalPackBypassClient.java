@@ -9,6 +9,10 @@ public class LocalPackBypassClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Local Resource Pack Cache завантажено");
+        LOGGER.info("Local Resource Pack Cache loaded");
+
+        // Finish an update that was downloaded on a previous run, then offer any newer release.
+        Updater.applyPendingCleanup();
+        UpdateFlow.init();
     }
 }

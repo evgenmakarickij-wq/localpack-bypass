@@ -9,7 +9,7 @@
 
 **Languages:** **English** · [Українська](READMEUA.md) · [Русский](READMERU.md)
 
-**Authors:** Claude, McChopik, Telemine3140
+**Authors:** McChopik, Telemine3140
 
 ---
 
@@ -22,6 +22,18 @@
 - **Decline and leave:** you are disconnected from the server.
 - **Older packs:** packs previously downloaded by the mod are deselected when a newer version arrives. The files stay on disk, so going back is instant.
 
+## Updates
+
+Once a day the mod asks GitHub for the [latest release](https://github.com/evgenmakarickij-wq/localpack-bypass/releases) of this repository. If it is newer than the version you are running, the title screen offers to install it. Accepting does three things:
+
+1. The new jar is downloaded and its **SHA-256 is checked** against the `update.json` manifest published with that release.
+2. The old jar is deleted and the new one is moved into `mods/`.
+3. You restart the game.
+
+On Windows a jar that is currently loaded cannot be deleted, so a short generated script waits for the game to exit and performs step 2 for you; the mod says so when it happens. Everything the updater touches is under `mods/` and `config/localpack-bypass/`.
+
+The check is a plain anonymous GitHub API request (no token, no account), the mod has no telemetry and no server of its own. Skipping a version is remembered, and `-Dlocalpack.bypass.updateCheck=false` disables updates entirely.
+
 ## Requirements
 
 - Minecraft 26.2
@@ -32,18 +44,18 @@
 
 ## Build
 
-The mod is built by the [GitHub Actions workflow](.github/workflows/build.yml) on every push to `main`. Download the jar from the **Artifacts** of the run.
+The mod is built by the [GitHub Actions workflow](.github/workflows/build.yml) on every push to `main`, with the jar available under the run's Artifacts. Push a tag such as `v0.0.2` to also publish a [release](https://github.com/evgenmakarickij-wq/localpack-bypass/releases) with the jar and the `update.json` manifest the in-game updater reads.
 
 ## Where the code comes from
 
 - **Origin:** the project started from this repository's original prototype, which matched the SHA-1 of the server's pack against local files.
-- **Authors:** Claude, McChopik, Telemine3140. The current code was rewritten and extended by [Claude](https://claude.ai), an AI model by [Anthropic](https://www.anthropic.com), at the request of the project's authors. It added the one-click download, batching, automatic enabling, "decline and leave", translations and the documentation. No code was copied from other mods.
+- **Authors:** McChopik, Telemine3140. The current code was rewritten and extended with [Claude Code](https://claude.com/claude-code), an AI coding tool by [Anthropic](https://www.anthropic.com), at the request of the project's authors. It added the one-click download, batching, automatic enabling, "decline and leave", the updater, translations and the documentation. No code was copied from other mods.
 - **Built on:** Minecraft's own code with Mojang's official names, [Fabric Loader and Fabric API](https://fabricmc.net), [Fabric Loom](https://github.com/FabricMC/fabric-loom) and [SpongePowered Mixin](https://github.com/SpongePowered/Mixin).
 - **Status:** experimental. It has not been tested extensively, so use it at your own risk.
 - **Not affiliated** with Mojang, Microsoft, Fabric or Anthropic.
 
 ## License
 
-This is an **open-source** project released under the **[MIT License](LICENSE)** ([summary](https://opensource.org/license/mit)). Copyright (c) 2026 Claude, McChopik, Telemine3140. You may use, copy, modify, merge, publish and distribute it, including commercially, as long as the copyright and license notice are kept. The software is provided "as is", without warranty of any kind.
+This is an **open-source** project released under the **[MIT License](LICENSE)** ([summary](https://opensource.org/license/mit)). Copyright (c) 2026 McChopik, Telemine3140. You may use, copy, modify, merge, publish and distribute it, including commercially, as long as the copyright and license notice are kept. The software is provided "as is", without warranty of any kind.
 
 Contributions, issues and pull requests are welcome: [open an issue](https://github.com/evgenmakarickij-wq/localpack-bypass/issues).

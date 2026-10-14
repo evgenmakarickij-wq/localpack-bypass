@@ -4,6 +4,17 @@
   "localpack-bypass.screen.download": "Скачать все ресурспаки",
   "localpack-bypass.screen.decline": "Отказаться и выйти",
   "localpack-bypass.disconnect": "Вы отказались скачивать ресурспаки сервера",
+  "localpack-bypass.update.title": "Обновление мода",
+  "localpack-bypass.update.message": "Доступна версия %s мода «Локальный кэш ресурспаков», у вас %s.\n\nСкачать её? Старая версия будет заменена, игру нужно перезапустить.",
+  "localpack-bypass.update.download": "Скачать и установить",
+  "localpack-bypass.update.skip": "Пропустить эту версию",
+  "localpack-bypass.update.downloading": "Скачивание версии %s...",
+  "localpack-bypass.update.installed": "Версия %s установлена. Перезапустите игру, чтобы её включить.",
+  "localpack-bypass.update.queued": "Версия %s скачана и проверена. Старая версия будет удалена после закрытия игры, затем перезапустите её.",
+  "localpack-bypass.update.queuedManual": "Версия %s скачана и проверена, но заменить старый jar автоматически не удалось. Удалите его вручную и перенесите новый jar в mods: %s",
+  "localpack-bypass.update.dev": "Мод запущен из среды разработки, обновления отключены.",
+  "localpack-bypass.update.failed": "Не удалось установить обновление: %s",
+  "localpack-bypass.update.ok": "ОК",
   "modmenu.nameTranslation.localpack-bypass": "Локальный кэш ресурспаков",
   "modmenu.descriptionTranslation.localpack-bypass": "Скачивает ресурспаки сервера одной кнопкой, сохраняет их в resourcepacks и включает автоматически. Если пак уже скачан, вы заходите без запросов."
 }
