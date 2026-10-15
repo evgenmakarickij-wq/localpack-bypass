@@ -50,14 +50,14 @@ public final class PackManagerScreen extends OptionsSubScreen {
 
         Map<String, List<PackRegistry.Pack>> byServer = PackRegistry.packsByServer();
         if (byServer.isEmpty()) {
-            list.addHeader(Component.translatable("localpack-bypass.packs.empty"));
+            Screens.header(list, this, font, Component.translatable("localpack-bypass.packs.empty"));
             return;
         }
         for (Map.Entry<String, List<PackRegistry.Pack>> server : byServer.entrySet()) {
-            list.addHeader(Component.translatable("localpack-bypass.packs.server",
+            Screens.header(list, this, font, Component.translatable("localpack-bypass.packs.server",
                     Screens.serverName(server.getKey()), server.getValue().size()));
             for (PackRegistry.Pack pack : server.getValue()) {
-                list.addBig(packButton(pack, available, selected));
+                Screens.big(list, this, packButton(pack, available, selected));
             }
         }
     }

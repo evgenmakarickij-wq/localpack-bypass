@@ -41,20 +41,20 @@ public final class HistoryScreen extends OptionsSubScreen {
                 Screens.small("localpack-bypass.history.refresh", this::rebuildWidgets));
 
         if (!Config.get().historyEnabled()) {
-            list.addHeader(Component.translatable("localpack-bypass.history.off"));
+            Screens.header(list, this, font, Component.translatable("localpack-bypass.history.off"));
             return;
         }
 
         List<PackRegistry.Event> events = PackRegistry.events(SHOWN);
         if (events.isEmpty()) {
-            list.addHeader(Component.translatable("localpack-bypass.history.empty"));
+            Screens.header(list, this, font, Component.translatable("localpack-bypass.history.empty"));
             return;
         }
-        list.addHeader(Component.translatable("localpack-bypass.history.count", events.size()));
+        Screens.header(list, this, font, Component.translatable("localpack-bypass.history.count", events.size()));
         for (PackRegistry.Event event : events) {
             StringWidget row = new StringWidget(0, 0, Screens.BIG, 18, rowText(event), font);
             row.setTooltip(Tooltip.create(rowDetails(event)));
-            list.addBig(row);
+            Screens.big(list, this, row);
         }
     }
 

@@ -35,7 +35,7 @@ public final class SettingsScreen extends OptionsSubScreen {
     protected void addOptions() {
         Config config = Config.get();
 
-        list.addHeader(Component.translatable("localpack-bypass.config.header.storage"));
+        Screens.header(list, this, font, Component.translatable("localpack-bypass.config.header.storage"));
 
         EditBox folder = new EditBox(font, 0, 0, Screens.BIG, 20,
                 Component.translatable("localpack-bypass.config.folder"));
@@ -43,19 +43,19 @@ public final class SettingsScreen extends OptionsSubScreen {
         folder.setValue(folderText);
         folder.setHint(Component.translatable("localpack-bypass.config.folder.hint"));
         folder.setResponder(typed -> folderText = typed);
-        list.addBig(folder);
+        Screens.big(list, this, folder);
 
         list.addSmall(
                 Screens.small("localpack-bypass.config.openStorage", () -> Screens.open(PackStorage.downloadDir())),
                 Screens.small("localpack-bypass.config.openGame", () -> Screens.open(PackStorage.gameDir())));
 
-        list.addHeader(Component.translatable("localpack-bypass.config.header.asking"));
+        Screens.header(list, this, font, Component.translatable("localpack-bypass.config.header.asking"));
         list.addBig(toggle("localpack-bypass.config.rememberServers",
                 config.rememberServers(), config::rememberServers));
         list.addBig(toggle("localpack-bypass.config.keepEarlier",
                 config.keepEarlierPacks(), config::keepEarlierPacks));
 
-        list.addHeader(Component.translatable("localpack-bypass.config.header.download"));
+        Screens.header(list, this, font, Component.translatable("localpack-bypass.config.header.download"));
         list.addBig(amount("localpack-bypass.config.batchWait", "localpack-bypass.unit.ms",
                 config.batchWaitMs(), Config.MIN_BATCH_WAIT_MS, Config.MAX_BATCH_WAIT_MS, config::batchWaitMs));
         list.addBig(amount("localpack-bypass.config.timeout", "localpack-bypass.unit.seconds",
@@ -64,13 +64,13 @@ public final class SettingsScreen extends OptionsSubScreen {
         list.addBig(amount("localpack-bypass.config.attempts", "localpack-bypass.unit.times",
                 config.downloadAttempts(), Config.MIN_ATTEMPTS, Config.MAX_ATTEMPTS, config::downloadAttempts));
 
-        list.addHeader(Component.translatable("localpack-bypass.config.header.history"));
+        Screens.header(list, this, font, Component.translatable("localpack-bypass.config.header.history"));
         list.addBig(toggle("localpack-bypass.config.history", config.historyEnabled(), config::historyEnabled));
         list.addBig(amount("localpack-bypass.config.historyLimit", "localpack-bypass.unit.entries",
                 config.historyLimit(), Config.MIN_HISTORY, Config.MAX_HISTORY, config::historyLimit));
         list.addBig(toggle("localpack-bypass.config.verbose", config.verboseLog(), config::verboseLog));
 
-        list.addHeader(Component.translatable("localpack-bypass.config.header.manage"));
+        Screens.header(list, this, font, Component.translatable("localpack-bypass.config.header.manage"));
         list.addSmall(
                 Screens.small("localpack-bypass.config.managePacks", () -> open(new PackManagerScreen(this))),
                 Screens.small("localpack-bypass.config.openHistory", () -> open(new HistoryScreen(this))));

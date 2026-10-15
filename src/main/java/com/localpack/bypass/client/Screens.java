@@ -2,14 +2,20 @@ package com.localpack.bypass.client;
 
 import com.localpack.bypass.Config;
 import com.localpack.bypass.PackStorage;
+import net.minecraft.Util;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.OptionsList;
+import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Locale;
 
 /** Bits shared by the mod's screens. */
@@ -29,6 +35,25 @@ final class Screens {
 
     static Button small(String key, Runnable action) {
         return Button.builder(Component.translatable(key), b -> action.run()).width(SMALL).build();
+    }
+
+    /**
+     * A heading row.
+     *
+     * <p>An options list knows two things in this version of the game: one option, through addBig,
+     * and a pair of widgets, through addSmall. A heading is neither, so the row is built and added
+     * here instead — which is all the old addHeader did.
+     */
+    static void header(OptionsList list, Screen screen, Font font, Component text) {
+        list.addEntry(OptionsList.Entry.big(List.of(new StringWidget(0, 0, BIG, 18, text, font)), screen));
+    }
+
+    /**
+     * A full-width row holding a widget the mod owns rather than an option: a text field, a button,
+     * a line of history. Same reason as above — addBig takes an option and nothing else.
+     */
+    static void big(OptionsList list, Screen screen, AbstractWidget widget) {
+        list.addEntry(OptionsList.Entry.big(List.of(widget), screen));
     }
 
     /** True when packs are kept somewhere other than the folder the game itself loads from. */
