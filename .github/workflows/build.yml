@@ -2,7 +2,9 @@ name: Build mod
 
 on:
   push:
-    branches: [ main ]
+    # Every line of the mod builds here, not just the stable one: a port is only as good as the
+    # compiler that checked it, and there is no local one.
+    branches: [ main, beta, main1.21.10, beta1.21.10 ]
     tags: [ 'v*' ]
   workflow_dispatch:
 
@@ -14,10 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Minecraft 26.1 and newer run on Java 25, and so do the branches that build them. 1.21.10 is
+      # a Java 21 game: the branch carrying it says so in its name, and so does a tag for it.
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '25'
+          java-version: ${{ contains(github.ref_name, '1.21.10') && '21' || '25' }}
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.5.1'
