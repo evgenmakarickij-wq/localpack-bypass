@@ -43,7 +43,7 @@ public final class SettingsScreen extends OptionsSubScreen {
         folder.setValue(folderText);
         folder.setHint(Component.translatable("localpack-bypass.config.folder.hint"));
         folder.setResponder(typed -> folderText = typed);
-        Screens.big(list, this, folder);
+        Screens.row(list, this, folder);
 
         list.addSmall(
                 Screens.small("localpack-bypass.config.openStorage", () -> Screens.open(PackStorage.downloadDir())),

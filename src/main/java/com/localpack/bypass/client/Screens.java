@@ -3,12 +3,14 @@ package com.localpack.bypass.client;
 import com.localpack.bypass.Config;
 import com.localpack.bypass.PackStorage;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,20 +42,39 @@ final class Screens {
     /**
      * A heading row.
      *
-     * <p>An options list knows two things in this version of the game: one option, through addBig,
-     * and a pair of widgets, through addSmall. A heading is neither, so the row is built and added
-     * here instead — which is all the old addHeader did.
+     * <p>An options list in this version of the game knows two things: one option, through addBig,
+     * and a pair of widgets, through addSmall. A heading is neither, so its row is built by hand —
+     * which is all the addHeader of the newer version did.
      */
     static void header(OptionsList list, Screen screen, Font font, Component text) {
-        list.addEntry(OptionsList.Entry.big(List.of(new StringWidget(0, 0, BIG, 18, text, font)), screen));
+        Rows.add(list, screen, new StringWidget(0, 0, BIG, 18, text, font));
     }
 
     /**
      * A full-width row holding a widget the mod owns rather than an option: a text field, a button,
      * a line of history. Same reason as above — addBig takes an option and nothing else.
      */
-    static void big(OptionsList list, Screen screen, AbstractWidget widget) {
-        list.addEntry(OptionsList.Entry.big(List.of(widget), screen));
+    static void row(OptionsList list, Screen screen, AbstractWidget widget) {
+        Rows.add(list, screen, widget);
+    }
+
+    /**
+     * The one way into a row that is not an option.
+     *
+     * <p>The list's Entry type is protected, so nothing outside the class — or a subclass of it —
+     * can build one; the only public doors are addBig and addSmall, and neither fits a heading or a
+     * single widget. Extending the list is what makes Entry reachable. This class exists for that
+     * access alone and is never instantiated, which is why its constructor is private.
+     */
+    private static final class Rows extends OptionsList {
+
+        private Rows(Minecraft minecraft, int width, OptionsSubScreen screen) {
+            super(minecraft, width, screen);
+        }
+
+        static void add(OptionsList list, Screen screen, AbstractWidget widget) {
+            list.addEntry(Entry.big(List.of(widget), screen));
+        }
     }
 
     /** True when packs are kept somewhere other than the folder the game itself loads from. */

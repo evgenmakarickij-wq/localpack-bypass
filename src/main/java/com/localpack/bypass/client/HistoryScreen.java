@@ -54,7 +54,7 @@ public final class HistoryScreen extends OptionsSubScreen {
         for (PackRegistry.Event event : events) {
             StringWidget row = new StringWidget(0, 0, Screens.BIG, 18, rowText(event), font);
             row.setTooltip(Tooltip.create(rowDetails(event)));
-            Screens.big(list, this, row);
+            Screens.row(list, this, row);
         }
     }
 

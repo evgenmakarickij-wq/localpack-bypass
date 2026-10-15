@@ -57,7 +57,7 @@ public final class PackManagerScreen extends OptionsSubScreen {
             Screens.header(list, this, font, Component.translatable("localpack-bypass.packs.server",
                     Screens.serverName(server.getKey()), server.getValue().size()));
             for (PackRegistry.Pack pack : server.getValue()) {
-                Screens.big(list, this, packButton(pack, available, selected));
+                Screens.row(list, this, packButton(pack, available, selected));
             }
         }
     }
