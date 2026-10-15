@@ -2,12 +2,10 @@ package com.localpack.bypass.client;
 
 import com.localpack.bypass.PackRegistry;
 import com.localpack.bypass.PackStorage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.repository.PackRepository;
 
@@ -26,38 +24,38 @@ import java.util.Set;
  * screen: the same selection, written to the same place, with the same reload. What this screen adds
  * is the one thing the vanilla screen cannot show — which server each pack arrived from.
  */
-public final class PackManagerScreen extends OptionsSubScreen {
+public final class PackManagerScreen extends ModScreen {
 
     private static final String FILE_ID_PREFIX = "file/";
 
     public PackManagerScreen(Screen parent) {
-        super(parent, Minecraft.getInstance().options, Component.translatable("localpack-bypass.packs.title"));
+        super(parent, Component.translatable("localpack-bypass.packs.title"));
     }
 
     @Override
-    protected void addOptions() {
+    protected void fill() {
         PackRepository repository = minecraft.getResourcePackRepository();
         repository.reload();
         Set<String> available = new LinkedHashSet<>(repository.getAvailableIds());
         Set<String> selected = new LinkedHashSet<>(repository.getSelectedIds());
 
-        list.addSmall(
+        list.add(
                 Screens.small("localpack-bypass.config.openStorage", () -> Screens.open(PackStorage.downloadDir())),
                 Screens.small("localpack-bypass.config.openGame", () -> Screens.open(PackStorage.gameDir())));
-        list.addSmall(
+        list.add(
                 Screens.small("localpack-bypass.packs.forgetMissing", this::forgetMissing),
                 Screens.small("localpack-bypass.packs.forgetAll", this::confirmForgetAll));
 
         Map<String, List<PackRegistry.Pack>> byServer = PackRegistry.packsByServer();
         if (byServer.isEmpty()) {
-            Screens.header(list, this, font, Component.translatable("localpack-bypass.packs.empty"));
+            Screens.header(list, font, Component.translatable("localpack-bypass.packs.empty"));
             return;
         }
         for (Map.Entry<String, List<PackRegistry.Pack>> server : byServer.entrySet()) {
-            Screens.header(list, this, font, Component.translatable("localpack-bypass.packs.server",
+            Screens.header(list, font, Component.translatable("localpack-bypass.packs.server",
                     Screens.serverName(server.getKey()), server.getValue().size()));
             for (PackRegistry.Pack pack : server.getValue()) {
-                Screens.row(list, this, packButton(pack, available, selected));
+                Screens.row(list, packButton(pack, available, selected));
             }
         }
     }

@@ -2,12 +2,10 @@ package com.localpack.bypass.client;
 
 import com.localpack.bypass.Config;
 import com.localpack.bypass.PackRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.network.chat.Component;
 
 import java.time.Instant;
@@ -22,7 +20,7 @@ import java.util.Locale;
  * screen?" — which pack, from which address, at what time, and whether it was downloaded, found
  * already, or refused.
  */
-public final class HistoryScreen extends OptionsSubScreen {
+public final class HistoryScreen extends ModScreen {
 
     /** Enough to see a pattern without the file growing for ever; the setting decides what is kept. */
     private static final int SHOWN = 200;
@@ -31,30 +29,30 @@ public final class HistoryScreen extends OptionsSubScreen {
             DateTimeFormatter.ofPattern("MM-dd HH:mm:ss", Locale.ROOT).withZone(ZoneId.systemDefault());
 
     public HistoryScreen(Screen parent) {
-        super(parent, Minecraft.getInstance().options, Component.translatable("localpack-bypass.history.title"));
+        super(parent, Component.translatable("localpack-bypass.history.title"));
     }
 
     @Override
-    protected void addOptions() {
-        list.addSmall(
+    protected void fill() {
+        list.add(
                 Screens.small("localpack-bypass.history.clear", this::confirmClear),
                 Screens.small("localpack-bypass.history.refresh", this::rebuildWidgets));
 
         if (!Config.get().historyEnabled()) {
-            Screens.header(list, this, font, Component.translatable("localpack-bypass.history.off"));
+            Screens.header(list, font, Component.translatable("localpack-bypass.history.off"));
             return;
         }
 
         List<PackRegistry.Event> events = PackRegistry.events(SHOWN);
         if (events.isEmpty()) {
-            Screens.header(list, this, font, Component.translatable("localpack-bypass.history.empty"));
+            Screens.header(list, font, Component.translatable("localpack-bypass.history.empty"));
             return;
         }
-        Screens.header(list, this, font, Component.translatable("localpack-bypass.history.count", events.size()));
+        Screens.header(list, font, Component.translatable("localpack-bypass.history.count", events.size()));
         for (PackRegistry.Event event : events) {
             StringWidget row = new StringWidget(0, 0, Screens.BIG, 18, rowText(event), font);
             row.setTooltip(Tooltip.create(rowDetails(event)));
-            Screens.row(list, this, row);
+            Screens.row(list, row);
         }
     }
 
