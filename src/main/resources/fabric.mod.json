@@ -14,6 +14,7 @@
     "sources": "https://github.com/evgenmakarickij-wq/localpack-bypass"
   },
   "license": "MIT",
+  "icon": "assets/localpack-bypass/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
