@@ -1,6 +1,6 @@
 package com.localpack.bypass.client;
 
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -42,12 +42,12 @@ public class InfoScreen extends Screen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.centeredText(font, heading, width / 2, Math.max(16, textTop - 24), 0xFFFFFFFF);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
+        graphics.drawCenteredString(font, heading, width / 2, Math.max(16, textTop - 24), 0xFFFFFFFF);
         int y = textTop;
         for (FormattedCharSequence line : lines) {
-            graphics.centeredText(font, line, width / 2, y, 0xFFFFFFFF);
+            graphics.drawCenteredString(font, line, width / 2, y, 0xFFFFFFFF);
             y += 12;
         }
     }
@@ -57,7 +57,7 @@ public class InfoScreen extends Screen {
         if (afterClose != null) {
             afterClose.run();
         } else {
-            minecraft.gui.setScreen(null);
+            minecraft.setScreen(null);
         }
     }
 }

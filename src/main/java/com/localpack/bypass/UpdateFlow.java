@@ -62,14 +62,14 @@ public final class UpdateFlow {
 
     private static void tick(Minecraft client) {
         if (pending == null || prompted) return;
-        if (!(client.gui.screen() instanceof TitleScreen)) return;
+        if (!(client.screen instanceof TitleScreen)) return;
 
         prompted = true;
         Updater.UpdateInfo info = pending;
-        Screen previous = client.gui.screen();
-        client.gui.setScreen(new ConfirmScreen(
+        Screen previous = client.screen;
+        client.setScreen(new ConfirmScreen(
                 accepted -> {
-                    client.gui.setScreen(previous);
+                    client.setScreen(previous);
                     if (accepted) {
                         download(client, info);
                     } else {
@@ -87,7 +87,7 @@ public final class UpdateFlow {
         showProgress(client, Component.translatable("localpack-bypass.update.downloading", info.version()));
 
         Updater.install(info).thenAccept(result -> client.execute(() -> {
-            if (client.gui.screen() != progressScreen) {
+            if (client.screen != progressScreen) {
                 // The player left the title screen while the update was downloading: do not interrupt.
                 LOGGER.info("Update finished ({}) while the player was elsewhere", result.kind());
                 progressScreen = null;
@@ -100,14 +100,14 @@ public final class UpdateFlow {
 
     /** ConfirmScreen with both buttons missing: a plain message screen for the duration of the download. */
     private static void showProgress(Minecraft client, Component message) {
-        returnScreen = client.gui.screen();
+        returnScreen = client.screen;
         progressScreen = new ConfirmScreen(
-                accepted -> client.gui.setScreen(returnScreen),
+                accepted -> client.setScreen(returnScreen),
                 Component.translatable("localpack-bypass.update.title"),
                 message,
                 null,
                 null);
-        client.gui.setScreen(progressScreen);
+        client.setScreen(progressScreen);
     }
 
     private static void showOutcome(Minecraft client, Updater.InstallResult result) {
@@ -119,8 +119,8 @@ public final class UpdateFlow {
             case DEV -> Component.translatable("localpack-bypass.update.dev");
             case FAILED -> Component.translatable("localpack-bypass.update.failed", result.detail());
         };
-        client.gui.setScreen(new ConfirmScreen(
-                accepted -> client.gui.setScreen(returnScreen),
+        client.setScreen(new ConfirmScreen(
+                accepted -> client.setScreen(returnScreen),
                 Component.translatable("localpack-bypass.update.title"),
                 message,
                 Component.translatable("localpack-bypass.update.ok"),

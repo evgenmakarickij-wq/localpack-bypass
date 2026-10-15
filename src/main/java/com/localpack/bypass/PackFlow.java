@@ -158,7 +158,7 @@ public final class PackFlow {
     /** Waits for the rest of a batch — servers send their packs back to back — then handles them together. */
     private static void schedule(Minecraft client) {
         // A question that is no longer on screen was not answered: something else replaced it.
-        if (asking && client.gui.screen() != prompt) {
+        if (asking && client.screen != prompt) {
             asking = false;
             prompt = null;
         }
@@ -360,7 +360,7 @@ public final class PackFlow {
             return;
         }
 
-        Screen previous = client.gui.screen();
+        Screen previous = client.screen;
         Component message = Component.translatable(
                 "localpack-bypass.screen.message",
                 scan.missing().size(),
@@ -388,7 +388,7 @@ public final class PackFlow {
                     if (System.currentTimeMillis() < ignoreClicksUntil) return;
                     asking = false;
                     prompt = null;
-                    client.gui.setScreen(previous);
+                    client.setScreen(previous);
                     answer(first, accepted);
                     if (accepted) {
                         approve(first);
@@ -409,7 +409,7 @@ public final class PackFlow {
 
         asking = true;
         prompt = question;
-        client.gui.setScreen(question);
+        client.setScreen(question);
     }
 
     /** Like vanilla on decline: say no, then leave the server. */
@@ -608,12 +608,12 @@ public final class PackFlow {
         LOGGER.warn("Resource pack problem: {}", message.getString());
         Component heading = Component.translatable("localpack-bypass.screen.failedTitle");
 
-        Screen current = client.gui.screen();
+        Screen current = client.screen;
         if (current == null || current instanceof InfoScreen) {
-            client.gui.setScreen(new InfoScreen(heading, message));
+            client.setScreen(new InfoScreen(heading, message));
             return;
         }
-        SystemToast.addOrUpdate(client.gui.toastManager(), PROBLEM_TOAST, heading, message);
+        SystemToast.addOrUpdate(client.getToastManager(), PROBLEM_TOAST, heading, message);
     }
 
     private static String hostOf(String url) {

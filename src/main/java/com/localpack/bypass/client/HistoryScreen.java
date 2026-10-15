@@ -80,9 +80,9 @@ public final class HistoryScreen extends OptionsSubScreen {
     }
 
     private void confirmClear() {
-        minecraft.gui.setScreen(new ConfirmScreen(
+        minecraft.setScreen(new ConfirmScreen(
                 yes -> {
-                    minecraft.gui.setScreen(this);
+                    minecraft.setScreen(this);
                     if (yes) {
                         PackRegistry.clearHistory();
                         PackRegistry.flush();

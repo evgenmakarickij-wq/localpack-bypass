@@ -1,5 +1,8 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.17.20'
+    // Minecraft 1.21.11 and older are obfuscated, and Loom splits the plugin by that: this is the
+    // remapping one. `net.fabricmc.fabric-loom` is the same plugin for 26.1 and newer, where the
+    // game ships with its own names and there is nothing to remap.
+    id 'net.fabricmc.fabric-loom-remap' version '1.17.20'
     id 'maven-publish'
 }
 
@@ -21,14 +24,17 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    mappings loom.officialMojangMappings()
 
-    // Compile-only, and deliberately so. Minecraft 26.1 and later ship unobfuscated, so there is no
-    // remapping step and this is a plain compileOnly rather than modCompileOnly. The config screen
-    // is reached through Mod Menu's "modmenu" entrypoint, which nothing loads unless Mod Menu is
-    // installed, so a player without Mod Menu never classloads the one class that names it.
-    compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Compile-only, and deliberately so. The config screen is reached through Mod Menu's "modmenu"
+    // entrypoint, which nothing loads unless Mod Menu is installed, so a player without Mod Menu
+    // never classloads the one class that names it. The `mod` prefix is what remaps it: the game
+    // underneath is obfuscated, so a plain compileOnly would leave Mod Menu's names unremapped and
+    // the config screen would fail at runtime rather than at build time.
+    modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {
@@ -47,11 +53,11 @@ tasks.withType(Jar).configureEach {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 25
+    it.options.release = 21
 }
 
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_25
-    targetCompatibility = JavaVersion.VERSION_25
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }

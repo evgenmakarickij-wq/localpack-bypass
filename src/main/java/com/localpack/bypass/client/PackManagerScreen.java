@@ -134,9 +134,9 @@ public final class PackManagerScreen extends OptionsSubScreen {
     }
 
     private void confirmForgetAll() {
-        minecraft.gui.setScreen(new ConfirmScreen(
+        minecraft.setScreen(new ConfirmScreen(
                 yes -> {
-                    minecraft.gui.setScreen(this);
+                    minecraft.setScreen(this);
                     if (yes) {
                         PackRegistry.clearAll();
                         PackRegistry.flush();

@@ -1,6 +1,7 @@
 {
   "required": true,
   "package": "com.localpack.bypass.mixin",
+  "compatibilityLevel": "JAVA_21",
   "client": [
     "ClientCommonPacketListenerMixin"
   ],

@@ -77,7 +77,7 @@ public final class SettingsScreen extends OptionsSubScreen {
     }
 
     private void open(Screen screen) {
-        Minecraft.getInstance().gui.setScreen(screen);
+        Minecraft.getInstance().setScreen(screen);
     }
 
     /** A whole number with a unit: a slider, so the player can see the range as well as the value. */
@@ -125,11 +125,11 @@ public final class SettingsScreen extends OptionsSubScreen {
         super.onClose();
 
         if (problem != null) {
-            minecraft.gui.setScreen(new InfoScreen(Component.translatable("localpack-bypass.config.title"),
+            minecraft.setScreen(new InfoScreen(Component.translatable("localpack-bypass.config.title"),
                     Component.translatable(problem)));
         } else if (changed && Screens.separateFolder()) {
             // Said once, when the choice is made, so a pack appearing twice on disk is not a mystery.
-            minecraft.gui.setScreen(new InfoScreen(Component.translatable("localpack-bypass.config.title"),
+            minecraft.setScreen(new InfoScreen(Component.translatable("localpack-bypass.config.title"),
                     Component.translatable("localpack-bypass.config.folder.copied",
                             PackStorage.gameDir().toString())));
         }
