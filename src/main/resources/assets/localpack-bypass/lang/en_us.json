@@ -85,6 +85,7 @@
   "localpack-bypass.packs.details.gone": "The file is no longer in the folder; press to forget it",
   "localpack-bypass.packs.forgetMissing": "Forget missing",
   "localpack-bypass.packs.forgetAll": "Delete all downloaded",
+  "localpack-bypass.packs.deleteAll": "Delete all downloaded",
   "localpack-bypass.packs.forgetAll.title": "Forget everything?",
   "localpack-bypass.packs.forgetAll.message": "Deselects and deletes every downloaded resource pack without restarting the game.",
   "localpack-bypass.packs.forgetAll.yes": "Forget",

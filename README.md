@@ -20,16 +20,17 @@
 - **Pack already downloaded:** the local file is copied into Minecraft's server-pack cache and Minecraft verifies its SHA-1 before use. No HTTP download is needed.
 - **New or changed pack:** Minecraft downloads it with its normal proxy, headers, 250 MiB limit and checksum validation. The verified result is archived as `resourcepacks/localpack-<sha1>.zip`.
 - **Consent and required packs:** the normal per-server Prompt, Enabled and Disabled setting is authoritative. Optional and required packs behave exactly as in vanilla.
-- **Pack lifetime:** server packs are removed on `pop` packets and disconnect. UUID replacement, ordering and reload failures are handled by Minecraft.
-- **Manual selection stays manual:** archived ZIP files appear in the normal resource-pack screen, but the mod never edits `options.txt` and never turns a manually disabled archive back on.
+- **Pack lifetime:** after Minecraft successfully applies a pack once, its archived copy stays enabled after disconnect. Session UUID replacement, ordering and reload failures remain vanilla-owned.
+- **Manual selection stays manual:** the first successful application is persisted, but if the player later disables that archive, the mod records the choice and never turns it back on automatically.
 
 ## Settings (Mod Menu)
 
 With [Mod Menu](https://modrinth.com/mod/modmenu) installed the mod appears in the mod list with a settings screen of its own. No hotkeys were added; everything is there.
 
 - **Folder for downloaded packs** — where an extra archive copy is kept. Leave it empty to use the game's own `resourcepacks` folder. Relative paths are resolved from the game directory.
+- **Parallel downloads and total speed** — several packs are transferred together while every worker shares one aggregate bandwidth limit. Lower the limit if downloading affects ping.
 - **Keep a record** — records which server offered a pack and what happened. URLs, checksums, sizes and diagnostics are stored only when **Also record the details** is enabled.
-- **Downloaded packs** — the packs the mod has downloaded, grouped by the server they came from, showing whether each is on, off, or gone from the folder. Press one to switch it on or off; a pack whose file has disappeared can be forgotten. **Forget everything** clears what the mod remembers and never deletes a pack file.
+- **Downloaded packs** — packs grouped by server, with manual on/off controls. **Delete all downloaded** deselects and removes every mod-owned archive and matching Minecraft cache file without restarting the game.
 - **What servers sent** — the record itself, newest first, with the details of every entry.
 
 ## Requirements
@@ -49,7 +50,7 @@ The mod is built by the [GitHub Actions workflow](.github/workflows/build.yml) o
 
 - **Origin:** the project started from this repository's original prototype, which matched the SHA-1 of the server's pack against local files.
 - **Authors:** McChopik, Telemine3140. The current implementation keeps Minecraft's server-pack protocol intact and adds a persistent local cache around its verified downloader. No code was copied from other mods.
-- **Built on:** Minecraft's own code with Mojang's official names, [Fabric Loader and Fabric API](https://fabricmc.net), [Fabric Loom](https://github.com/FabricMC/fabric-loom) and [SpongePowered Mixin](https://github.com/SpongePowered/Mixin).
+- **Built on:** Minecraft's own code with Mojang's official names, [Fabric Loader and Fabric API](https://fabricmc.net), [Fabric Loom](https://github.com/FabricMC/fabric-loom), [SpongePowered Mixin](https://github.com/SpongePowered/Mixin), and the embedded [ModuLib](https://github.com/mcchopik/modulib) utilities.
 - **Status:** experimental. It has not been tested extensively, so use it at your own risk.
 - **Not affiliated** with Mojang, Microsoft, Fabric or Anthropic.
 

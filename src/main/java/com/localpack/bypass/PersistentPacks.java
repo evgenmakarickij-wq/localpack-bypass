@@ -25,6 +25,8 @@ public final class PersistentPacks {
     private static long generation;
     private static int activeTransfers;
     private static boolean deleting;
+    private static final Set<Path> ACTIVE_TARGETS = new LinkedHashSet<>();
+    private static final Set<Thread> ACTIVE_THREADS = new LinkedHashSet<>();
     private static final ExecutorService IO = Executors.newSingleThreadExecutor(runnable -> {
         Thread thread = new Thread(runnable, "localpack-cleanup");
         thread.setDaemon(true);
@@ -48,17 +50,21 @@ public final class PersistentPacks {
         if (hash != null && !hash.isBlank()) PENDING.add(hash.toLowerCase(java.util.Locale.ROOT));
     }
 
-    public static long beginTransfer() {
+    public static long beginTransfer(Set<Path> targets) {
         synchronized (TRANSFER_LOCK) {
             if (deleting) return -1L;
             activeTransfers++;
+            targets.stream().map(path -> path.toAbsolutePath().normalize()).forEach(ACTIVE_TARGETS::add);
+            ACTIVE_THREADS.add(Thread.currentThread());
             return generation;
         }
     }
 
-    public static void endTransfer() {
+    public static void endTransfer(Set<Path> targets) {
         synchronized (TRANSFER_LOCK) {
             activeTransfers = Math.max(0, activeTransfers - 1);
+            targets.stream().map(path -> path.toAbsolutePath().normalize()).forEach(ACTIVE_TARGETS::remove);
+            ACTIVE_THREADS.remove(Thread.currentThread());
             TRANSFER_LOCK.notifyAll();
         }
     }
@@ -127,10 +133,13 @@ public final class PersistentPacks {
     /** Deselects, forgets and deletes every downloaded archive without restarting the game. */
     public static void deleteAll(Minecraft client) {
         long deletionGeneration;
+        Set<Path> activeTargets;
         synchronized (TRANSFER_LOCK) {
             if (deleting) return;
             deleting = true;
             deletionGeneration = ++generation;
+            activeTargets = new LinkedHashSet<>(ACTIVE_TARGETS);
+            ACTIVE_THREADS.forEach(Thread::interrupt);
         }
         List<PackRegistry.Pack> packs = PackRegistry.packs();
         client.getDownloadedPackSource().popAll();
@@ -150,18 +159,20 @@ public final class PersistentPacks {
         activationCountdown = -1;
         PackRegistry.clearPacks();
         PackRegistry.flush();
-        CompletableFuture.runAsync(() -> deleteWithRetries(packs, deletionGeneration), IO);
+        CompletableFuture.runAsync(() -> deleteWithRetries(packs, activeTargets, deletionGeneration), IO);
     }
 
-    private static void deleteWithRetries(List<PackRegistry.Pack> packs, long deletionGeneration) {
+    private static void deleteWithRetries(List<PackRegistry.Pack> packs, Set<Path> transferTargets,
+                                          long deletionGeneration) {
         Set<Path> files = new LinkedHashSet<>();
         try {
-            for (int attempt = 0; attempt < 40; attempt++) {
+            for (int attempt = 0; attempt < 120; attempt++) {
                 synchronized (TRANSFER_LOCK) {
                     if (!deleting || generation != deletionGeneration) return;
                 }
                 collectOwnedFiles(packs, files);
-                files.removeIf(PersistentPacks::deleteQuietly);
+                files.addAll(transferTargets);
+                files.removeIf(PersistentPacks::deleteOwnedPath);
                 synchronized (TRANSFER_LOCK) {
                     if (activeTransfers == 0 && files.isEmpty()) return;
                 }
@@ -228,6 +239,23 @@ public final class PersistentPacks {
         try {
             Files.deleteIfExists(file);
             return !Files.exists(file);
+        } catch (IOException | RuntimeException e) {
+            return false;
+        }
+    }
+
+    private static boolean deleteOwnedPath(Path path) {
+        try {
+            if (Files.isDirectory(path)) {
+                try (var children = Files.walk(path)) {
+                    for (Path child : children.sorted(java.util.Comparator.reverseOrder()).toList()) {
+                        Files.deleteIfExists(child);
+                    }
+                }
+            } else {
+                Files.deleteIfExists(path);
+            }
+            return !Files.exists(path);
         } catch (IOException | RuntimeException e) {
             return false;
         }

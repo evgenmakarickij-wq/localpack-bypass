@@ -47,7 +47,7 @@ public final class PackManagerScreen extends OptionsSubScreen {
                 Screens.small("localpack-bypass.config.openGame", () -> Screens.open(PackStorage.gameDir())));
         list.addSmall(
                 Screens.small("localpack-bypass.packs.forgetMissing", this::forgetMissing),
-                Screens.small("localpack-bypass.packs.forgetAll", this::deleteAll));
+                Screens.small("localpack-bypass.packs.deleteAll", this::deleteAll));
 
         Map<String, List<PackRegistry.Pack>> byServer = PackRegistry.packsByServer();
         if (byServer.isEmpty()) {

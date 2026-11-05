@@ -76,6 +76,7 @@
   "localpack-bypass.packs.details.gone": "Файла больше нет в папке; нажмите, чтобы забыть о нём",
   "localpack-bypass.packs.forgetMissing": "Забыть отсутствующие",
   "localpack-bypass.packs.forgetAll": "Удалить все скачанные",
+  "localpack-bypass.packs.deleteAll": "Удалить все скачанные",
   "localpack-bypass.packs.forgetAll.title": "Забыть всё?",
   "localpack-bypass.packs.forgetAll.message": "Отключает и удаляет все скачанные ресурспаки без перезапуска игры.",
   "localpack-bypass.packs.forgetAll.yes": "Забыть",

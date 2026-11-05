@@ -35,7 +35,10 @@ public abstract class DownloadQueueMixin {
     private void localpackBypass$downloadBatch(DownloadQueue.BatchConfig batchConfig,
                                                Map<UUID, DownloadQueue.DownloadRequest> requests,
                                                CallbackInfoReturnable<DownloadQueue.BatchResult> cir) {
-        long generation = com.localpack.bypass.PersistentPacks.beginTransfer();
+        Set<Path> transferTargets = requests.keySet().stream()
+                .map(id -> cacheDir.resolve(id.toString()))
+                .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));
+        long generation = com.localpack.bypass.PersistentPacks.beginTransfer(transferTargets);
         if (generation < 0) {
             DownloadQueue.BatchResult denied = new DownloadQueue.BatchResult();
             denied.failed().addAll(requests.keySet());
@@ -117,7 +120,7 @@ public abstract class DownloadQueueMixin {
         }
         cir.setReturnValue(result);
         } finally {
-            com.localpack.bypass.PersistentPacks.endTransfer();
+            com.localpack.bypass.PersistentPacks.endTransfer(transferTargets);
         }
     }
 }

@@ -70,15 +70,19 @@ jobs:
             exit 1
           fi
 
+          sha="$(sha256sum "${jar}" | cut -d' ' -f1)"
+          printf '{\n  "version": "%s",\n  "file": "localpack-bypass-%s.jar",\n  "sha256": "%s"\n}\n' \
+            "${version}" "${version}" "${sha}" > update.json
+
           # Hand-written notes when we have them: .github/release-notes/<version>.md describes what
           # that version contains. Otherwise fall back to the list of commits.
           notes=".github/release-notes/${version}.md"
           if [ -f "${notes}" ]; then
-            gh release create "${GITHUB_REF_NAME}" "${jar}" \
+            gh release create "${GITHUB_REF_NAME}" "${jar}" update.json \
               --title "localpack-bypass ${version}" \
               --notes-file "${notes}"
           else
-            gh release create "${GITHUB_REF_NAME}" "${jar}" \
+            gh release create "${GITHUB_REF_NAME}" "${jar}" update.json \
               --title "localpack-bypass ${version}" \
               --generate-notes
           fi
