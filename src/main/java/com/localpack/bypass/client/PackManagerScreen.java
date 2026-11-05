@@ -2,6 +2,7 @@ package com.localpack.bypass.client;
 
 import com.localpack.bypass.PackRegistry;
 import com.localpack.bypass.PackStorage;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -66,7 +67,8 @@ public final class PackManagerScreen extends OptionsSubScreen {
         String id = FILE_ID_PREFIX + pack.file;
         boolean present = available.contains(id);
         boolean on = present && selected.contains(id);
-        Component state = Component.translatable(stateKey(present, on));
+        ChatFormatting color = !present ? ChatFormatting.RED : on ? ChatFormatting.GREEN : ChatFormatting.GRAY;
+        Component state = Component.translatable(stateKey(present, on)).withStyle(color);
 
         return Button.builder(Component.empty().append(state).append(" ")
                         .append(Component.literal(pack.file == null ? "?" : pack.file)),

@@ -4,7 +4,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 
 import java.nio.file.Path;
-import java.util.Optional;
 
 /**
  * Every folder and file the mod touches, resolved in one place.
@@ -17,6 +16,8 @@ import java.util.Optional;
  * path stored on one system cannot blow up the client when it is read back on another.
  */
 public final class GamePaths {
+
+    private static final String MOD_ID = "localpack-bypass";
 
     private GamePaths() {}
 
@@ -46,11 +47,7 @@ public final class GamePaths {
     }
 
     public static Path stateDir() {
-        return configDir().resolve(Updater.MOD_ID);
-    }
-
-    public static Path stateFile() {
-        return stateDir().resolve("update-state.json");
+        return configDir().resolve(MOD_ID);
     }
 
     /** The player's settings, written by the config screen. */
@@ -63,23 +60,4 @@ public final class GamePaths {
         return stateDir().resolve("history.json");
     }
 
-    public static Path pendingDir() {
-        return stateDir().resolve("pending");
-    }
-
-    /**
-     * Reads a path an earlier run wrote down. A game directory that is synced between devices can
-     * leave a literal this system cannot parse at all — the classic case being a Windows path opened
-     * on Android — and {@link Path#of} rejects those with an unchecked exception, so callers get an
-     * empty result instead of a crash during client initialisation.
-     */
-    public static Optional<Path> parseStored(String text) {
-        if (text == null || text.isBlank()) return Optional.empty();
-        try {
-            Path path = Path.of(text);
-            return path.isAbsolute() ? Optional.of(path.normalize()) : Optional.empty();
-        } catch (RuntimeException e) {
-            return Optional.empty();
-        }
-    }
 }

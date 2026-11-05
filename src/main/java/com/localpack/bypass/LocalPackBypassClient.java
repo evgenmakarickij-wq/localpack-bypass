@@ -23,8 +23,5 @@ public class LocalPackBypassClient implements ClientModInitializer {
             PackRegistry.flush();
         }, "localpack-state-save"));
 
-        // Finish an update that was downloaded on a previous run, then offer any newer release.
-        Updater.applyPendingCleanup();
-        UpdateFlow.init();
     }
 }

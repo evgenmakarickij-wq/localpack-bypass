@@ -35,6 +35,11 @@ public final class SettingsScreen extends OptionsSubScreen {
     protected void addOptions() {
         Config config = Config.get();
 
+        list.addHeader(Component.translatable("localpack-bypass.config.header.manage"));
+        list.addSmall(
+                Screens.small("localpack-bypass.config.managePacks", () -> open(new PackManagerScreen(this))),
+                Screens.small("localpack-bypass.config.openHistory", () -> open(new HistoryScreen(this))));
+
         list.addHeader(Component.translatable("localpack-bypass.config.header.storage"));
 
         EditBox folder = new EditBox(font, 0, 0, Screens.BIG, 20,
@@ -49,31 +54,11 @@ public final class SettingsScreen extends OptionsSubScreen {
                 Screens.small("localpack-bypass.config.openStorage", () -> Screens.open(PackStorage.downloadDir())),
                 Screens.small("localpack-bypass.config.openGame", () -> Screens.open(PackStorage.gameDir())));
 
-        list.addHeader(Component.translatable("localpack-bypass.config.header.asking"));
-        list.addBig(toggle("localpack-bypass.config.rememberServers",
-                config.rememberServers(), config::rememberServers));
-        list.addBig(toggle("localpack-bypass.config.keepEarlier",
-                config.keepEarlierPacks(), config::keepEarlierPacks));
-
-        list.addHeader(Component.translatable("localpack-bypass.config.header.download"));
-        list.addBig(amount("localpack-bypass.config.batchWait", "localpack-bypass.unit.ms",
-                config.batchWaitMs(), Config.MIN_BATCH_WAIT_MS, Config.MAX_BATCH_WAIT_MS, config::batchWaitMs));
-        list.addBig(amount("localpack-bypass.config.timeout", "localpack-bypass.unit.seconds",
-                config.downloadTimeoutSeconds(), Config.MIN_TIMEOUT_SECONDS, Config.MAX_TIMEOUT_SECONDS,
-                config::downloadTimeoutSeconds));
-        list.addBig(amount("localpack-bypass.config.attempts", "localpack-bypass.unit.times",
-                config.downloadAttempts(), Config.MIN_ATTEMPTS, Config.MAX_ATTEMPTS, config::downloadAttempts));
-
         list.addHeader(Component.translatable("localpack-bypass.config.header.history"));
         list.addBig(toggle("localpack-bypass.config.history", config.historyEnabled(), config::historyEnabled));
         list.addBig(amount("localpack-bypass.config.historyLimit", "localpack-bypass.unit.entries",
                 config.historyLimit(), Config.MIN_HISTORY, Config.MAX_HISTORY, config::historyLimit));
         list.addBig(toggle("localpack-bypass.config.verbose", config.verboseLog(), config::verboseLog));
-
-        list.addHeader(Component.translatable("localpack-bypass.config.header.manage"));
-        list.addSmall(
-                Screens.small("localpack-bypass.config.managePacks", () -> open(new PackManagerScreen(this))),
-                Screens.small("localpack-bypass.config.openHistory", () -> open(new HistoryScreen(this))));
     }
 
     private void open(Screen screen) {
@@ -116,22 +101,15 @@ public final class SettingsScreen extends OptionsSubScreen {
         Config config = Config.get();
         String typed = folderText == null ? "" : folderText.trim();
         String problem = Config.problem(typed, true);
-        boolean changed = false;
         if (problem == null && !typed.equals(config.resourcePackDir())) {
             config.resourcePackDir(typed);
             Config.save();
-            changed = true;
         }
         super.onClose();
 
         if (problem != null) {
-            minecraft.gui.setScreen(new InfoScreen(Component.translatable("localpack-bypass.config.title"),
+            minecraft.gui.setScreen(new InfoScreen(this, Component.translatable("localpack-bypass.config.title"),
                     Component.translatable(problem)));
-        } else if (changed && Screens.separateFolder()) {
-            // Said once, when the choice is made, so a pack appearing twice on disk is not a mystery.
-            minecraft.gui.setScreen(new InfoScreen(Component.translatable("localpack-bypass.config.title"),
-                    Component.translatable("localpack-bypass.config.folder.copied",
-                            PackStorage.gameDir().toString())));
         }
     }
 }

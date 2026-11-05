@@ -40,31 +40,10 @@ public final class Config {
 
     // ------------------------------------------------------------------ ranges
 
-    public static final int MIN_BATCH_WAIT_MS = 0;
-    public static final int MAX_BATCH_WAIT_MS = 5_000;
-    public static final int MIN_TIMEOUT_SECONDS = 10;
-    public static final int MAX_TIMEOUT_SECONDS = 3_600;
-    public static final int MIN_ATTEMPTS = 1;
-    public static final int MAX_ATTEMPTS = 10;
     public static final int MIN_HISTORY = 20;
     public static final int MAX_HISTORY = 2_000;
 
     // ------------------------------------------------------------------ fields
-
-    /** How long to wait for more packs after the first one arrives, so a batch is asked about once. */
-    private int batchWaitMs = 300;
-
-    /** How long a single pack download may take before it is given up on. */
-    private int downloadTimeoutSeconds = 600;
-
-    /** How many times a failed download is retried before the player is told it did not work. */
-    private int downloadAttempts = 3;
-
-    /** Skip the question for a server the player has already downloaded packs from. */
-    private boolean rememberServers = true;
-
-    /** Leave packs from other servers enabled when a new server's packs are applied. */
-    private boolean keepEarlierPacks = true;
 
     /** Record what every server sent, for the history screens. */
     private boolean historyEnabled = true;
@@ -155,46 +134,6 @@ public final class Config {
     }
 
     // ------------------------------------------------------------------ values
-
-    public int batchWaitMs() {
-        return clamp(batchWaitMs, MIN_BATCH_WAIT_MS, MAX_BATCH_WAIT_MS);
-    }
-
-    public void batchWaitMs(int value) {
-        batchWaitMs = clamp(value, MIN_BATCH_WAIT_MS, MAX_BATCH_WAIT_MS);
-    }
-
-    public int downloadTimeoutSeconds() {
-        return clamp(downloadTimeoutSeconds, MIN_TIMEOUT_SECONDS, MAX_TIMEOUT_SECONDS);
-    }
-
-    public void downloadTimeoutSeconds(int value) {
-        downloadTimeoutSeconds = clamp(value, MIN_TIMEOUT_SECONDS, MAX_TIMEOUT_SECONDS);
-    }
-
-    public int downloadAttempts() {
-        return clamp(downloadAttempts, MIN_ATTEMPTS, MAX_ATTEMPTS);
-    }
-
-    public void downloadAttempts(int value) {
-        downloadAttempts = clamp(value, MIN_ATTEMPTS, MAX_ATTEMPTS);
-    }
-
-    public boolean rememberServers() {
-        return rememberServers;
-    }
-
-    public void rememberServers(boolean value) {
-        rememberServers = value;
-    }
-
-    public boolean keepEarlierPacks() {
-        return keepEarlierPacks;
-    }
-
-    public void keepEarlierPacks(boolean value) {
-        keepEarlierPacks = value;
-    }
 
     public boolean historyEnabled() {
         return historyEnabled;

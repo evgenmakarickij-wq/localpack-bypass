@@ -116,5 +116,5 @@
   "localpack-bypass.gui.close": "OK",
 
   "modmenu.nameTranslation.localpack-bypass": "Local Resource Pack Cache",
-  "modmenu.descriptionTranslation.localpack-bypass": "Downloads server resource packs with one button, saves them to resourcepacks and enables them automatically. If a pack is already downloaded, you join without any prompts."
+  "modmenu.descriptionTranslation.localpack-bypass": "Caches verified server resource packs for reuse without changing your manual resource-pack selection."
 }

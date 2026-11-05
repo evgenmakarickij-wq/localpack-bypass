@@ -103,5 +103,5 @@
   "localpack-bypass.size.mb": "%s МБ",
   "localpack-bypass.gui.close": "ОК",
   "modmenu.nameTranslation.localpack-bypass": "Локальный кэш ресурспаков",
-  "modmenu.descriptionTranslation.localpack-bypass": "Скачивает ресурспаки сервера одной кнопкой, сохраняет их в resourcepacks и включает автоматически. Если пак уже скачан, вы заходите без запросов."
+  "modmenu.descriptionTranslation.localpack-bypass": "Кэширует проверенные серверные ресурспаки и не меняет ваш ручной выбор в меню ресурспаков."
 }

@@ -3,7 +3,7 @@
   "id": "localpack-bypass",
   "version": "${version}",
   "name": "Local Resource Pack Cache",
-  "description": "Downloads server resource packs with one button, saves them to resourcepacks and enables them automatically. If a pack is already downloaded, you join without any prompts.",
+  "description": "Caches verified server resource packs for reuse while leaving consent, activation and reloads to Minecraft.",
   "authors": [
     "McChopik",
     "Telemine3140"

@@ -1,7 +1,5 @@
 package com.localpack.bypass.client;
 
-import com.localpack.bypass.Config;
-import com.localpack.bypass.PackStorage;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Util;
@@ -29,12 +27,6 @@ final class Screens {
 
     static Button small(String key, Runnable action) {
         return Button.builder(Component.translatable(key), b -> action.run()).width(SMALL).build();
-    }
-
-    /** True when packs are kept somewhere other than the folder the game itself loads from. */
-    static boolean separateFolder() {
-        return !Config.packDir().toAbsolutePath().normalize()
-                .equals(PackStorage.gameDir().toAbsolutePath().normalize());
     }
 
     /** Opens a folder in whatever file manager the system has, creating it if it is not there yet. */

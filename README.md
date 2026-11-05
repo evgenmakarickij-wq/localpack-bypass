@@ -13,42 +13,24 @@
 
 ---
 
-**localpack-bypass** is a free, open-source, client-side [Fabric](https://fabricmc.net) mod for [Minecraft](https://www.minecraft.net) 26.2 that makes server resource packs painless. Instead of downloading the same pack every time you join, it compares the SHA-1 of the pack the server sends with the ZIP files already in your `resourcepacks` folder. If a matching pack is found, it is enabled silently, so you join without prompts or waiting. If a pack is new or has changed, a single screen offers to download all the needed packs at once; the mod then verifies them, enables them, saves the selection and reloads resources only once. Downloaded packs stay active after you leave the server, like normal resource packs, while declining disconnects you from the server, like in vanilla. The screen and messages follow the game language; the mod ships translations for 38 languages (see the list above).
+**localpack-bypass** is a free, open-source, client-side [Fabric](https://fabricmc.net) mod for [Minecraft](https://www.minecraft.net) 26.2 that caches server resource packs in the normal `resourcepacks` folder. Minecraft keeps full control of consent, required packs, downloading, SHA-1 verification, pack ordering and resource reloads. The mod only seeds Minecraft's verified download cache from matching local ZIP files and archives successful downloads for later use.
 
 ## How it works
 
-- **Pack already downloaded:** it is enabled silently. No prompt, no download.
-- **New or changed pack:** one screen with **Download all resource packs**. Packs are saved to `resourcepacks/localpack-<sha1>.zip`, verified by SHA-1, enabled and saved to your options.
-- **Decline and leave:** you are disconnected from the server.
-- **Older packs:** packs previously downloaded by the mod are deselected when a newer version arrives. The files stay on disk, so going back is instant.
-- **Nothing fails silently:** a download that did not work, a checksum that did not match, or a file the game would not switch on is reported on screen, or as a notification if no screen is available.
+- **Pack already downloaded:** the local file is copied into Minecraft's server-pack cache and Minecraft verifies its SHA-1 before use. No HTTP download is needed.
+- **New or changed pack:** Minecraft downloads it with its normal proxy, headers, 250 MiB limit and checksum validation. The verified result is archived as `resourcepacks/localpack-<sha1>.zip`.
+- **Consent and required packs:** the normal per-server Prompt, Enabled and Disabled setting is authoritative. Optional and required packs behave exactly as in vanilla.
+- **Pack lifetime:** server packs are removed on `pop` packets and disconnect. UUID replacement, ordering and reload failures are handled by Minecraft.
+- **Manual selection stays manual:** archived ZIP files appear in the normal resource-pack screen, but the mod never edits `options.txt` and never turns a manually disabled archive back on.
 
 ## Settings (Mod Menu)
 
 With [Mod Menu](https://modrinth.com/mod/modmenu) installed the mod appears in the mod list with a settings screen of its own. No hotkeys were added; everything is there.
 
-- **Folder for downloaded packs** — where packs are kept. Leave it empty for the game's own `resourcepacks` folder. Any other folder works, including a different drive or an Android shared folder; packs are then also copied into `resourcepacks` before they are switched on, because that is the only folder the game itself reads. Buttons open either folder.
-- **Remember servers you said yes to** — a server you have already taken packs from is not asked about again. The answer is written into the game's own per-server *Server Resource Packs* setting as well, next to Prompt, Enabled and Disabled.
-- **Keep packs from other servers** — leave this on to keep the packs you already have. Turn it off to start each server with only that server's packs.
-- **Wait before asking** — how long to collect the rest of a batch before the screen appears, in milliseconds or seconds. Servers send all their packs at once, so waiting turns several questions into one.
-- **Give up after** and **Tries** — how long one download may take, and how many times a failed one is retried. A checksum that does not match counts as a failure, because that is what a half-finished transfer looks like.
-- **Keep a record** — every resource pack a server sends is written down: which server, which address, the checksum, the size, what happened to it and how long it took. It is a file on your own computer; nothing is sent anywhere.
+- **Folder for downloaded packs** — where an extra archive copy is kept. Leave it empty to use the game's own `resourcepacks` folder. Relative paths are resolved from the game directory.
+- **Keep a record** — records which server offered a pack and what happened. URLs, checksums, sizes and diagnostics are stored only when **Also record the details** is enabled.
 - **Downloaded packs** — the packs the mod has downloaded, grouped by the server they came from, showing whether each is on, off, or gone from the folder. Press one to switch it on or off; a pack whose file has disappeared can be forgotten. **Forget everything** clears what the mod remembers and never deletes a pack file.
 - **What servers sent** — the record itself, newest first, with the details of every entry.
-
-## Updates
-
-Once a day the mod asks GitHub for the [latest release](https://github.com/evgenmakarickij-wq/localpack-bypass/releases) of this repository. If it is newer than the version you are running, the title screen offers to install it. Accepting does three things:
-
-1. The new jar is downloaded and its **SHA-256 is checked** against the `update.json` manifest published with that release.
-2. The old jar is deleted and the new one is moved into `mods/`.
-3. You restart the game.
-
-On Windows a jar that is currently loaded cannot be deleted, so a short generated script waits for the game to exit and performs step 2 for you; the mod says so when it happens. On Android, Linux and macOS the running jar is not locked and is simply replaced. Everything the updater touches is under `mods/` and `config/localpack-bypass/`.
-
-The check is a plain anonymous GitHub API request (no token, no account), the mod has no telemetry and no server of its own. Skipping a version is remembered, and `-Dlocalpack.bypass.updateCheck=false` disables updates entirely.
-
-**Version numbering caveat:** `0.0.1.2026-alpha-build-beta-release` is read as `[0, 0, 1, 2026]`, which sorts *below* the earlier `0.0.3-beta` (`[0, 0, 3]`). Builds numbered `0.0.3-beta` or higher will not be offered this one automatically and have to be replaced by hand.
 
 ## Requirements
 
@@ -61,12 +43,12 @@ The check is a plain anonymous GitHub API request (no token, no account), the mo
 
 ## Build
 
-The mod is built by the [GitHub Actions workflow](.github/workflows/build.yml) on every push to `main`, with the jar available under the run's Artifacts. Push a tag such as `v0.0.3` to also publish a [release](https://github.com/evgenmakarickij-wq/localpack-bypass/releases) with the jar and the `update.json` manifest the in-game updater reads.
+The mod is built by the [GitHub Actions workflow](.github/workflows/build.yml) on every push to `main`, with the jar available under the run's Artifacts. A `v*` tag may publish a release; ordinary commits never do.
 
 ## Where the code comes from
 
 - **Origin:** the project started from this repository's original prototype, which matched the SHA-1 of the server's pack against local files.
-- **Authors:** McChopik, Telemine3140. The current code was rewritten and extended with [Claude Code](https://claude.com/claude-code), an AI coding tool by [Anthropic](https://www.anthropic.com), at the request of the project's authors. It added the one-click download, batching, automatic enabling, "decline and leave", the updater, the translations, path handling that covers Windows, macOS, Linux and Android, and the documentation. No code was copied from other mods.
+- **Authors:** McChopik, Telemine3140. The current implementation keeps Minecraft's server-pack protocol intact and adds a persistent local cache around its verified downloader. No code was copied from other mods.
 - **Built on:** Minecraft's own code with Mojang's official names, [Fabric Loader and Fabric API](https://fabricmc.net), [Fabric Loom](https://github.com/FabricMC/fabric-loom) and [SpongePowered Mixin](https://github.com/SpongePowered/Mixin).
 - **Status:** experimental. It has not been tested extensively, so use it at your own risk.
 - **Not affiliated** with Mojang, Microsoft, Fabric or Anthropic.
