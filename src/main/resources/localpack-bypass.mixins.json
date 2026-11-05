@@ -2,8 +2,10 @@
   "required": true,
   "package": "com.localpack.bypass.mixin",
   "client": [
-    "ClientCommonPacketListenerMixin"
+    "ClientCommonPacketListenerMixin",
+    "DownloadQueueMixin"
   ],
+  "compatibilityLevel": "JAVA_25",
   "injectors": {
     "defaultRequire": 1
   }

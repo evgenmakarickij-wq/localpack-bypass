@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LocalPackBypassClient implements ClientModInitializer {
-    private static final Logger LOGGER = LoggerFactory.getLogger("localpack-bypass");
+    public static final Logger LOGGER = LoggerFactory.getLogger("localpack-bypass");
 
     @Override
     public void onInitializeClient() {

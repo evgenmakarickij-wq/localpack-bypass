@@ -1,12 +1,9 @@
 package com.localpack.bypass.mixin;
 
-import com.localpack.bypass.LocalPackBypassHelper;
-import com.localpack.bypass.Disconnector;
-import com.localpack.bypass.PackFlow;
+import com.localpack.bypass.PackTracker;
 import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.network.Connection;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,38 +13,26 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientCommonPacketListenerImpl.class)
-public abstract class ClientCommonPacketListenerMixin implements Disconnector {
-
-    @Shadow
-    @Final
-    protected Connection connection;
+public abstract class ClientCommonPacketListenerMixin {
 
     @Shadow
     @Final
     protected ServerData serverData;
 
-    @Override
-    public void localpackBypass$disconnect(Component reason) {
-        this.connection.disconnect(reason);
-    }
-
-    @Override
-    public Object localpackBypass$connectionKey() {
-        return this.connection;
-    }
-
-    @Override
-    public ServerData localpackBypass$serverData() {
-        return this.serverData;
-    }
-
-    @Inject(method = "handleResourcePackPush", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "handleResourcePackPush", at = @At(value = "INVOKE", target =
+            "Lnet/minecraft/network/protocol/PacketUtils;ensureRunningOnSameThread(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketListener;Lnet/minecraft/network/PacketProcessor;)V", shift = At.Shift.AFTER))
     private void localpackBypass$onResourcePackPush(ClientboundResourcePackPushPacket packet, CallbackInfo ci) {
-        if (!LocalPackBypassHelper.isValidSha1(packet.hash())) {
-            return;
-        }
+        PackTracker.observe(serverData, packet);
+    }
 
-        PackFlow.handle((ClientCommonPacketListenerImpl) (Object) this, packet);
-        ci.cancel();
+    @Inject(method = "handleResourcePackPop", at = @At(value = "INVOKE", target =
+            "Lnet/minecraft/network/protocol/PacketUtils;ensureRunningOnSameThread(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketListener;Lnet/minecraft/network/PacketProcessor;)V", shift = At.Shift.AFTER))
+    private void localpackBypass$onResourcePackPop(ClientboundResourcePackPopPacket packet, CallbackInfo ci) {
+        packet.id().ifPresentOrElse(PackTracker::forget, PackTracker::clear);
+    }
+
+    @Inject(method = "onDisconnect", at = @At("HEAD"))
+    private void localpackBypass$onDisconnect(CallbackInfo ci) {
+        PackTracker.clear();
     }
 }
