@@ -46,11 +46,16 @@ public final class PackCache {
 
         String normalized = hash.toLowerCase(java.util.Locale.ROOT);
         String fileName = LocalPackBypassHelper.fileNameFor(normalized);
-        Set<Path> targets = new LinkedHashSet<>();
-        targets.add(PackStorage.downloadDir().resolve(fileName).toAbsolutePath().normalize());
-        targets.add(PackStorage.gameDir().resolve(fileName).toAbsolutePath().normalize());
-        for (Path target : targets) {
-            atomicCopy(downloaded, target);
+        Path gameTarget = PackStorage.gameDir().resolve(fileName).toAbsolutePath().normalize();
+        atomicCopy(downloaded, gameTarget);
+
+        Path configuredTarget = PackStorage.downloadDir().resolve(fileName).toAbsolutePath().normalize();
+        if (!configuredTarget.equals(gameTarget)) {
+            try {
+                atomicCopy(downloaded, configuredTarget);
+            } catch (IOException | RuntimeException e) {
+                LOGGER.warn("Could not write the extra archive copy to {}: {}", configuredTarget, e.toString());
+            }
         }
         return new Archived(normalized, fileName, Files.size(downloaded));
     }

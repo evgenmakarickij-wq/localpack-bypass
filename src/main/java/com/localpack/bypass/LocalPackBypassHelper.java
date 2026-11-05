@@ -11,8 +11,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -24,11 +22,6 @@ public final class LocalPackBypassHelper {
     public static final String AUTO_FILE_PREFIX = "localpack-";
 
     private static final Pattern SHA1_HEX = Pattern.compile("^[0-9a-fA-F]{40}$");
-    private static final Map<Path, CachedHash> CACHE = new ConcurrentHashMap<>();
-    private static final long CACHE_MIN_AGE_MS = 3_000L;
-
-    private record CachedHash(long size, long modified, String sha1) {}
-
     private LocalPackBypassHelper() {}
 
     public static boolean isValidSha1(String hash) {
@@ -44,7 +37,7 @@ public final class LocalPackBypassHelper {
 
         Path named = dir.resolve(fileNameFor(targetHash));
         if (Files.isRegularFile(named)) {
-            String sha1 = cachedSha1(named);
+            String sha1 = getSha1(named);
             if (sha1.equalsIgnoreCase(targetHash)) return named;
             LOGGER.warn("{} does not match its file name; searching the folder", named.getFileName());
         }
@@ -53,31 +46,12 @@ public final class LocalPackBypassHelper {
             for (Path file : (Iterable<Path>) stream::iterator) {
                 String name = file.getFileName().toString().toLowerCase(Locale.ROOT);
                 if (!name.endsWith(".zip") || !Files.isRegularFile(file)) continue;
-                if (cachedSha1(file).equalsIgnoreCase(targetHash)) return file;
+                if (getSha1(file).equalsIgnoreCase(targetHash)) return file;
             }
         } catch (IOException | RuntimeException e) {
             LOGGER.debug("Could not search {} for resource packs: {}", dir, e.toString());
         }
         return null;
-    }
-
-    private static String cachedSha1(Path file) {
-        try {
-            Path key = file.toAbsolutePath().normalize();
-            long size = Files.size(key);
-            long modified = Files.getLastModifiedTime(key).toMillis();
-            CachedHash cached = CACHE.get(key);
-            if (cached != null && cached.size() == size && cached.modified() == modified) {
-                return cached.sha1();
-            }
-            String sha1 = getSha1(key);
-            if (!sha1.isEmpty() && System.currentTimeMillis() - modified > CACHE_MIN_AGE_MS) {
-                CACHE.put(key, new CachedHash(size, modified, sha1));
-            }
-            return sha1;
-        } catch (IOException | RuntimeException e) {
-            return "";
-        }
     }
 
     public static String getSha1(Path file) {

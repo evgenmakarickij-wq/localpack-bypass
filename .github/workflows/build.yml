@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -34,7 +34,7 @@ jobs:
 
       # Only the mod jar: the -sources jar Loom also produces is not what players install,
       # and publishing it as the run's artifact only leads to the wrong file being downloaded.
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: localpack-bypass-jar
           path: |
@@ -42,18 +42,29 @@ jobs:
             !build/libs/*-sources.jar
           if-no-files-found: error
 
+  release:
+    if: github.ref_type == 'tag'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v6
+        with:
+          name: localpack-bypass-jar
+          path: release-artifact
       - name: Publish release
-        if: github.ref_type == 'tag'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           version="${GITHUB_REF_NAME#v}"
-          jar="build/libs/localpack-bypass-${version}.jar"
+          jar="release-artifact/localpack-bypass-${version}.jar"
 
           if [ ! -f "${jar}" ]; then
-            echo "::error::Expected ${jar}, but build/libs contains:"
-            ls -1 build/libs
+            echo "::error::Expected ${jar}, but the artifact contains:"
+            ls -1 release-artifact
             exit 1
           fi
 

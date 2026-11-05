@@ -11,9 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /** Associates vanilla download results with the server that offered them for history and UI only. */
 public final class PackTracker {
 
-    private record Offered(String server, String url, String hash) {}
+    private record OfferKey(UUID id, String hash) {}
+    private record Offered(String server, String url) {}
 
-    private static final ConcurrentHashMap<UUID, Offered> OFFERS = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<OfferKey, Offered> OFFERS = new ConcurrentHashMap<>();
 
     private PackTracker() {}
 
@@ -21,22 +22,21 @@ public final class PackTracker {
         String server = serverData == null || serverData.ip == null
                 ? ""
                 : serverData.ip.trim().toLowerCase(Locale.ROOT);
-        OFFERS.put(packet.id(), new Offered(server, packet.url(), packet.hash()));
+        OFFERS.put(key(packet.id(), packet.hash()), new Offered(server, packet.url()));
     }
 
     public static void forget(UUID id) {
-        OFFERS.remove(id);
+        OFFERS.keySet().removeIf(key -> key.id().equals(id));
     }
 
     public static void clear() {
         OFFERS.clear();
     }
 
-    public static void completed(UUID id, Path downloaded, boolean cacheHit) {
-        Offered offered = OFFERS.get(id);
+    public static void completed(UUID id, Path downloaded, String verifiedHash, boolean cacheHit) {
+        Offered offered = OFFERS.get(key(id, verifiedHash));
         try {
-            String expected = offered == null ? "" : offered.hash();
-            PackCache.Archived archived = PackCache.archive(downloaded, expected);
+            PackCache.Archived archived = PackCache.archive(downloaded, verifiedHash);
             String server = offered == null ? "" : offered.server();
             String url = offered == null ? "" : offered.url();
             PackRegistry.remember(archived.hash(), archived.fileName(), archived.bytes(), server, url);
@@ -47,11 +47,15 @@ public final class PackTracker {
         }
     }
 
-    public static void failed(UUID id) {
-        Offered offered = OFFERS.get(id);
+    public static void failed(UUID id, String hash) {
+        Offered offered = OFFERS.get(key(id, hash));
         if (offered != null) {
-            PackRegistry.event(offered.server(), offered.url(), offered.hash(), "failed",
+            PackRegistry.event(offered.server(), offered.url(), hash, "failed",
                     "vanilla download failed", 0L, 0L);
         }
+    }
+
+    private static OfferKey key(UUID id, String hash) {
+        return new OfferKey(id, hash == null ? "" : hash.toLowerCase(Locale.ROOT));
     }
 }

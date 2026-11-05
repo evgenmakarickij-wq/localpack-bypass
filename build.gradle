@@ -29,6 +29,14 @@ dependencies {
     // is reached through Mod Menu's "modmenu" entrypoint, which nothing loads unless Mod Menu is
     // installed, so a player without Mod Menu never classloads the one class that names it.
     compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    testImplementation platform("org.junit:junit-bom:5.12.2")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
+test {
+    useJUnitPlatform()
 }
 
 processResources {

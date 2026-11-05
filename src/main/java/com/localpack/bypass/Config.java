@@ -29,6 +29,7 @@ public final class Config {
     private static final Logger LOGGER = LoggerFactory.getLogger("localpack-bypass");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Object LOCK = new Object();
+    private static final Object WRITE_LOCK = new Object();
     private static final ScheduledExecutorService WRITER = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread thread = new Thread(r, "localpack-config");
         thread.setDaemon(true);
@@ -93,30 +94,32 @@ public final class Config {
 
     /** Writes pending settings now. Failed writes remain pending and are retried. */
     public static void flush() {
-        Path file = GamePaths.configFile();
-        long writingRevision;
-        String json;
-        synchronized (LOCK) {
-            if (savedRevision >= revision) return;
-            writingRevision = revision;
-            json = GSON.toJson(get());
-        }
-        try {
-            Files.createDirectories(GamePaths.stateDir());
-            Path part = file.resolveSibling(file.getFileName() + ".part");
-            Files.writeString(part, json, StandardCharsets.UTF_8);
-            try {
-                Files.move(part, file, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
-            } catch (AtomicMoveNotSupportedException e) {
-                Files.move(part, file, StandardCopyOption.REPLACE_EXISTING);
-            }
+        synchronized (WRITE_LOCK) {
+            Path file = GamePaths.configFile();
+            long writingRevision;
+            String json;
             synchronized (LOCK) {
-                savedRevision = Math.max(savedRevision, writingRevision);
-                retryScheduled = false;
+                if (savedRevision >= revision) return;
+                writingRevision = revision;
+                json = GSON.toJson(get());
             }
-        } catch (IOException | RuntimeException e) {
-            LOGGER.warn("Could not save {}: {}", file, e.toString());
-            scheduleRetry();
+            try {
+                Files.createDirectories(GamePaths.stateDir());
+                Path part = file.resolveSibling(file.getFileName() + ".part");
+                Files.writeString(part, json, StandardCharsets.UTF_8);
+                try {
+                    Files.move(part, file, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+                } catch (AtomicMoveNotSupportedException e) {
+                    Files.move(part, file, StandardCopyOption.REPLACE_EXISTING);
+                }
+                synchronized (LOCK) {
+                    savedRevision = Math.max(savedRevision, writingRevision);
+                    retryScheduled = false;
+                }
+            } catch (IOException | RuntimeException e) {
+                LOGGER.warn("Could not save {}: {}", file, e.toString());
+                scheduleRetry();
+            }
         }
     }
 
@@ -157,6 +160,7 @@ public final class Config {
 
     public void verboseLog(boolean value) {
         verboseLog = value;
+        if (!value) PackRegistry.redactDetails();
     }
 
     /** The typed folder: empty means "use the game's resourcepacks folder". */

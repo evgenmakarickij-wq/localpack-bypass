@@ -131,6 +131,12 @@ public final class PackRegistry {
 
     private PackRegistry() {}
 
+    /** Loads and sanitizes persisted state before the first screen or server connection uses it. */
+    public static void initialize() {
+        data();
+        flush();
+    }
+
     // ------------------------------------------------------------------ load/save
 
     private static Data data() {
@@ -155,7 +161,17 @@ public final class PackRegistry {
             loaded.servers.removeIf(s -> s == null || s.host == null);
             loaded.events.removeIf(e -> e == null);
             if (!Config.get().verboseLog()) {
+                boolean hadDetails = loaded.events.stream().anyMatch(e -> e.url != null && !e.url.isEmpty()
+                        || e.hash != null && !e.hash.isEmpty() || e.detail != null && !e.detail.isEmpty()
+                        || e.bytes != 0L || e.durationMs != 0L)
+                        || loaded.packs.stream().anyMatch(pack -> pack.url != null && !pack.url.isEmpty());
                 loaded.events.forEach(PackRegistry::redact);
+                loaded.packs.forEach(pack -> pack.url = "");
+                if (hadDetails) {
+                    dirty = true;
+                    saveScheduled = true;
+                    WRITER.schedule(PackRegistry::flush, 2, TimeUnit.SECONDS);
+                }
             }
             return loaded;
         } catch (IOException | RuntimeException e) {
@@ -176,14 +192,14 @@ public final class PackRegistry {
 
     /** Writes now, if anything changed. Called at shutdown as well as by the scheduled write. */
     public static void flush() {
-        String json;
-        synchronized (LOCK) {
-            saveScheduled = false;
-            if (!dirty || data == null) return;
-            dirty = false;
-            json = GSON.toJson(data);
-        }
         synchronized (WRITE_LOCK) {
+            String json;
+            synchronized (LOCK) {
+                saveScheduled = false;
+                if (!dirty || data == null) return;
+                dirty = false;
+                json = GSON.toJson(data);
+            }
             Path file = GamePaths.historyFile();
             try {
                 Files.createDirectories(GamePaths.stateDir());
@@ -413,6 +429,17 @@ public final class PackRegistry {
         event.detail = null;
         event.bytes = 0L;
         event.durationMs = 0L;
+    }
+
+    /** Removes previously stored diagnostics as soon as the player disables detailed history. */
+    public static void redactDetails() {
+        synchronized (LOCK) {
+            Data current = data();
+            current.events.forEach(PackRegistry::redact);
+            current.packs.forEach(pack -> pack.url = "");
+            touch();
+        }
+        flush();
     }
 
     /** Newest first, which is the order the history screen shows them in. */

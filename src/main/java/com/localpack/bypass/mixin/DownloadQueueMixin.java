@@ -48,8 +48,16 @@ public abstract class DownloadQueueMixin {
                                          CallbackInfoReturnable<DownloadQueue.BatchResult> cir) {
         Set<UUID> seeded = localpackBypass$seeded.get();
         DownloadQueue.BatchResult result = cir.getReturnValue();
-        result.downloaded().forEach((id, path) -> PackTracker.completed(id, path, seeded.contains(id)));
-        result.failed().forEach(PackTracker::failed);
+        result.downloaded().forEach((id, path) -> {
+            DownloadQueue.DownloadRequest request = requests.get(id);
+            String hash = request == null || request.hash() == null ? "" : request.hash().toString();
+            PackTracker.completed(id, path, hash, seeded.contains(id));
+        });
+        result.failed().forEach(id -> {
+            DownloadQueue.DownloadRequest request = requests.get(id);
+            String hash = request == null || request.hash() == null ? "" : request.hash().toString();
+            PackTracker.failed(id, hash);
+        });
         seeded.clear();
         localpackBypass$seeded.remove();
     }

@@ -17,7 +17,7 @@ public class LocalPackBypassClient implements ClientModInitializer {
         // Read now, so a damaged settings file is reported at startup rather than in the middle of a
         // join, and write the memory out on the way down so the last few seconds are not lost.
         Config.get();
-        PackRegistry.flush();
+        PackRegistry.initialize();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Config.flush();
             PackRegistry.flush();

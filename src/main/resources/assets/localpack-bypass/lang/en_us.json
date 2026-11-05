@@ -59,7 +59,7 @@
 
   "localpack-bypass.config.header.history": "Record of what servers sent",
   "localpack-bypass.config.history": "Keep a record",
-  "localpack-bypass.config.history.tooltip": "Records every resource pack a server sends, what happened to it and where it came from. Nothing is sent anywhere: the record is a file on your own computer.",
+  "localpack-bypass.config.history.tooltip": "Records packs that are downloaded or reused and which server offered them. Nothing is sent anywhere.",
   "localpack-bypass.config.historyLimit": "Keep the last",
   "localpack-bypass.config.historyLimit.tooltip": "How many entries the record keeps before the oldest are dropped.",
   "localpack-bypass.config.verbose": "Also record the details",
@@ -82,7 +82,7 @@
   "localpack-bypass.packs.forgetMissing": "Forget missing",
   "localpack-bypass.packs.forgetAll": "Forget everything",
   "localpack-bypass.packs.forgetAll.title": "Forget everything?",
-  "localpack-bypass.packs.forgetAll.message": "The mod forgets which servers you said yes to, which packs it downloaded, and the record of what servers sent.\n\nNo pack files are deleted.",
+  "localpack-bypass.packs.forgetAll.message": "The mod clears its pack index and download record. Minecraft's per-server choice and all pack files are left unchanged.",
   "localpack-bypass.packs.forgetAll.yes": "Forget",
   "localpack-bypass.packs.forgetAll.no": "Cancel",
 
@@ -95,7 +95,7 @@
   "localpack-bypass.history.row": "%s  %s  -  %s",
   "localpack-bypass.history.details": "Checksum: %s\nSize: %s\nTook: %s",
   "localpack-bypass.history.clear.title": "Clear the record?",
-  "localpack-bypass.history.clear.message": "Every entry is removed. Packs you have downloaded are not touched, and the mod keeps remembering the servers you said yes to.",
+  "localpack-bypass.history.clear.message": "Every history entry is removed. Downloaded pack files and Minecraft's per-server choices are not changed.",
   "localpack-bypass.history.clear.yes": "Clear",
   "localpack-bypass.history.clear.no": "Cancel",
 

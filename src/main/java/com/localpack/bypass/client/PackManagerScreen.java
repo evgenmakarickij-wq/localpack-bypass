@@ -84,13 +84,14 @@ public final class PackManagerScreen extends OptionsSubScreen {
     }
 
     private static Component details(PackRegistry.Pack pack, boolean present) {
+        boolean details = com.localpack.bypass.Config.get().verboseLog();
         return Component.translatable("localpack-bypass.packs.details",
                 Component.translatable(present ? "localpack-bypass.packs.details.action"
                         : "localpack-bypass.packs.details.gone"),
                 Screens.serverName(pack.host),
-                Screens.size(pack.bytes),
-                Component.literal(pack.url == null ? "" : pack.url),
-                Component.literal(pack.hash == null ? "" : pack.hash));
+                details ? Screens.size(pack.bytes) : Component.literal("-"),
+                Component.literal(details && pack.url != null ? pack.url : "-"),
+                Component.literal(details && pack.hash != null ? pack.hash : "-"));
     }
 
     /**
@@ -121,7 +122,7 @@ public final class PackManagerScreen extends OptionsSubScreen {
 
     /** Drops the entries whose files are no longer in the folder. Touches no files. */
     private void forgetMissing() {
-        Path dir = PackStorage.downloadDir();
+        Path dir = PackStorage.gameDir();
         for (PackRegistry.Pack pack : PackRegistry.packs()) {
             try {
                 if (pack.file == null || !Files.isRegularFile(dir.resolve(pack.file))) {
