@@ -1,15 +1,12 @@
 package com.localpack.bypass;
 
+import dev.mcchopik.modulib.io.Hashes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.HexFormat;
 import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -55,15 +52,9 @@ public final class LocalPackBypassHelper {
     }
 
     public static String getSha1(Path file) {
-        try (InputStream in = Files.newInputStream(file)) {
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            byte[] buffer = new byte[65536];
-            int read;
-            while ((read = in.read(buffer)) != -1) {
-                digest.update(buffer, 0, read);
-            }
-            return HexFormat.of().formatHex(digest.digest());
-        } catch (IOException | NoSuchAlgorithmException | RuntimeException e) {
+        try {
+            return Hashes.sha1(file);
+        } catch (IOException | RuntimeException e) {
             return "";
         }
     }

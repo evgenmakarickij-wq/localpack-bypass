@@ -54,6 +54,19 @@ public final class SettingsScreen extends OptionsSubScreen {
                 Screens.small("localpack-bypass.config.openStorage", () -> Screens.open(PackStorage.downloadDir())),
                 Screens.small("localpack-bypass.config.openGame", () -> Screens.open(PackStorage.gameDir())));
 
+        list.addHeader(Component.translatable("localpack-bypass.config.header.download"));
+        list.addBig(amount("localpack-bypass.config.parallel", "localpack-bypass.unit.packs",
+                config.parallelDownloads(), Config.MIN_PARALLEL_DOWNLOADS, Config.MAX_PARALLEL_DOWNLOADS,
+                config::parallelDownloads));
+        list.addBig(amount("localpack-bypass.config.speed", "localpack-bypass.unit.mibps",
+                config.downloadSpeedMiB(), Config.MIN_DOWNLOAD_SPEED_MIB, Config.MAX_DOWNLOAD_SPEED_MIB,
+                config::downloadSpeedMiB));
+        list.addBig(amount("localpack-bypass.config.timeout", "localpack-bypass.unit.seconds",
+                config.downloadTimeoutSeconds(), Config.MIN_TIMEOUT_SECONDS, Config.MAX_TIMEOUT_SECONDS,
+                config::downloadTimeoutSeconds));
+        list.addBig(amount("localpack-bypass.config.attempts", "localpack-bypass.unit.times",
+                config.downloadAttempts(), Config.MIN_ATTEMPTS, Config.MAX_ATTEMPTS, config::downloadAttempts));
+
         list.addHeader(Component.translatable("localpack-bypass.config.header.history"));
         list.addBig(toggle("localpack-bypass.config.history", config.historyEnabled(), config::historyEnabled));
         list.addBig(amount("localpack-bypass.config.historyLimit", "localpack-bypass.unit.entries",

@@ -3,6 +3,8 @@
   "package": "com.localpack.bypass.mixin",
   "client": [
     "ClientCommonPacketListenerMixin",
+    "ConnectionMixin",
+    "DownloadedPackSourceMixin",
     "DownloadQueueMixin"
   ],
   "compatibilityLevel": "JAVA_25",

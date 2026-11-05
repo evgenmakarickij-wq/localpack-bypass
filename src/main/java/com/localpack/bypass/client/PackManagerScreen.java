@@ -2,11 +2,11 @@ package com.localpack.bypass.client;
 
 import com.localpack.bypass.PackRegistry;
 import com.localpack.bypass.PackStorage;
+import com.localpack.bypass.PersistentPacks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.network.chat.Component;
@@ -47,7 +47,7 @@ public final class PackManagerScreen extends OptionsSubScreen {
                 Screens.small("localpack-bypass.config.openGame", () -> Screens.open(PackStorage.gameDir())));
         list.addSmall(
                 Screens.small("localpack-bypass.packs.forgetMissing", this::forgetMissing),
-                Screens.small("localpack-bypass.packs.forgetAll", this::confirmForgetAll));
+                Screens.small("localpack-bypass.packs.forgetAll", this::deleteAll));
 
         Map<String, List<PackRegistry.Pack>> byServer = PackRegistry.packsByServer();
         if (byServer.isEmpty()) {
@@ -110,8 +110,10 @@ public final class PackManagerScreen extends OptionsSubScreen {
         Set<String> selection = new LinkedHashSet<>(repository.getSelectedIds());
         if (on) {
             selection.remove(FILE_ID_PREFIX + pack.file);
+            PackRegistry.markUserDisabled(pack.hash);
         } else {
             selection.add(FILE_ID_PREFIX + pack.file);
+            PackRegistry.markUserEnabled(pack.hash);
         }
         if (!selection.equals(new LinkedHashSet<>(repository.getSelectedIds()))) {
             repository.setSelected(selection);
@@ -136,19 +138,8 @@ public final class PackManagerScreen extends OptionsSubScreen {
         rebuildWidgets();
     }
 
-    private void confirmForgetAll() {
-        minecraft.gui.setScreen(new ConfirmScreen(
-                yes -> {
-                    minecraft.gui.setScreen(this);
-                    if (yes) {
-                        PackRegistry.clearAll();
-                        PackRegistry.flush();
-                        rebuildWidgets();
-                    }
-                },
-                Component.translatable("localpack-bypass.packs.forgetAll.title"),
-                Component.translatable("localpack-bypass.packs.forgetAll.message"),
-                Component.translatable("localpack-bypass.packs.forgetAll.yes"),
-                Component.translatable("localpack-bypass.packs.forgetAll.no")));
+    private void deleteAll() {
+        PersistentPacks.deleteAll(minecraft);
+        rebuildWidgets();
     }
 }

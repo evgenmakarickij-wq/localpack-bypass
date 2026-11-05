@@ -18,6 +18,7 @@ public class LocalPackBypassClient implements ClientModInitializer {
         // join, and write the memory out on the way down so the last few seconds are not lost.
         Config.get();
         PackRegistry.initialize();
+        PersistentPacks.initialize();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Config.flush();
             PackRegistry.flush();

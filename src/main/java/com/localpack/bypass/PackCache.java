@@ -1,13 +1,12 @@
 package com.localpack.bypass;
 
+import dev.mcchopik.modulib.io.AtomicFiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -26,7 +25,7 @@ public final class PackCache {
         Path local = find(expectedHash);
         if (local == null) return false;
         try {
-            atomicCopy(local, vanillaTarget);
+            AtomicFiles.copy(local, vanillaTarget);
             LOGGER.info("Seeded Minecraft's server-pack cache from {}", local.getFileName());
             return true;
         } catch (IOException | RuntimeException e) {
@@ -47,12 +46,12 @@ public final class PackCache {
         String normalized = hash.toLowerCase(java.util.Locale.ROOT);
         String fileName = LocalPackBypassHelper.fileNameFor(normalized);
         Path gameTarget = PackStorage.gameDir().resolve(fileName).toAbsolutePath().normalize();
-        atomicCopy(downloaded, gameTarget);
+        AtomicFiles.copy(downloaded, gameTarget);
 
         Path configuredTarget = PackStorage.downloadDir().resolve(fileName).toAbsolutePath().normalize();
         if (!configuredTarget.equals(gameTarget)) {
             try {
-                atomicCopy(downloaded, configuredTarget);
+                AtomicFiles.copy(downloaded, configuredTarget);
             } catch (IOException | RuntimeException e) {
                 LOGGER.warn("Could not write the extra archive copy to {}: {}", configuredTarget, e.toString());
             }
@@ -69,28 +68,6 @@ public final class PackCache {
             if (match != null) return match;
         }
         return null;
-    }
-
-    static void atomicCopy(Path source, Path target) throws IOException {
-        Path normalizedSource = source.toAbsolutePath().normalize();
-        Path normalizedTarget = target.toAbsolutePath().normalize();
-        if (normalizedSource.equals(normalizedTarget)) return;
-
-        Path parent = normalizedTarget.getParent();
-        if (parent == null) throw new IOException("Target has no parent: " + normalizedTarget);
-        Files.createDirectories(parent);
-        Path part = Files.createTempFile(parent, "." + normalizedTarget.getFileName(), ".part");
-        try {
-            Files.copy(normalizedSource, part, StandardCopyOption.REPLACE_EXISTING);
-            try {
-                Files.move(part, normalizedTarget, StandardCopyOption.ATOMIC_MOVE,
-                        StandardCopyOption.REPLACE_EXISTING);
-            } catch (AtomicMoveNotSupportedException e) {
-                Files.move(part, normalizedTarget, StandardCopyOption.REPLACE_EXISTING);
-            }
-        } finally {
-            Files.deleteIfExists(part);
-        }
     }
 
     public record Archived(String hash, String fileName, long bytes) {}

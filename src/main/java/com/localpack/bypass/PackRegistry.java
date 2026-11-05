@@ -59,6 +59,12 @@ public final class PackRegistry {
         public String url;
         public long firstSeenMs;
         public long lastSeenMs;
+        /** True while a newly received pack still has to be added to the persistent selection. */
+        public boolean pendingEnable;
+        /** True only while the mod-owned selection is still present. */
+        public boolean autoEnabled;
+        /** Set when the player removes this pack; automatic activation must then leave it alone. */
+        public boolean userDisabled;
 
         public Pack() {}
 
@@ -157,7 +163,7 @@ public final class PackRegistry {
             if (loaded.events == null) loaded.events = new ArrayList<>();
             // Entries written by an older version, or damaged by hand, are dropped rather than
             // trusted: everything here is a cache, and a missing entry only costs a hash pass.
-            loaded.packs.removeIf(p -> p == null || p.hash == null || p.file == null);
+            loaded.packs.removeIf(p -> p == null || p.hash == null || !safeFileName(p.file));
             loaded.servers.removeIf(s -> s == null || s.host == null);
             loaded.events.removeIf(e -> e == null);
             if (!Config.get().verboseLog()) {
@@ -229,6 +235,17 @@ public final class PackRegistry {
         return hash == null ? "" : hash.toLowerCase(Locale.ROOT);
     }
 
+    private static boolean safeFileName(String file) {
+        if (file == null || file.isBlank()) return false;
+        try {
+            Path path = Path.of(file);
+            return !path.isAbsolute() && path.getNameCount() == 1
+                    && file.equals(path.getFileName().toString());
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
     /**
      * The remembered pack for this SHA-1, if its file is still where it was recorded and still the
      * same size. The size check is the point: it costs one {@code stat} and catches a file that was
@@ -280,6 +297,49 @@ public final class PackRegistry {
             current.packs.add(new Pack(wanted, file, bytes, host,
                     Config.get().verboseLog() ? url : "", now));
             touch();
+        }
+    }
+
+    public static void markPendingEnable(String hash) {
+        updatePackState(hash, pack -> pack.pendingEnable = true);
+    }
+
+    public static void markAutoEnabled(String hash) {
+        updatePackState(hash, pack -> {
+            pack.pendingEnable = false;
+            pack.autoEnabled = true;
+            pack.userDisabled = false;
+        });
+    }
+
+    public static void markUserDisabled(String hash) {
+        updatePackState(hash, pack -> {
+            pack.pendingEnable = false;
+            pack.autoEnabled = false;
+            pack.userDisabled = true;
+        });
+    }
+
+    public static void markUserEnabled(String hash) {
+        updatePackState(hash, pack -> {
+            pack.autoEnabled = true;
+            pack.userDisabled = false;
+        });
+    }
+
+    public static void clearPending(String hash) {
+        updatePackState(hash, pack -> pack.pendingEnable = false);
+    }
+
+    private static void updatePackState(String hash, java.util.function.Consumer<Pack> update) {
+        String wanted = key(hash);
+        synchronized (LOCK) {
+            for (Pack pack : data().packs) {
+                if (!key(pack.hash).equals(wanted)) continue;
+                update.accept(pack);
+                touch();
+                return;
+            }
         }
     }
 
@@ -455,6 +515,13 @@ public final class PackRegistry {
     public static void clearHistory() {
         synchronized (LOCK) {
             data().events.clear();
+            touch();
+        }
+    }
+
+    public static void clearPacks() {
+        synchronized (LOCK) {
+            data().packs.clear();
             touch();
         }
     }

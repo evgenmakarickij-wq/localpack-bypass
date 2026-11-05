@@ -1,0 +1,3 @@
+[submodule "libs/modulib"]
+	path = libs/modulib
+	url = https://github.com/mcchopik/modulib.git

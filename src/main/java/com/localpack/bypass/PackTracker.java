@@ -15,6 +15,8 @@ public final class PackTracker {
     private record Offered(String server, String url) {}
 
     private static final ConcurrentHashMap<OfferKey, Offered> OFFERS = new ConcurrentHashMap<>();
+    private record Archived(String hash, long generation) {}
+    private static final ConcurrentHashMap<UUID, Archived> ARCHIVED = new ConcurrentHashMap<>();
 
     private PackTracker() {}
 
@@ -22,37 +24,57 @@ public final class PackTracker {
         String server = serverData == null || serverData.ip == null
                 ? ""
                 : serverData.ip.trim().toLowerCase(Locale.ROOT);
+        forget(packet.id());
         OFFERS.put(key(packet.id(), packet.hash()), new Offered(server, packet.url()));
     }
 
     public static void forget(UUID id) {
         OFFERS.keySet().removeIf(key -> key.id().equals(id));
+        ARCHIVED.remove(id);
     }
 
     public static void clear() {
         OFFERS.clear();
+        ARCHIVED.clear();
     }
 
-    public static void completed(UUID id, Path downloaded, String verifiedHash, boolean cacheHit) {
+    public static void completed(UUID id, Path downloaded, String verifiedHash, boolean cacheHit, long generation) {
         Offered offered = OFFERS.get(key(id, verifiedHash));
-        try {
-            PackCache.Archived archived = PackCache.archive(downloaded, verifiedHash);
-            String server = offered == null ? "" : offered.server();
-            String url = offered == null ? "" : offered.url();
-            PackRegistry.remember(archived.hash(), archived.fileName(), archived.bytes(), server, url);
-            PackRegistry.event(server, url, archived.hash(), cacheHit ? "found" : "downloaded",
-                    null, archived.bytes(), 0L);
-        } catch (Exception e) {
-            LocalPackBypassClient.LOGGER.warn("Could not archive server resource pack {}: {}", id, e.toString());
-        }
+        PersistentPacks.runIfCurrent(generation, () -> {
+            try {
+                PackCache.Archived archived = PackCache.archive(downloaded, verifiedHash);
+                String server = offered == null ? "" : offered.server();
+                String url = offered == null ? "" : offered.url();
+                PackRegistry.remember(archived.hash(), archived.fileName(), archived.bytes(), server, url);
+                ARCHIVED.put(id, new Archived(archived.hash(), generation));
+                PackRegistry.event(server, url, archived.hash(), cacheHit ? "found" : "downloaded",
+                        null, archived.bytes(), 0L);
+            } catch (Exception e) {
+                LocalPackBypassClient.LOGGER.warn("Could not archive server resource pack {}: {}", id, e.toString());
+            }
+        });
     }
 
-    public static void failed(UUID id, String hash) {
+    public static void failed(UUID id, String hash, long generation) {
         Offered offered = OFFERS.get(key(id, hash));
-        if (offered != null) {
+        PersistentPacks.runIfCurrent(generation, () -> {
+            if (offered == null) return;
             PackRegistry.event(offered.server(), offered.url(), hash, "failed",
                     "vanilla download failed", 0L, 0L);
+        });
+    }
+
+    public static void successful(UUID id) {
+        Archived archived = ARCHIVED.remove(id);
+        if (archived != null) {
+            PersistentPacks.runIfCurrent(archived.generation(), () -> {
+                PackRegistry.markPendingEnable(archived.hash());
+                PersistentPacks.queue(archived.hash());
+            });
         }
+        OFFERS.keySet().stream().filter(key -> key.id().equals(id)).findFirst().ifPresent(key -> {
+            OFFERS.remove(key);
+        });
     }
 
     private static OfferKey key(UUID id, String hash) {

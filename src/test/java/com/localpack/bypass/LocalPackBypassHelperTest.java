@@ -45,7 +45,7 @@ class LocalPackBypassHelperTest {
         Files.createDirectories(target.getParent());
         Files.writeString(target, "old pack");
 
-        PackCache.atomicCopy(source, target);
+        dev.mcchopik.modulib.io.AtomicFiles.copy(source, target);
 
         assertEquals("new pack", Files.readString(target));
     }

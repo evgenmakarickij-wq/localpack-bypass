@@ -43,6 +43,14 @@ public final class Config {
 
     public static final int MIN_HISTORY = 20;
     public static final int MAX_HISTORY = 2_000;
+    public static final int MIN_PARALLEL_DOWNLOADS = 1;
+    public static final int MAX_PARALLEL_DOWNLOADS = 8;
+    public static final int MIN_DOWNLOAD_SPEED_MIB = 1;
+    public static final int MAX_DOWNLOAD_SPEED_MIB = 64;
+    public static final int MIN_TIMEOUT_SECONDS = 10;
+    public static final int MAX_TIMEOUT_SECONDS = 600;
+    public static final int MIN_ATTEMPTS = 1;
+    public static final int MAX_ATTEMPTS = 5;
 
     // ------------------------------------------------------------------ fields
 
@@ -57,6 +65,15 @@ public final class Config {
 
     /** Folder downloaded packs are written to. Empty means the game's own resourcepacks folder. */
     private String resourcePackDir = "";
+
+    /** Number of packs transferred at the same time. */
+    private int parallelDownloads = 4;
+
+    /** Aggregate limit shared by every parallel transfer, in MiB/s. */
+    private int downloadSpeedMiB = 4;
+
+    private int downloadTimeoutSeconds = 120;
+    private int downloadAttempts = 2;
 
     private static Config instance;
 
@@ -170,6 +187,38 @@ public final class Config {
 
     public void resourcePackDir(String value) {
         resourcePackDir = value == null ? "" : value.trim();
+    }
+
+    public int parallelDownloads() {
+        return clamp(parallelDownloads, MIN_PARALLEL_DOWNLOADS, MAX_PARALLEL_DOWNLOADS);
+    }
+
+    public void parallelDownloads(int value) {
+        parallelDownloads = clamp(value, MIN_PARALLEL_DOWNLOADS, MAX_PARALLEL_DOWNLOADS);
+    }
+
+    public int downloadSpeedMiB() {
+        return clamp(downloadSpeedMiB, MIN_DOWNLOAD_SPEED_MIB, MAX_DOWNLOAD_SPEED_MIB);
+    }
+
+    public void downloadSpeedMiB(int value) {
+        downloadSpeedMiB = clamp(value, MIN_DOWNLOAD_SPEED_MIB, MAX_DOWNLOAD_SPEED_MIB);
+    }
+
+    public int downloadTimeoutSeconds() {
+        return clamp(downloadTimeoutSeconds, MIN_TIMEOUT_SECONDS, MAX_TIMEOUT_SECONDS);
+    }
+
+    public void downloadTimeoutSeconds(int value) {
+        downloadTimeoutSeconds = clamp(value, MIN_TIMEOUT_SECONDS, MAX_TIMEOUT_SECONDS);
+    }
+
+    public int downloadAttempts() {
+        return clamp(downloadAttempts, MIN_ATTEMPTS, MAX_ATTEMPTS);
+    }
+
+    public void downloadAttempts(int value) {
+        downloadAttempts = clamp(value, MIN_ATTEMPTS, MAX_ATTEMPTS);
     }
 
     // ------------------------------------------------------------------ folder
