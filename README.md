@@ -7,7 +7,7 @@
   <a href="https://fabricmc.net"><img src="https://img.shields.io/badge/mod%20loader-Fabric-beige.svg" alt="Fabric"></a>
 </p>
 
-**Documentation:** **English** · [Русский](docs/READMERU.md). The in-game interface still ships all 38 translations.
+**Documentation:** **English** · [Українська](docs/READMEUA.md) · [Русский](docs/READMERU.md). The in-game interface still ships all 38 translations.
 
 **Authors:** McChopik, Telemine3140
 

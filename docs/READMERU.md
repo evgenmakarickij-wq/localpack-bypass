@@ -7,7 +7,7 @@
   <a href="https://fabricmc.net"><img src="https://img.shields.io/badge/mod%20loader-Fabric-beige.svg" alt="Fabric"></a>
 </p>
 
-**Документация:** [English](../README.md) · **Русский**. Интерфейс игры по-прежнему содержит все 38 переводов.
+**Документация:** [English](../README.md) · [Українська](READMEUA.md) · **Русский**. Интерфейс игры по-прежнему содержит все 38 переводов.
 
 **Авторы:** McChopik, Telemine3140
 
