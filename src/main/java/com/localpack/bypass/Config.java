@@ -9,8 +9,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The player's settings, stored as JSON in {@code config/localpack-bypass/config.json}.
@@ -25,6 +29,14 @@ public final class Config {
     private static final Logger LOGGER = LoggerFactory.getLogger("localpack-bypass");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Object LOCK = new Object();
+    private static final ScheduledExecutorService WRITER = Executors.newSingleThreadScheduledExecutor(r -> {
+        Thread thread = new Thread(r, "localpack-config");
+        thread.setDaemon(true);
+        return thread;
+    });
+    private static long revision;
+    private static long savedRevision;
+    private static boolean retryScheduled;
 
     // ------------------------------------------------------------------ ranges
 
@@ -94,17 +106,52 @@ public final class Config {
 
     /** Writes the file, replacing the old one only if the new one is complete. */
     public static void save() {
+        synchronized (LOCK) {
+            revision++;
+        }
+        flush();
+    }
+
+    /** Writes pending settings now. Failed writes remain pending and are retried. */
+    public static void flush() {
         Path file = GamePaths.configFile();
+        long writingRevision;
+        String json;
+        synchronized (LOCK) {
+            if (savedRevision >= revision) return;
+            writingRevision = revision;
+            json = GSON.toJson(get());
+        }
         try {
             Files.createDirectories(GamePaths.stateDir());
             Path part = file.resolveSibling(file.getFileName() + ".part");
-            synchronized (LOCK) {
-                Files.writeString(part, GSON.toJson(get()), StandardCharsets.UTF_8);
+            Files.writeString(part, json, StandardCharsets.UTF_8);
+            try {
+                Files.move(part, file, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+            } catch (AtomicMoveNotSupportedException e) {
+                Files.move(part, file, StandardCopyOption.REPLACE_EXISTING);
             }
-            Files.move(part, file, StandardCopyOption.REPLACE_EXISTING);
+            synchronized (LOCK) {
+                savedRevision = Math.max(savedRevision, writingRevision);
+                retryScheduled = false;
+            }
         } catch (IOException | RuntimeException e) {
             LOGGER.warn("Could not save {}: {}", file, e.toString());
+            scheduleRetry();
         }
+    }
+
+    private static void scheduleRetry() {
+        synchronized (LOCK) {
+            if (retryScheduled) return;
+            retryScheduled = true;
+        }
+        WRITER.schedule(() -> {
+            synchronized (LOCK) {
+                retryScheduled = false;
+            }
+            flush();
+        }, 2, TimeUnit.SECONDS);
     }
 
     // ------------------------------------------------------------------ values
@@ -198,10 +245,13 @@ public final class Config {
     /** Absolute, or relative to the game directory. Empty when the text cannot be a path at all. */
     public static Optional<Path> resolve(String typed) {
         if (typed == null || typed.isBlank()) return Optional.empty();
-        Optional<Path> parsed = GamePaths.parseStored(typed);
-        if (parsed.isEmpty()) return Optional.empty();
-        Path path = parsed.get();
-        return Optional.of(path.isAbsolute() ? path.normalize() : GamePaths.gameDir().resolve(path).normalize());
+        try {
+            Path path = Path.of(typed);
+            return Optional.of((path.isAbsolute() ? path : GamePaths.gameDir().resolve(path))
+                    .toAbsolutePath().normalize());
+        } catch (RuntimeException e) {
+            return Optional.empty();
+        }
     }
 
     /**

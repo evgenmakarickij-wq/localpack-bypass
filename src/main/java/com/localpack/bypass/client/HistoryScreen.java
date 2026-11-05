@@ -53,7 +53,9 @@ public final class HistoryScreen extends OptionsSubScreen {
         list.addHeader(Component.translatable("localpack-bypass.history.count", events.size()));
         for (PackRegistry.Event event : events) {
             StringWidget row = new StringWidget(0, 0, Screens.BIG, 18, rowText(event), font);
-            row.setTooltip(Tooltip.create(rowDetails(event)));
+            if (Config.get().verboseLog()) {
+                row.setTooltip(Tooltip.create(rowDetails(event)));
+            }
             list.addBig(row);
         }
     }

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -39,6 +40,7 @@ public final class PackRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger("localpack-bypass");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Object LOCK = new Object();
+    private static final Object WRITE_LOCK = new Object();
 
     private static final ScheduledExecutorService WRITER = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "localpack-history");
@@ -152,6 +154,9 @@ public final class PackRegistry {
             loaded.packs.removeIf(p -> p == null || p.hash == null || p.file == null);
             loaded.servers.removeIf(s -> s == null || s.host == null);
             loaded.events.removeIf(e -> e == null);
+            if (!Config.get().verboseLog()) {
+                loaded.events.forEach(PackRegistry::redact);
+            }
             return loaded;
         } catch (IOException | RuntimeException e) {
             LOGGER.warn("Could not read {}: {}. Starting empty.", file, e.toString());
@@ -178,14 +183,27 @@ public final class PackRegistry {
             dirty = false;
             json = GSON.toJson(data);
         }
-        Path file = GamePaths.historyFile();
-        try {
-            Files.createDirectories(GamePaths.stateDir());
-            Path part = file.resolveSibling(file.getFileName() + ".part");
-            Files.writeString(part, json, StandardCharsets.UTF_8);
-            Files.move(part, file, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException | RuntimeException e) {
-            LOGGER.warn("Could not save {}: {}", file, e.toString());
+        synchronized (WRITE_LOCK) {
+            Path file = GamePaths.historyFile();
+            try {
+                Files.createDirectories(GamePaths.stateDir());
+                Path part = file.resolveSibling(file.getFileName() + ".part");
+                Files.writeString(part, json, StandardCharsets.UTF_8);
+                try {
+                    Files.move(part, file, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+                } catch (AtomicMoveNotSupportedException e) {
+                    Files.move(part, file, StandardCopyOption.REPLACE_EXISTING);
+                }
+            } catch (IOException | RuntimeException e) {
+                LOGGER.warn("Could not save {}: {}", file, e.toString());
+                synchronized (LOCK) {
+                    dirty = true;
+                    if (!saveScheduled) {
+                        saveScheduled = true;
+                        WRITER.schedule(PackRegistry::flush, 2, TimeUnit.SECONDS);
+                    }
+                }
+            }
         }
     }
 
@@ -238,12 +256,13 @@ public final class PackRegistry {
                 pack.file = file;
                 pack.bytes = bytes;
                 pack.host = host;
-                pack.url = url;
+                pack.url = Config.get().verboseLog() ? url : "";
                 pack.lastSeenMs = now;
                 touch();
                 return;
             }
-            current.packs.add(new Pack(wanted, file, bytes, host, url, now));
+            current.packs.add(new Pack(wanted, file, bytes, host,
+                    Config.get().verboseLog() ? url : "", now));
             touch();
         }
     }
@@ -375,9 +394,10 @@ public final class PackRegistry {
 
     /** Records one pack push. Silently does nothing when history is switched off. */
     public static void event(String host, String url, String hash, String result, String detail,
-                             long bytes, long durationMs) {
+                              long bytes, long durationMs) {
         if (!Config.get().historyEnabled()) return;
         Event entry = new Event(System.currentTimeMillis(), host, url, hash, result, detail, bytes, durationMs);
+        if (!Config.get().verboseLog()) redact(entry);
         int limit = Config.get().historyLimit();
         synchronized (LOCK) {
             List<Event> events = data().events;
@@ -385,6 +405,14 @@ public final class PackRegistry {
             while (events.size() > limit) events.remove(0);
             touch();
         }
+    }
+
+    private static void redact(Event event) {
+        event.url = "";
+        event.hash = "";
+        event.detail = null;
+        event.bytes = 0L;
+        event.durationMs = 0L;
     }
 
     /** Newest first, which is the order the history screen shows them in. */

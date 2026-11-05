@@ -18,7 +18,10 @@ public class LocalPackBypassClient implements ClientModInitializer {
         // join, and write the memory out on the way down so the last few seconds are not lost.
         Config.get();
         PackRegistry.flush();
-        Runtime.getRuntime().addShutdownHook(new Thread(PackRegistry::flush, "localpack-history-save"));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Config.flush();
+            PackRegistry.flush();
+        }, "localpack-state-save"));
 
         // Finish an update that was downloaded on a previous run, then offer any newer release.
         Updater.applyPendingCleanup();

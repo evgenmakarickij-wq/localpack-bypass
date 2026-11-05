@@ -76,7 +76,8 @@ public final class GamePaths {
     public static Optional<Path> parseStored(String text) {
         if (text == null || text.isBlank()) return Optional.empty();
         try {
-            return Optional.of(Path.of(text).toAbsolutePath().normalize());
+            Path path = Path.of(text);
+            return path.isAbsolute() ? Optional.of(path.normalize()) : Optional.empty();
         } catch (RuntimeException e) {
             return Optional.empty();
         }
