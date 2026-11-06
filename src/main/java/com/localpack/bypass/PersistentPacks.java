@@ -47,7 +47,23 @@ public final class PersistentPacks {
     }
 
     public static void queue(String hash) {
-        if (hash != null && !hash.isBlank()) PENDING.add(hash.toLowerCase(java.util.Locale.ROOT));
+        if (hash == null || hash.isBlank()) return;
+        PENDING.add(hash.toLowerCase(java.util.Locale.ROOT));
+        Minecraft.getInstance().execute(() -> activationCountdown = Math.max(activationCountdown, 1));
+    }
+
+    /** True when the verified archive is already selected as a normal persistent resource pack. */
+    public static boolean isActive(String hash) {
+        Minecraft client = Minecraft.getInstance();
+        return PackRegistry.pack(hash).filter(pack -> !pack.userDisabled).filter(pack -> {
+            Path file = PackStorage.gameDir().resolve(pack.file);
+            try {
+                return Files.isRegularFile(file) && (pack.bytes <= 0 || Files.size(file) == pack.bytes)
+                        && client.getResourcePackRepository().getSelectedIds().contains(FILE_PREFIX + pack.file);
+            } catch (IOException | RuntimeException e) {
+                return false;
+            }
+        }).isPresent();
     }
 
     public static long beginTransfer(Set<Path> targets) {
@@ -84,13 +100,9 @@ public final class PersistentPacks {
     private static void tick(Minecraft client) {
         if (activationCountdown < 0) return;
         if (activationCountdown-- > 0) return;
+        activationCountdown = -1;
         PackRepository repository = client.getResourcePackRepository();
         repository.reload();
-        if (repository.getAvailableIds().stream().anyMatch(id -> id.startsWith("server/"))) {
-            activationCountdown = 1;
-            return;
-        }
-        activationCountdown = -1;
         activatePending(client, repository);
     }
 

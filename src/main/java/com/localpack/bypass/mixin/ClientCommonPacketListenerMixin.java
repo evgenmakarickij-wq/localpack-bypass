@@ -1,10 +1,12 @@
 package com.localpack.bypass.mixin;
 
 import com.localpack.bypass.PackTracker;
+import com.localpack.bypass.PersistentPacks;
 import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,9 +22,18 @@ public abstract class ClientCommonPacketListenerMixin {
     protected ServerData serverData;
 
     @Inject(method = "handleResourcePackPush", at = @At(value = "INVOKE", target =
-            "Lnet/minecraft/network/protocol/PacketUtils;ensureRunningOnSameThread(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketListener;Lnet/minecraft/network/PacketProcessor;)V", shift = At.Shift.AFTER))
+            "Lnet/minecraft/network/protocol/PacketUtils;ensureRunningOnSameThread(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketListener;Lnet/minecraft/network/PacketProcessor;)V", shift = At.Shift.AFTER), cancellable = true)
     private void localpackBypass$onResourcePackPush(ClientboundResourcePackPushPacket packet, CallbackInfo ci) {
         PackTracker.observe(serverData, packet);
+        if (!com.localpack.bypass.LocalPackBypassHelper.isValidSha1(packet.hash())
+                || !PersistentPacks.isActive(packet.hash())) return;
+
+        ClientCommonPacketListenerImpl listener = (ClientCommonPacketListenerImpl) (Object) this;
+        listener.send(new ServerboundResourcePackPacket(packet.id(), ServerboundResourcePackPacket.Action.ACCEPTED));
+        listener.send(new ServerboundResourcePackPacket(packet.id(), ServerboundResourcePackPacket.Action.DOWNLOADED));
+        listener.send(new ServerboundResourcePackPacket(packet.id(), ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED));
+        PackTracker.forget(packet.id());
+        ci.cancel();
     }
 
     @Inject(method = "handleResourcePackPop", at = @At(value = "INVOKE", target =

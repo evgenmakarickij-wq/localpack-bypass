@@ -363,6 +363,13 @@ public final class PackRegistry {
         }
     }
 
+    public static Optional<Pack> pack(String hash) {
+        String wanted = key(hash);
+        synchronized (LOCK) {
+            return data().packs.stream().filter(pack -> key(pack.hash).equals(wanted)).findFirst();
+        }
+    }
+
     /** Every pack grouped by the server it came from, servers ordered by the most recent pack. */
     public static Map<String, List<Pack>> packsByServer() {
         Map<String, List<Pack>> grouped = new LinkedHashMap<>();
